@@ -74,15 +74,6 @@ impl BasicItem for Game {
     fn set_id(&mut self, id: usize) {
         self.id = id;
     }
-    fn print_details(&self) -> String {
-        format!(
-            "Name: {}\nTags: {}\nStores:\n{}\nYear: {}",
-            self.name,
-            self.tags.join(" "),
-            self.store.join("\n"),
-            self.year
-        )
-    }
 }
 
 impl GameItem for Game {

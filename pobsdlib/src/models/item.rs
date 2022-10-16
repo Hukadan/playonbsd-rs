@@ -22,7 +22,4 @@ impl BasicItem for Item {
     fn set_id(&mut self, id: usize) {
         self.id = id;
     }
-    fn print_details(&self) -> String {
-        format!("Name: {}", self.name)
-    }
 }
