@@ -115,7 +115,7 @@ impl<'a> Field<'a> {
                     None => Field::Year(None),
                 },
                 _ => match right {
-                    Some(right) => Field::Unknown(Some(left)),
+                    Some(right) => Field::Unknown(Some(right)),
                     None => Field::Unknown(None),
                 },
             }
@@ -186,6 +186,6 @@ mod test_methods {
     fn from_malformed_line() {
         let input = "Let's not\tpanic";
         let field = Field::from(&input);
-        assert_eq!(Field::Unknown(Some(&"Let's not")), field);
+        assert_eq!(Field::Unknown(Some(&"panic")), field);
     }
 }

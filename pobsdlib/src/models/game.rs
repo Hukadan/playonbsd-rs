@@ -31,31 +31,31 @@ pub struct Game {
     /// The name of the game.
     pub name: String,
     /// The cover of the game.
-    pub cover: String,
+    pub cover: Option<String>,
     /// The engine used by the game.
-    pub engine: String,
+    pub engine: Option<String>,
     /// Step(s) to setup the game.
-    pub setup: String,
+    pub setup: Option<String>,
     /// The executable in the package.
-    pub runtime: String,
+    pub runtime: Option<String>,
     /// A vector with store urls.
-    pub store: Vec<String>,
+    pub store: Option<Vec<String>>,
     /// Hints (as the name imply).
-    pub hints: String,
+    pub hints: Option<String>,
     /// A vector of genres associated with the game.
-    pub genres: Vec<String>,
+    pub genres: Option<Vec<String>>,
     /// A vector of tags associated with the game.
-    pub tags: Vec<String>,
+    pub tags: Option<Vec<String>>,
     /// Released year.
-    pub year: String,
+    pub year: Option<String>,
     /// Developer.
-    pub dev: String,
+    pub dev: Option<String>,
     /// Publisher.
-    pub publi: String,
+    pub publi: Option<String>,
     /// Version of the game.
-    pub version: String,
+    pub version: Option<String>,
     /// When tested on -current.
-    pub status: String,
+    pub status: Option<String>,
 }
 
 impl BasicItem for Game {
@@ -78,12 +78,18 @@ impl BasicItem for Game {
 
 impl GameItem for Game {
     /// Returns the tag vector of the game.
-    fn get_tags(&self) -> &Vec<String> {
-        &self.tags
+    fn get_tags(&self) -> Option<&Vec<String>> {
+        match &self.tags {
+            Some(tags) => Some(&tags),
+            None => None,
+        }
     }
     /// Returns the tag vector of the game.
-    fn get_genres(&self) -> &Vec<String> {
-        &self.genres
+    fn get_genres(&self) -> Option<&Vec<String>> {
+        match &self.genres {
+            Some(genres) => Some(&genres),
+            None => None
+        }
     }
 }
 

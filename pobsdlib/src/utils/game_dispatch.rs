@@ -22,10 +22,10 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     if name.len() > 0 {
-                        game.cover = format!(
+                        game.cover = Some(format!(
                             "https://playonbsd.com/legacy/shopping_guide/pics/originals/{}",
                             name.to_string()
-                        );
+                        ));
                     }
                 };
             };
@@ -34,7 +34,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.engine = name.to_string();
+                    game.engine = Some(name.to_string());
                 };
                 database
                     .engines
@@ -47,7 +47,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.setup = name.to_string();
+                    game.setup = Some(name.to_string());
                 };
             };
         }
@@ -55,7 +55,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.runtime = name.to_string();
+                    game.runtime = Some(name.to_string());
                 };
                 database
                     .runtimes
@@ -68,7 +68,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.hints = name.to_string();
+                    game.hints = Some(name.to_string());
                 };
             }
         }
@@ -76,7 +76,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.publi = name.to_string();
+                    game.publi = Some(name.to_string());
                 };
                 database
                     .devs
@@ -89,7 +89,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.dev = name.to_string();
+                    game.dev = Some(name.to_string());
                 };
                 database
                     .publis
@@ -102,7 +102,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.version = name.to_string();
+                    game.version = Some(name.to_string());
                 };
             };
         }
@@ -110,7 +110,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.status = name.to_string();
+                    game.status = Some(name.to_string());
                 };
             };
         }
@@ -118,19 +118,26 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(items) = items {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    let is_empty = game.cover.is_empty();
+                    let is_empty = game.cover.is_none();
                     for item in items {
+                        // If cover is empty, try to grap the Steam one
+                        // if a steam link is given in store.
                         if is_empty && item.contains("steampowered") {
                             let item = item.clone();
                             let app_id = item.split("app/").collect::<Vec<&str>>()[1]
                                 .split("/")
                                 .collect::<Vec<&str>>()[0];
-                            game.cover = format!(
+                            game.cover = Some(format!(
                                 "https://cdn.akamai.steamstatic.com/steam/apps/{}/header.jpg",
                                 app_id
-                            );
+                            ));
                         }
-                        game.store.push(item.to_string());
+                        match &mut game.store {
+                            Some(store) => store.push(item.to_string()),
+                            None => {
+                                game.store = Some(vec![item.to_string()]);
+                            }
+                        }
                     }
                 };
             };
@@ -140,8 +147,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     for item in &items {
-                        if item.len() > 0 {
-                            game.genres.push(item.to_string());
+                        match &mut game.genres {
+                            Some(genres) => genres.push(item.to_string()),
+                            None => {
+                                game.genres = Some(vec![item.to_string()]);
+                            }
                         }
                     }
                 };
@@ -159,7 +169,12 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     for item in &items {
-                        game.tags.push(item.to_string());
+                        match &mut game.tags {
+                            Some(tags) => tags.push(item.to_string()),
+                            None => {
+                                game.tags = Some(vec![item.to_string()]);
+                            }
+                        }
                     }
                 };
                 for item in &items {
@@ -175,7 +190,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(year) = year {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.year = year.to_string();
+                    game.year = Some(year.to_string());
                 };
                 database
                     .years
@@ -214,8 +229,8 @@ mod test_game_dispatch {
         game_dispatch(co, &mut db);
         assert_eq!(db.games.len(), 1);
         assert_eq!(
-            db.games.get(&1).unwrap().cover,
-            "https://playonbsd.com/legacy/shopping_guide/pics/originals/cover".to_string()
+            db.games.get(&1).unwrap().cover.as_ref().unwrap(),
+            &"https://playonbsd.com/legacy/shopping_guide/pics/originals/cover".to_string()
         );
     }
     #[test]
@@ -226,7 +241,7 @@ mod test_game_dispatch {
         game_dispatch(fd1, &mut db);
         game_dispatch(fd2, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().engine, "test2".to_string());
+        assert_eq!(db.games.get(&1).unwrap().engine.as_ref().unwrap(), &"test2".to_string());
         assert_eq!(db.engines.len(), 1);
         assert_eq!(db.engines.get("test2").unwrap(), &vec![1 as usize]);
     }
@@ -238,7 +253,7 @@ mod test_game_dispatch {
         game_dispatch(fd1, &mut db);
         game_dispatch(fd2, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().setup, "test2".to_string());
+        assert_eq!(db.games.get(&1).unwrap().setup.as_ref().unwrap(), &"test2".to_string());
     }
     #[test]
     fn dispatch_runtime() {
@@ -248,7 +263,7 @@ mod test_game_dispatch {
         game_dispatch(fd1, &mut db);
         game_dispatch(fd2, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().runtime, "test2".to_string());
+        assert_eq!(db.games.get(&1).unwrap().runtime.as_ref().unwrap(), &"test2".to_string());
         assert_eq!(db.runtimes.len(), 1);
         assert_eq!(db.runtimes.get("test2").unwrap(), &vec![1 as usize]);
     }

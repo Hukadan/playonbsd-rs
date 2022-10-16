@@ -8,8 +8,8 @@ fn test_game_get_by_id() {
         Some(game) => {
             assert_eq!(game.name, "The Adventures of Shuggy".to_string());
             assert_eq!(
-                game.store,
-                [
+                game.store.as_ref().unwrap(),
+                &vec![
                     "https://store.steampowered.com/app/211440/Adventures_of_Shuggy/".to_string(),
                     "https://www.gog.com/game/the_adventures_of_shuggy".to_string()
                 ]
@@ -24,7 +24,7 @@ fn test_game_get_by_name() {
     let qs = db_game.get_game_by_name("Akane the Kunoichi");
     assert_eq!(qs.count, 1);
     assert_eq!(qs.items[0].id, 6);
-    assert_eq!(qs.items[0].engine, "XNA".to_string());
+    assert_eq!(qs.items[0].engine.as_ref().unwrap(), &"XNA".to_string());
 }
 #[test]
 fn test_game_get_by_tag() {
