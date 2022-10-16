@@ -39,114 +39,84 @@ impl<'a> Field<'a> {
         // Use the left hand side to discriminate between single and multiple item lines
         if let Some(left) = left {
             match left {
-                "Game" => {
-                    match right {
-                        Some(right) => Field::Game(Some(right)),
-                        None => Field::Game(None),
-                    }
+                "Game" => match right {
+                    Some(right) => Field::Game(Some(right)),
+                    None => Field::Game(None),
                 },
-                "Cover" => {
-                    match right {
-                        Some(right) => Field::Cover(Some(right)),
-                        None => Field::Cover(None),
-                    }
+                "Cover" => match right {
+                    Some(right) => Field::Cover(Some(right)),
+                    None => Field::Cover(None),
                 },
-                "Engine" => {
-                    match right {
-                        Some(right) => Field::Engine(Some(right)),
-                        None => Field::Engine(None),
-                    }
+                "Engine" => match right {
+                    Some(right) => Field::Engine(Some(right)),
+                    None => Field::Engine(None),
                 },
-                "Setup" => {
-                    match right {
-                        Some(right) => Field::Setup(Some(right)),
-                        None => Field::Setup(None),
-                    }
+                "Setup" => match right {
+                    Some(right) => Field::Setup(Some(right)),
+                    None => Field::Setup(None),
                 },
-                "Runtime" => {
-                    match right {
-                        Some(right) => Field::Runtime(Some(right)),
-                        None => Field::Runtime(None),
-                    }
+                "Runtime" => match right {
+                    Some(right) => Field::Runtime(Some(right)),
+                    None => Field::Runtime(None),
                 },
-                "Hints" => {
-                    match right {
-                        Some(right) => Field::Hints(Some(right)),
-                        None => Field::Hints(None),
-                    }
+                "Hints" => match right {
+                    Some(right) => Field::Hints(Some(right)),
+                    None => Field::Hints(None),
                 },
-                "Dev" => {
-                    match right {
-                        Some(right) => Field::Dev(Some(right)),
-                        None => Field::Dev(None),
-                    }
+                "Dev" => match right {
+                    Some(right) => Field::Dev(Some(right)),
+                    None => Field::Dev(None),
                 },
-                "Pub" => {
-                    match right {
-                        Some(right) => Field::Publi(Some(right)),
-                        None => Field::Publi(None),
-                    }
+                "Pub" => match right {
+                    Some(right) => Field::Publi(Some(right)),
+                    None => Field::Publi(None),
                 },
-                "Version" => {
-                    match right {
-                        Some(right) => Field::Version(Some(right)),
-                        None => Field::Version(None),
-                    }
+                "Version" => match right {
+                    Some(right) => Field::Version(Some(right)),
+                    None => Field::Version(None),
                 },
-                "Status" => {
-                    match right {
-                        Some(right) => Field::Status(Some(right)),
-                        None => Field::Status(None),
-                    }
+                "Status" => match right {
+                    Some(right) => Field::Status(Some(right)),
+                    None => Field::Status(None),
                 },
                 // Store does not use the same separator than Genre and Tags
-                "Store" => {
-                    match right {
-                        Some(right) => {
-                            let mut items: Vec<&str> = Vec::new();
-                            for item in right.split(' ') {
-                                items.push(item.trim());
-                            }
-                            Field::Store(Some(items))
-                        },
-                        None => Field::Store(None),
+                "Store" => match right {
+                    Some(right) => {
+                        let mut items: Vec<&str> = Vec::new();
+                        for item in right.split(' ') {
+                            items.push(item.trim());
+                        }
+                        Field::Store(Some(items))
                     }
-                }
-                "Genre" => {
-                    match right {
-                        Some(right) => {
-                            let mut items: Vec<&str> = Vec::new();
-                            for item in right.split(',') {
-                                items.push(item.trim());
-                            }
-                            Field::Genres(Some(items))
-                        },
-                        None => Field::Genres(None),
-                    }
-                }
-                "Tags" => {
-                    match right {
-                        Some(right) => {
-                            let mut items: Vec<&str> = Vec::new();
-                            for item in right.split(',') {
-                                items.push(item.trim());
-                            }
-                            Field::Tags(Some(items))
-                        },
-                        None => Field::Tags(None),
-                    }
-                }
-                "Year" => {
-                    match right {
-                        Some(right) => Field::Year(Some(right)),
-                        None => Field::Year(None),
-                    }
+                    None => Field::Store(None),
                 },
-                _ => {
-                    match right {
-                        Some(right) => Field::Unknown(Some(left)),
-                        None => Field::Unknown(None),
+                "Genre" => match right {
+                    Some(right) => {
+                        let mut items: Vec<&str> = Vec::new();
+                        for item in right.split(',') {
+                            items.push(item.trim());
+                        }
+                        Field::Genres(Some(items))
                     }
+                    None => Field::Genres(None),
+                },
+                "Tags" => match right {
+                    Some(right) => {
+                        let mut items: Vec<&str> = Vec::new();
+                        for item in right.split(',') {
+                            items.push(item.trim());
+                        }
+                        Field::Tags(Some(items))
+                    }
+                    None => Field::Tags(None),
+                },
+                "Year" => match right {
+                    Some(right) => Field::Year(Some(right)),
+                    None => Field::Year(None),
+                },
+                _ => match right {
+                    Some(right) => Field::Unknown(Some(left)),
+                    None => Field::Unknown(None),
                 },
             }
         } else {

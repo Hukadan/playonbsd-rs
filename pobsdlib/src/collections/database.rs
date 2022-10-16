@@ -49,7 +49,11 @@ impl DataBase {
         QuerySet::new(games)
     }
     pub fn get_game_by_name_contains(&self, search: &str) -> QuerySet<Game> {
-        let gs = self.games.iter().filter(|&(_, item)| item.name.to_lowercase().contains(search.to_lowercase().as_str()));
+        let gs = self.games.iter().filter(|&(_, item)| {
+            item.name
+                .to_lowercase()
+                .contains(search.to_lowercase().as_str())
+        });
         let mut games: Vec<Game> = Vec::new();
         for (_, item) in gs {
             games.push((*item).clone());

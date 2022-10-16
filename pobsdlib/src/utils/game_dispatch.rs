@@ -11,7 +11,10 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 game.id = game_id;
                 database.games.insert(game_id, game);
             } else {
-                eprintln!("Error trying to insert game with id: {}.", database.games.len() + 1);
+                eprintln!(
+                    "Error trying to insert game with id: {}.",
+                    database.games.len() + 1
+                );
             };
         }
         Field::Cover(name) => {
@@ -19,7 +22,10 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     if name.len() > 0 {
-                        game.cover = format!("https://playonbsd.com/legacy/shopping_guide/pics/originals/{}", name.to_string());
+                        game.cover = format!(
+                            "https://playonbsd.com/legacy/shopping_guide/pics/originals/{}",
+                            name.to_string()
+                        );
                     }
                 };
             };
@@ -36,7 +42,6 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                     .and_modify(|e| e.push(last_game_id))
                     .or_insert(vec![last_game_id]);
             };
-                
         }
         Field::Setup(name) => {
             if let Some(name) = name {
@@ -117,12 +122,13 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                     for item in items {
                         if is_empty && item.contains("steampowered") {
                             let item = item.clone();
-                            let app_id = item
-                                .split("app/")
-                                .collect::<Vec<&str>>()[1]
+                            let app_id = item.split("app/").collect::<Vec<&str>>()[1]
                                 .split("/")
                                 .collect::<Vec<&str>>()[0];
-                            game.cover = format!("https://cdn.akamai.steamstatic.com/steam/apps/{}/header.jpg", app_id);
+                            game.cover = format!(
+                                "https://cdn.akamai.steamstatic.com/steam/apps/{}/header.jpg",
+                                app_id
+                            );
                         }
                         game.store.push(item.to_string());
                     }
@@ -207,7 +213,10 @@ mod test_game_dispatch {
         game_dispatch(fd, &mut db);
         game_dispatch(co, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().cover, "https://playonbsd.com/legacy/shopping_guide/pics/originals/cover".to_string());
+        assert_eq!(
+            db.games.get(&1).unwrap().cover,
+            "https://playonbsd.com/legacy/shopping_guide/pics/originals/cover".to_string()
+        );
     }
     #[test]
     fn dispatch_engine() {

@@ -9,7 +9,7 @@ pub struct QuerySet<T> {
 
 impl<T: BasicItem> QuerySet<T> {
     pub fn new(mut items: Vec<T>) -> Self {
-        items.sort_by(|a,b| a.get_id().partial_cmp(&b.get_id()).unwrap());
+        items.sort_by(|a, b| a.get_id().partial_cmp(&b.get_id()).unwrap());
         Self {
             count: items.len(),
             items,
