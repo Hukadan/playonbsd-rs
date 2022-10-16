@@ -1,0 +1,12 @@
+[package]
+name = "pobsdrs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pobsdlib = { path = "../pobsdlib" }
+rocket = "0.5.0-rc.2"
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+
