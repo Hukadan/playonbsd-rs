@@ -9,8 +9,8 @@ const gameid = ref(1)
 const searchtxt = ref("")
 const allGames = ref(null)
 
-//const hostname = "127.0.0.1:8000"
-const hostname = "pobsdjs.chocolatines.org"
+const hostname = "127.0.0.1:8000"
+//const hostname = "pobsdjs.chocolatines.org"
 
 async function fetchGame() {
   const res = await fetch(
