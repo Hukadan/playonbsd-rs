@@ -1,4 +1,5 @@
 use crate::traits::{BasicItem, GameItem};
+use std::cmp::{Ordering, PartialOrd};
 
 /// # Represent a game
 /// A Game is created by a line starting by 'Game' in the database.
@@ -163,6 +164,24 @@ impl Game {
     }
 }
 
+impl PartialOrd for Game {
+    fn partial_cmp(&self, other: &Game) -> Option<Ordering> {
+        self.id.partial_cmp(&other.id)
+    }
+    fn lt(&self, other: &Game) -> bool {
+        self.id.lt(&other.id)
+    }
+    fn le(&self, other: &Game) -> bool {
+        self.id.le(&other.id)
+    }
+    fn gt(&self, other: &Game) -> bool {
+        self.id.gt(&other.id)
+    }
+    fn ge(&self, other: &Game) -> bool {
+        self.id.ge(&other.id)
+    }
+}
+
 impl BasicItem for Game {
     /// Is equivalent to Game::Default().
     fn new() -> Self {
@@ -306,5 +325,16 @@ mod test_game_methods {
         game.publi = None;
         assert!(game.publi_contains(None));
         assert!(!game.publi_contains(Some(&"publi")));
+    }
+    #[test]
+    fn test_ordering() {
+        let mut game1 = create_game();
+        let mut game2 = create_game();
+        game1.id = 1;
+        game2.id = 2;
+        assert!(game2.gt(&game1));
+        assert!(game2.ge(&game1));
+        assert!(game1.le(&game2));
+        assert!(game1.lt(&game2));
     }
 }
