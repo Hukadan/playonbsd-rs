@@ -23,8 +23,8 @@ pub enum Field<'a> {
 }
 
 impl<'a> Field<'a> {
-    /// Try to convert a line of the database in a Field enum (see exemple above).
-    /// Panic if it cannot.
+    /// Convert a line of the database in a Field enum (see exemple above).
+    /// Return Field::Unknown if the field is not recognized.
     /// ```
     /// use pobsdlib::models::Field;
     ///
@@ -133,59 +133,139 @@ mod test_methods {
         let input = "Game\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Game(Some(&"Toto")), field);
+        let input = "Game";
+        let field = Field::from(&input);
+        assert_eq!(Field::Game(None), field);
     }
     #[test]
     fn from_cover_line() {
         let input = "Cover\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Cover(Some(&"Toto")), field);
+        let input = "Cover";
+        let field = Field::from(&input);
+        assert_eq!(Field::Cover(None), field);
+        let field = Field::from(&input);
+        assert_eq!(Field::Cover(None), field);
     }
     #[test]
     fn from_engine_line() {
         let input = "Engine\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Engine(Some(&"Toto")), field);
+        let input = "Engine";
+        let field = Field::from(&input);
+        assert_eq!(Field::Engine(None), field);
     }
     #[test]
     fn from_setup_line() {
         let input = "Setup\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Setup(Some(&"Toto")), field);
+        let input = "Setup";
+        let field = Field::from(&input);
+        assert_eq!(Field::Setup(None), field);
     }
     #[test]
     fn from_runtime_line() {
         let input = "Runtime\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Runtime(Some(&"Toto")), field);
+        let input = "Runtime";
+        let field = Field::from(&input);
+        assert_eq!(Field::Runtime(None), field);
     }
     #[test]
     fn from_hints_line() {
         let input = "Hints\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Hints(Some(&"Toto")), field);
+        let input = "Hints";
+        let field = Field::from(&input);
+        assert_eq!(Field::Hints(None), field);
+    }
+    #[test]
+    fn from_dev_line() {
+        let input = "Dev\tToto";
+        let field = Field::from(&input);
+        assert_eq!(Field::Dev(Some(&"Toto")), field);
+        let input = "Dev";
+        let field = Field::from(&input);
+        assert_eq!(Field::Dev(None), field);
+    }
+    #[test]
+    fn from_publi_line() {
+        let input = "Pub\tToto";
+        let field = Field::from(&input);
+        assert_eq!(Field::Publi(Some(&"Toto")), field);
+        let input = "Pub";
+        let field = Field::from(&input);
+        assert_eq!(Field::Publi(None), field);
+    }
+    #[test]
+    fn from_version_line() {
+        let input = "Version\tToto";
+        let field = Field::from(&input);
+        assert_eq!(Field::Version(Some(&"Toto")), field);
+        let input = "Version";
+        let field = Field::from(&input);
+        assert_eq!(Field::Version(None), field);
+    }
+    #[test]
+    fn from_status_line() {
+        let input = "Status\tToto";
+        let field = Field::from(&input);
+        assert_eq!(Field::Status(Some(&"Toto")), field);
+        let input = "Status";
+        let field = Field::from(&input);
+        assert_eq!(Field::Status(None), field);
     }
     #[test]
     fn from_store_line() {
         let input = "Store\tfirst second";
         let field = Field::from(&input);
         assert_eq!(Field::Store(Some(vec![&"first", &"second"])), field);
+        let input = "Store";
+        let field = Field::from(&input);
+        assert_eq!(Field::Store(None), field);
     }
     #[test]
     fn from_genre_line() {
         let input = "Genre\tfirst, second";
         let field = Field::from(&input);
         assert_eq!(Field::Genres(Some(vec![&"first", &"second"])), field);
+        let input = "Genre";
+        let field = Field::from(&input);
+        assert_eq!(Field::Genres(None), field);
     }
     #[test]
     fn from_tag_line() {
         let input = "Tags\tfirst, second";
         let field = Field::from(&input);
         assert_eq!(Field::Tags(Some(vec![&"first", &"second"])), field);
+        let input = "Tags";
+        let field = Field::from(&input);
+        assert_eq!(Field::Tags(None), field);
+    }
+    #[test]
+    fn from_year_line() {
+        let input = "Year\t1980";
+        let field = Field::from(&input);
+        assert_eq!(Field::Year(Some(&"1980")), field);
+        let input = "Year";
+        let field = Field::from(&input);
+        assert_eq!(Field::Year(None), field);
     }
     #[test]
     fn from_malformed_line() {
         let input = "Let's not\tpanic";
         let field = Field::from(&input);
         assert_eq!(Field::Unknown(Some(&"panic")), field);
+    }
+    #[test]
+    fn from_malformed_line_notab() {
+        let input = "Let's not";
+        let field = Field::from(&input);
+        assert_eq!(Field::Unknown(None), field);
     }
 }
