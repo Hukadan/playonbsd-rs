@@ -1,6 +1,5 @@
 use crate::traits::BasicItem;
 
-/// TODO
 #[derive(Serialize, Clone, Default, Debug)]
 pub struct QuerySet<T> {
     pub count: usize,

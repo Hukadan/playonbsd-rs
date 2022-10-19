@@ -116,4 +116,31 @@ impl DataBase {
         }
         QuerySet::new(games)
     }
+    pub fn game_contains(
+        &self,
+        name: Option<&str>,
+        engine: Option<&str>,
+        runtime: Option<&str>,
+        genre: Option<&str>,
+        tag: Option<&str>,
+        year: Option<&str>,
+        dev: Option<&str>,
+        publi: Option<&str>,
+    ) -> QuerySet<Game> {
+        let gs = self.games.iter().filter(|&(_, item)| {
+            item.name_contains(name)
+                && item.engine_contains(engine)
+                && item.runtime_contains(runtime)
+                && item.genres_contains(genre)
+                && item.tags_contains(tag)
+                && item.year_contains(year)
+                && item.dev_contains(dev)
+                && item.publi_contains(publi)
+        });
+        let mut games: Vec<Game> = Vec::new();
+        for (_, item) in gs {
+            games.push((*item).clone());
+        }
+        QuerySet::new(games)
+    }
 }

@@ -58,6 +58,111 @@ pub struct Game {
     pub status: Option<String>,
 }
 
+impl Game {
+    pub fn name_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => self
+                .name
+                .to_lowercase()
+                .contains(pattern.to_lowercase().as_str()),
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn engine_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.engine {
+                Some(engine) => engine
+                    .to_lowercase()
+                    .contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn runtime_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.runtime {
+                Some(runtime) => runtime
+                    .to_lowercase()
+                    .contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn genres_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.genres {
+                Some(genres) => genres
+                    .join(" ~~ ")
+                    .to_lowercase()
+                    .contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn tags_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.tags {
+                Some(tags) => tags
+                    .join(" ~~ ")
+                    .to_lowercase()
+                    .contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn year_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.year {
+                Some(year) => year
+                    .to_lowercase()
+                    .contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn dev_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.dev {
+                Some(dev) => dev.to_lowercase().contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+    pub fn publi_contains(&self, pattern: Option<&str>) -> bool {
+        match pattern {
+            // case insensitive
+            Some(pattern) => match &self.publi {
+                Some(publi) => publi
+                    .to_lowercase()
+                    .contains(pattern.to_lowercase().as_str()),
+                None => false,
+            },
+            //if there is no patter everything matches
+            None => true,
+        }
+    }
+}
+
 impl BasicItem for Game {
     /// Is equivalent to Game::Default().
     fn new() -> Self {
@@ -88,7 +193,7 @@ impl GameItem for Game {
     fn get_genres(&self) -> Option<&Vec<String>> {
         match &self.genres {
             Some(genres) => Some(&genres),
-            None => None
+            None => None,
         }
     }
 }

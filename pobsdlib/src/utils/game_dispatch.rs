@@ -241,7 +241,10 @@ mod test_game_dispatch {
         game_dispatch(fd1, &mut db);
         game_dispatch(fd2, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().engine.as_ref().unwrap(), &"test2".to_string());
+        assert_eq!(
+            db.games.get(&1).unwrap().engine.as_ref().unwrap(),
+            &"test2".to_string()
+        );
         assert_eq!(db.engines.len(), 1);
         assert_eq!(db.engines.get("test2").unwrap(), &vec![1 as usize]);
     }
@@ -253,7 +256,10 @@ mod test_game_dispatch {
         game_dispatch(fd1, &mut db);
         game_dispatch(fd2, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().setup.as_ref().unwrap(), &"test2".to_string());
+        assert_eq!(
+            db.games.get(&1).unwrap().setup.as_ref().unwrap(),
+            &"test2".to_string()
+        );
     }
     #[test]
     fn dispatch_runtime() {
@@ -263,7 +269,10 @@ mod test_game_dispatch {
         game_dispatch(fd1, &mut db);
         game_dispatch(fd2, &mut db);
         assert_eq!(db.games.len(), 1);
-        assert_eq!(db.games.get(&1).unwrap().runtime.as_ref().unwrap(), &"test2".to_string());
+        assert_eq!(
+            db.games.get(&1).unwrap().runtime.as_ref().unwrap(),
+            &"test2".to_string()
+        );
         assert_eq!(db.runtimes.len(), 1);
         assert_eq!(db.runtimes.get("test2").unwrap(), &vec![1 as usize]);
     }
