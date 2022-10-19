@@ -203,10 +203,108 @@ impl GameItem for Game {
 #[cfg(test)]
 mod test_game_methods {
     use super::*;
+    fn create_game() -> Game {
+        let mut game = Game::default();
+        let tags: Vec<String> = vec!["tag1".to_string(), "tag2".to_string()];
+        let genres: Vec<String> = vec!["genre1".to_string(), "genre2".to_string()];
+        let store: Vec<String> = vec!["store1".to_string(), "store2".to_string()];
+        game.name = "game name".to_string();
+        game.cover = Some("cover.jpg".to_string());
+        game.engine = Some("game engine".to_string());
+        game.setup = Some("game setup".to_string());
+        game.runtime = Some("game runtime".to_string());
+        game.store = Some(store);
+        game.hints = Some("game hints".to_string());
+        game.genres = Some(genres);
+        game.tags = Some(tags);
+        game.year = Some("1980".to_string());
+        game.dev = Some("game dev".to_string());
+        game.publi = Some("game publi".to_string());
+        game.version = Some("game version".to_string());
+        game.status = Some("game status".to_string());
+        game
+    }
     #[test]
     fn default_is_new() {
         let game = Game::new();
         let game_bis = Game::default();
         assert!(game == game_bis);
+    }
+    #[test]
+    fn name_contains() {
+        let game = create_game();
+        assert!(game.name_contains(None));
+        assert!(game.name_contains(Some(&"name")));
+        assert!(!game.name_contains(Some(&"not sure")));
+    }
+    #[test]
+    fn engine_contains() {
+        let mut game = create_game();
+        assert!(game.engine_contains(None));
+        assert!(game.engine_contains(Some(&"engine")));
+        assert!(!game.engine_contains(Some(&"not sure")));
+        game.engine = None;
+        assert!(game.engine_contains(None));
+        assert!(!game.engine_contains(Some(&"engine")));
+    }
+    #[test]
+    fn runtime_contains() {
+        let mut game = create_game();
+        assert!(game.runtime_contains(None));
+        assert!(game.runtime_contains(Some(&"runtime")));
+        assert!(!game.runtime_contains(Some(&"not sure")));
+        game.runtime = None;
+        assert!(game.runtime_contains(None));
+        assert!(!game.runtime_contains(Some(&"runtime")));
+    }
+    #[test]
+    fn genres_contains() {
+        let mut game = create_game();
+        assert!(game.genres_contains(None));
+        assert!(game.genres_contains(Some(&"genre")));
+        assert!(!game.genres_contains(Some(&"not sure")));
+        game.genres = None;
+        assert!(game.genres_contains(None));
+        assert!(!game.genres_contains(Some(&"genre")));
+    }
+    #[test]
+    fn tags_contains() {
+        let mut game = create_game();
+        assert!(game.tags_contains(None));
+        assert!(game.tags_contains(Some(&"tag")));
+        assert!(!game.tags_contains(Some(&"not sure")));
+        game.tags = None;
+        assert!(game.tags_contains(None));
+        assert!(!game.tags_contains(Some(&"tag")));
+    }
+    #[test]
+    fn year_contains() {
+        let mut game = create_game();
+        assert!(game.year_contains(None));
+        assert!(game.year_contains(Some(&"1980")));
+        assert!(!game.year_contains(Some(&"not sure")));
+        game.year = None;
+        assert!(game.year_contains(None));
+        assert!(!game.year_contains(Some(&"1980")));
+    }
+    #[test]
+    fn dev_contains() {
+        let mut game = create_game();
+        assert!(game.dev_contains(None));
+        assert!(game.dev_contains(Some(&"dev")));
+        assert!(!game.dev_contains(Some(&"not sure")));
+        game.dev = None;
+        assert!(game.dev_contains(None));
+        assert!(!game.dev_contains(Some(&"dev")));
+    }
+    #[test]
+    fn publi_contains() {
+        let mut game = create_game();
+        assert!(game.publi_contains(None));
+        assert!(game.publi_contains(Some(&"publi")));
+        assert!(!game.publi_contains(Some(&"not sure")));
+        game.publi = None;
+        assert!(game.publi_contains(None));
+        assert!(!game.publi_contains(Some(&"publi")));
     }
 }
