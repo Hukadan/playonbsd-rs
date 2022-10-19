@@ -9,6 +9,5 @@ mod utils;
 // public api
 pub mod collections;
 pub mod models;
-pub mod traits;
 
 pub use crate::collections::database::DataBase;

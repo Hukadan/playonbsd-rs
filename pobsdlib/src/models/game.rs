@@ -1,4 +1,3 @@
-use crate::traits::{BasicItem, GameItem};
 use std::cmp::{Ordering, PartialOrd};
 
 /// # Represent a game
@@ -7,7 +6,6 @@ use std::cmp::{Ordering, PartialOrd};
 /// game entry.
 /// ```
 /// use pobsdlib::models::{Field, Game};
-/// use pobsdlib::traits::{BasicItem, GameItem};
 /// // typical lines of a game in the database
 /// let database="Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
 /// Cover	AaaaaA_for_the_Awesome_Cover.jpg
@@ -182,41 +180,6 @@ impl PartialOrd for Game {
     }
 }
 
-impl BasicItem for Game {
-    /// Is equivalent to Game::Default().
-    fn new() -> Self {
-        Self::default()
-    }
-    /// Returns the name of the item
-    fn get_name(&self) -> &str {
-        &self.name
-    }
-    fn get_id(&self) -> usize {
-        self.id
-    }
-    /// Sets the id of the game.
-    fn set_id(&mut self, id: usize) {
-        self.id = id;
-    }
-}
-
-impl GameItem for Game {
-    /// Returns the tag vector of the game.
-    fn get_tags(&self) -> Option<&Vec<String>> {
-        match &self.tags {
-            Some(tags) => Some(&tags),
-            None => None,
-        }
-    }
-    /// Returns the tag vector of the game.
-    fn get_genres(&self) -> Option<&Vec<String>> {
-        match &self.genres {
-            Some(genres) => Some(&genres),
-            None => None,
-        }
-    }
-}
-
 /* ------------------------- TESTS --------------------------*/
 
 #[cfg(test)]
@@ -245,7 +208,7 @@ mod test_game_methods {
     }
     #[test]
     fn default_is_new() {
-        let game = Game::new();
+        let game = Game::default();
         let game_bis = Game::default();
         assert!(game == game_bis);
     }
