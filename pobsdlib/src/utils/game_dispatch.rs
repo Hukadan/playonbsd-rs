@@ -1,5 +1,6 @@
 use crate::collections::DataBase;
 use crate::models::{Field, Game};
+use crate::utils::get_app_id;
 
 pub fn game_dispatch(field: Field, database: &mut DataBase) {
     match field {
@@ -122,15 +123,16 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                     for item in items {
                         // If cover is empty, try to grap the Steam one
                         // if a steam link is given in store.
-                        if is_empty && item.contains("steampowered") {
+                        // if is_empty && item.contains("steampowered") {
+                        if item.contains("steampowered") {
                             let item = item.clone();
-                            let app_id = item.split("app/").collect::<Vec<&str>>()[1]
-                                .split("/")
-                                .collect::<Vec<&str>>()[0];
-                            game.cover = Some(format!(
-                                "https://cdn.akamai.steamstatic.com/steam/apps/{}/header.jpg",
-                                app_id
-                            ));
+                            let app_id = get_app_id(item);
+                            if let Some(app_id) = app_id {
+                                game.cover = Some(format!(
+                                    "https://cdn.akamai.steamstatic.com/steam/apps/{}/header.jpg",
+                                    app_id
+                                ));
+                            }
                         }
                         match &mut game.store {
                             Some(store) => store.push(item.to_string()),
