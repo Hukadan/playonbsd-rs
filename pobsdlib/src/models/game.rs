@@ -1,4 +1,5 @@
 use std::cmp::{Ordering, PartialOrd};
+use std::fmt;
 
 /// # Represent a game
 /// A Game is created by a line starting by 'Game' in the database.
@@ -55,6 +56,38 @@ pub struct Game {
     pub version: Option<String>,
     /// When tested on -current.
     pub status: Option<String>,
+}
+
+impl fmt::Display for Game {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            self.name,
+            self.cover.as_ref().unwrap_or(&"".to_string()),
+            self.engine.as_ref().unwrap_or(&"".to_string()),
+            self.setup.as_ref().unwrap_or(&"".to_string()),
+            self.runtime.as_ref().unwrap_or(&"".to_string()),
+            self.store
+                .as_ref()
+                .unwrap_or(&vec!["".to_string()])
+                .join(" "),
+            self.hints.as_ref().unwrap_or(&"".to_string()),
+            self.genres
+                .as_ref()
+                .unwrap_or(&vec!["".to_string()])
+                .join(", "),
+            self.tags
+                .as_ref()
+                .unwrap_or(&vec!["".to_string()])
+                .join(", "),
+            self.year.as_ref().unwrap_or(&"".to_string()),
+            self.dev.as_ref().unwrap_or(&"".to_string()),
+            self.publi.as_ref().unwrap_or(&"".to_string()),
+            self.version.as_ref().unwrap_or(&"".to_string()),
+            self.status.as_ref().unwrap_or(&"".to_string()),
+        )
+    }
 }
 
 impl Game {
