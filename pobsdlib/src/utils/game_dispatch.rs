@@ -119,9 +119,8 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(items) = items {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    let is_empty = game.cover.is_none();
                     for item in items {
-                        // If cover is empty, try to grap the Steam one
+                        // Tries to grap the Steam one
                         // if a steam link is given in store.
                         // if is_empty && item.contains("steampowered") {
                         if item.contains("steampowered") {
@@ -201,10 +200,16 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                     .or_insert(vec![last_game_id]);
             }
         }
-        Field::Unknown(field) => {
-            if let Some(field) = field {
-                eprintln!("Skipping unknown field: {}", field);
-            };
+        Field::Unknown(left,right) => {
+            if let Some(left) = left {
+                if let Some(right) = right {
+                    eprintln!("Skipping unknown field: {}: {}", left, right);
+                } else {
+                    eprintln!("Skipping unknown field: {}", left);
+                };
+            } else {
+                eprintln!("Skipping unknown field");
+            }
         }
     };
 }
