@@ -26,96 +26,66 @@ pub enum Field<'a> {
 impl fmt::Display for Field<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Field::Game(name) => {
-                match name {
-                    Some(name) => write!(f, "Game\t{}", name),
-                    None => write!(f, "Game"),
-                }
-            }
-            Field::Cover(name) => {
-                match name {
-                    Some(name) => write!(f, "Cover\t{}", name),
-                    None => write!(f, "Cover"),
-                }
-            }
-            Field::Engine(name) => {
-                match name {
-                    Some(name) => write!(f, "Engine\t{}", name),
-                    None => write!(f, "Engine"),
-                }
-            }
-            Field::Setup(name) => {
-                match name {
-                    Some(name) => write!(f, "Setup\t{}", name),
-                    None => write!(f, "Setup"),
-                }
-            }
-            Field::Runtime(name) => {
-                match name {
-                    Some(name) => write!(f, "Runtime\t{}", name),
-                    None => write!(f, "Runtime"),
-                }
-            }
-            Field::Hints(name) => {
-                match name {
-                    Some(name) => write!(f, "Hints\t{}", name),
-                    None => write!(f, "Hints"),
-                }
-            }
-            Field::Dev(name) => {
-                match name {
-                    Some(name) => write!(f, "Dev\t{}", name),
-                    None => write!(f, "Dev"),
-                }
-            }
-            Field::Publi(name) => {
-                match name {
-                    Some(name) => write!(f, "Pub\t{}", name),
-                    None => write!(f, "Pub"),
-                }
-            }
-            Field::Version(name) => {
-                match name {
-                    Some(name) => write!(f, "Version\t{}", name),
-                    None => write!(f, "Version"),
-                }
-            }
-            Field::Status(name) => {
-                match name {
-                    Some(name) => write!(f, "Status\t{}", name),
-                    None => write!(f, "Status"),
-                }
-            }
-            Field::Store(name) => {
-                match name {
-                    Some(name) => write!(f, "Store\t{}", name.join(" ")),
-                    None => write!(f, "Store"),
-                }
-            }
-            Field::Genres(name) => {
-                match name {
-                    Some(name) => write!(f, "Genre\t{}", name.join(", ")),
-                    None => write!(f, "Genre"),
-                }
-            }
-            Field::Tags(name) => {
-                match name {
-                    Some(name) => write!(f, "Tags\t{}", name.join(", ")),
-                    None => write!(f, "Tags"),
-                }
-            }
-            Field::Year(name) => {
-                match name {
-                    Some(name) => write!(f, "Year\t{}", name),
-                    None => write!(f, "Year"),
-                }
-            }
-            Field::Unknown(left, right) => {
-                match right {
-                    Some(right) => write!(f, "Unknown\t{}\t{}", left.unwrap(), right),
-                    None => write!(f, "Unknown\t{}", left.unwrap()),
-                }
-            }
+            Field::Game(name) => match name {
+                Some(name) => write!(f, "Game\t{}", name),
+                None => write!(f, "Game"),
+            },
+            Field::Cover(name) => match name {
+                Some(name) => write!(f, "Cover\t{}", name),
+                None => write!(f, "Cover"),
+            },
+            Field::Engine(name) => match name {
+                Some(name) => write!(f, "Engine\t{}", name),
+                None => write!(f, "Engine"),
+            },
+            Field::Setup(name) => match name {
+                Some(name) => write!(f, "Setup\t{}", name),
+                None => write!(f, "Setup"),
+            },
+            Field::Runtime(name) => match name {
+                Some(name) => write!(f, "Runtime\t{}", name),
+                None => write!(f, "Runtime"),
+            },
+            Field::Hints(name) => match name {
+                Some(name) => write!(f, "Hints\t{}", name),
+                None => write!(f, "Hints"),
+            },
+            Field::Dev(name) => match name {
+                Some(name) => write!(f, "Dev\t{}", name),
+                None => write!(f, "Dev"),
+            },
+            Field::Publi(name) => match name {
+                Some(name) => write!(f, "Pub\t{}", name),
+                None => write!(f, "Pub"),
+            },
+            Field::Version(name) => match name {
+                Some(name) => write!(f, "Version\t{}", name),
+                None => write!(f, "Version"),
+            },
+            Field::Status(name) => match name {
+                Some(name) => write!(f, "Status\t{}", name),
+                None => write!(f, "Status"),
+            },
+            Field::Store(name) => match name {
+                Some(name) => write!(f, "Store\t{}", name.join(" ")),
+                None => write!(f, "Store"),
+            },
+            Field::Genres(name) => match name {
+                Some(name) => write!(f, "Genre\t{}", name.join(", ")),
+                None => write!(f, "Genre"),
+            },
+            Field::Tags(name) => match name {
+                Some(name) => write!(f, "Tags\t{}", name.join(", ")),
+                None => write!(f, "Tags"),
+            },
+            Field::Year(name) => match name {
+                Some(name) => write!(f, "Year\t{}", name),
+                None => write!(f, "Year"),
+            },
+            Field::Unknown(left, right) => match right {
+                Some(right) => write!(f, "Unknown\t{}\t{}", left.unwrap(), right),
+                None => write!(f, "Unknown\t{}", left.unwrap()),
+            },
         }
     }
 }
@@ -225,11 +195,10 @@ impl<'a> Field<'a> {
                 },
             }
         } else {
-            Field::Unknown(Some("Unknown"),None)
+            Field::Unknown(Some("Unknown"), None)
         }
     }
 }
-
 
 #[cfg(test)]
 mod test_methods {
@@ -392,14 +361,14 @@ mod test_methods {
     fn from_malformed_line() {
         let input = "Let's not\tpanic";
         let field = Field::from(&input);
-        assert_eq!(Field::Unknown(Some(&"Let's not"),Some(&"panic")), field);
-        assert_eq!(format!("{}", field), format!("Unknown\t{}",input));
+        assert_eq!(Field::Unknown(Some(&"Let's not"), Some(&"panic")), field);
+        assert_eq!(format!("{}", field), format!("Unknown\t{}", input));
     }
     #[test]
     fn from_malformed_line_notab() {
         let input = "Let's not";
         let field = Field::from(&input);
-        assert_eq!(Field::Unknown(Some(&"Let's not"),None), field);
+        assert_eq!(Field::Unknown(Some(&"Let's not"), None), field);
         assert_eq!(format!("{}", field), format!("Unknown\t{}", input));
     }
 }
