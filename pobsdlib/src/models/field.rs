@@ -126,10 +126,17 @@ impl<'a> Field<'a> {
     /// ```
     /// use pobsdlib::models::Field;
     ///
-    /// let line_str = "Tags\ttag1, tag2";
-    /// let field = Field::from(line_str);
+    /// let runtime_str = "Runtime\truntime name";
+    /// let runtime_field = Field::from(runtime_str);
+    /// assert_eq!(runtime_field,Field::Runtime(Some(&"runtime name")));
     ///
-    /// assert_eq!(field,Field::Tags(Some(vec![&"tag1",&"tag2"])));
+    /// let tag_str = "Tags\ttag1, tag2";
+    /// let tag_field = Field::from(tag_str);
+    /// assert_eq!(tag_field,Field::Tags(Some(vec![&"tag1",&"tag2"])));
+    ///
+    /// let uk_str = "not a field\tnot an entry";
+    /// let uk_field = Field::from(uk_str);
+    /// assert_eq!(uk_field,Field::Unknown(Some("not a field"), Some("not an entry")));
     /// ```
     pub fn from(line: &'a str) -> Self {
         // Split the line in a left and right hand sides
