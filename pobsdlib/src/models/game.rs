@@ -62,7 +62,7 @@ impl fmt::Display for Game {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            "Game\t{}\nCover\t{}\nEngine\t{}\nSetup\t{}\nRuntime\t{}\nStore\t{}\nHints\t{}\nGenre\t{}\nTags\t{}\nYear\t{}\nDev\t{}\nPub\t{}\nVersion\t{}\nStatus\t{}",
             self.name,
             self.cover.as_ref().unwrap_or(&"".to_string()),
             self.engine.as_ref().unwrap_or(&"".to_string()),
