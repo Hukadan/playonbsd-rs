@@ -60,32 +60,76 @@ pub struct Game {
 
 impl fmt::Display for Game {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let game = format!("Game\t{}", self.name);
+        let cover = match &self.cover {
+            Some(cover) => format!("Cover\t{}", cover),
+            None => "Cover".to_string(),
+        };
+        let engine = match &self.engine {
+            Some(engine) => format!("Engine\t{}", engine),
+            None => "Engine".to_string(),
+        };
+        let setup = match &self.setup {
+            Some(setup) => format!("Setup\t{}", setup),
+            None => "Setup".to_string(),
+        };
+        let runtime = match &self.runtime {
+            Some(runtime) => format!("Runtime\t{}", runtime),
+            None => "Runtime".to_string(),
+        };
+        let store = match &self.store {
+            Some(store) => format!("Store\t{}", store.join(" ")),
+            None => "Store".to_string(),
+        };
+        let hints = match &self.hints {
+            Some(hints) => format!("Hints\t{}", hints),
+            None => "Hints".to_string(),
+        };
+        let genres = match &self.genres {
+            Some(genres) => format!("Genre\t{}", genres.join(", ")),
+            None => "Genre".to_string(),
+        };
+        let tags = match &self.tags {
+            Some(tags) => format!("Tags\t{}", tags.join(", ")),
+            None => "Tags".to_string(),
+        };
+        let year = match &self.year {
+            Some(year) => format!("Year\t{}", year),
+            None => "Year".to_string(),
+        };
+        let dev = match &self.dev {
+            Some(dev) => format!("Dev\t{}", dev),
+            None => "Dev".to_string(),
+        };
+        let publi = match &self.publi {
+            Some(publi) => format!("Pub\t{}", publi),
+            None => "Pub".to_string(),
+        };
+        let version = match &self.version {
+            Some(version) => format!("Version\t{}", version),
+            None => "Version".to_string(),
+        };
+        let status = match &self.status {
+            Some(status) => format!("Status\t{}", status),
+            None => "Status".to_string(),
+        };
         write!(
             f,
-            "Game\t{}\nCover\t{}\nEngine\t{}\nSetup\t{}\nRuntime\t{}\nStore\t{}\nHints\t{}\nGenre\t{}\nTags\t{}\nYear\t{}\nDev\t{}\nPub\t{}\nVersion\t{}\nStatus\t{}",
-            self.name,
-            self.cover.as_ref().unwrap_or(&"".to_string()),
-            self.engine.as_ref().unwrap_or(&"".to_string()),
-            self.setup.as_ref().unwrap_or(&"".to_string()),
-            self.runtime.as_ref().unwrap_or(&"".to_string()),
-            self.store
-                .as_ref()
-                .unwrap_or(&vec!["".to_string()])
-                .join(" "),
-            self.hints.as_ref().unwrap_or(&"".to_string()),
-            self.genres
-                .as_ref()
-                .unwrap_or(&vec!["".to_string()])
-                .join(", "),
-            self.tags
-                .as_ref()
-                .unwrap_or(&vec!["".to_string()])
-                .join(", "),
-            self.year.as_ref().unwrap_or(&"".to_string()),
-            self.dev.as_ref().unwrap_or(&"".to_string()),
-            self.publi.as_ref().unwrap_or(&"".to_string()),
-            self.version.as_ref().unwrap_or(&"".to_string()),
-            self.status.as_ref().unwrap_or(&"".to_string()),
+            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            game,
+            cover,
+            engine,
+            setup,
+            runtime,
+            store,
+            hints,
+            genres,
+            tags,
+            year,
+            dev,
+            publi,
+            version,
+            status,
         )
     }
 }
@@ -332,5 +376,40 @@ mod test_game_methods {
         assert!(game2.ge(&game1));
         assert!(game1.le(&game2));
         assert!(game1.lt(&game2));
+    }
+    #[test]
+    fn test_display() {
+        let game_str="Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
+Cover	AaaaaA_for_the_Awesome_Cover.jpg
+Engine
+Setup
+Runtime	HumblePlay
+Store	https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
+Hints	Demo on HumbleBundle store page
+Genre
+Tags
+Year	2011
+Dev
+Pub
+Version
+Status";
+        let game = Game {
+            id: 1,
+            name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
+            cover: Some("AaaaaA_for_the_Awesome_Cover.jpg".to_string()),
+            engine: None,
+            setup: None,
+            runtime: Some("HumblePlay".to_string()),
+            store: Some(vec!["https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome".to_string()]),
+            hints:Some("Demo on HumbleBundle store page".to_string()),
+            genres:None,
+            tags:None,
+            year:Some("2011".to_string()),
+            dev: None,
+            publi: None,
+            version:None,
+            status:None,
+        };
+        assert_eq!(format!("{}", game), game_str);
     }
 }
