@@ -379,7 +379,7 @@ mod test_game_methods {
     }
     #[test]
     fn test_display() {
-        let game_str="Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
+        let game_str = "Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
 Cover	AaaaaA_for_the_Awesome_Cover.jpg
 Engine
 Setup
@@ -400,15 +400,18 @@ Status";
             engine: None,
             setup: None,
             runtime: Some("HumblePlay".to_string()),
-            store: Some(vec!["https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome".to_string()]),
-            hints:Some("Demo on HumbleBundle store page".to_string()),
-            genres:None,
-            tags:None,
-            year:Some("2011".to_string()),
+            store: Some(vec![
+                "https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome"
+                    .to_string(),
+            ]),
+            hints: Some("Demo on HumbleBundle store page".to_string()),
+            genres: None,
+            tags: None,
+            year: Some("2011".to_string()),
             dev: None,
             publi: None,
-            version:None,
-            status:None,
+            version: None,
+            status: None,
         };
         assert_eq!(format!("{}", game), game_str);
     }
