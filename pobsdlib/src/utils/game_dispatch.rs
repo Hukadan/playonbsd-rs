@@ -1,5 +1,5 @@
 use crate::collections::DataBase;
-use crate::models::{Field, Game};
+use crate::models::{Field, Game, Item};
 use crate::utils::get_app_id;
 
 pub fn game_dispatch(field: Field, database: &mut DataBase) {
@@ -40,8 +40,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 database
                     .engines
                     .entry(name.to_string())
-                    .and_modify(|e| e.push(last_game_id))
-                    .or_insert(vec![last_game_id]);
+                    .and_modify(|e| e.games.push(last_game_id))
+                    .or_insert(Item {
+                        name: name.to_string(),
+                        games: vec![last_game_id],
+                    });
             };
         }
         Field::Setup(name) => {
@@ -61,8 +64,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 database
                     .runtimes
                     .entry(name.to_string())
-                    .and_modify(|e| e.push(last_game_id))
-                    .or_insert(vec![last_game_id]);
+                    .and_modify(|e| e.games.push(last_game_id))
+                    .or_insert(Item {
+                        name: name.to_string(),
+                        games: vec![last_game_id],
+                    });
             };
         }
         Field::Hints(name) => {
@@ -82,8 +88,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 database
                     .devs
                     .entry(name.to_string())
-                    .and_modify(|e| e.push(last_game_id))
-                    .or_insert(vec![last_game_id]);
+                    .and_modify(|e| e.games.push(last_game_id))
+                    .or_insert(Item {
+                        name: name.to_string(),
+                        games: vec![last_game_id],
+                    });
             };
         }
         Field::Publi(name) => {
@@ -95,8 +104,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 database
                     .publis
                     .entry(name.to_string())
-                    .and_modify(|e| e.push(last_game_id))
-                    .or_insert(vec![last_game_id]);
+                    .and_modify(|e| e.games.push(last_game_id))
+                    .or_insert(Item {
+                        name: name.to_string(),
+                        games: vec![last_game_id],
+                    });
             };
         }
         Field::Version(name) => {
@@ -160,8 +172,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                     database
                         .genres
                         .entry(item.to_string())
-                        .and_modify(|e| e.push(last_game_id))
-                        .or_insert(vec![last_game_id]);
+                        .and_modify(|e| e.games.push(last_game_id))
+                        .or_insert(Item {
+                            name: item.to_string(),
+                            games: vec![last_game_id],
+                        });
                 }
             };
         }
@@ -182,8 +197,11 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                     database
                         .tags
                         .entry(item.to_string())
-                        .and_modify(|e| e.push(last_game_id))
-                        .or_insert(vec![last_game_id]);
+                        .and_modify(|e| e.games.push(last_game_id))
+                        .or_insert(Item {
+                            name: item.to_string(),
+                            games: vec![last_game_id],
+                        });
                 }
             };
         }
@@ -196,11 +214,14 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 database
                     .years
                     .entry(year.to_string())
-                    .and_modify(|e| e.push(last_game_id))
-                    .or_insert(vec![last_game_id]);
+                    .and_modify(|e| e.games.push(last_game_id))
+                    .or_insert(Item {
+                        name: year.to_string(),
+                        games: vec![last_game_id],
+                    });
             }
         }
-        Field::Unknown(left,right) => {
+        Field::Unknown(left, right) => {
             if let Some(left) = left {
                 if let Some(right) = right {
                     eprintln!("Skipping unknown field: {}: {}", left, right);
@@ -253,7 +274,13 @@ mod test_game_dispatch {
             &"test2".to_string()
         );
         assert_eq!(db.engines.len(), 1);
-        assert_eq!(db.engines.get("test2").unwrap(), &vec![1 as usize]);
+        assert_eq!(
+            db.engines.get("test2").unwrap(),
+            &Item {
+                name: "test2".to_string(),
+                games: vec![1 as usize]
+            }
+        );
     }
     #[test]
     fn dispatch_setup() {
@@ -281,6 +308,12 @@ mod test_game_dispatch {
             &"test2".to_string()
         );
         assert_eq!(db.runtimes.len(), 1);
-        assert_eq!(db.runtimes.get("test2").unwrap(), &vec![1 as usize]);
+        assert_eq!(
+            db.runtimes.get("test2").unwrap(),
+            &Item {
+                name: "test2".to_string(),
+                games: vec![1 as usize]
+            }
+        );
     }
 }

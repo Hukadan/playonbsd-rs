@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::collections::QuerySet;
-use crate::models::Game;
+use crate::models::{Game, Item};
 use crate::utils::load_database;
 
 /// # DataBase
@@ -16,13 +16,13 @@ use crate::utils::load_database;
 #[derive(Serialize, Clone, Default, Debug, PartialEq)]
 pub struct DataBase {
     pub(crate) games: HashMap<usize, Game>,
-    pub(crate) engines: HashMap<String, Vec<usize>>,
-    pub(crate) runtimes: HashMap<String, Vec<usize>>,
-    pub(crate) genres: HashMap<String, Vec<usize>>,
-    pub(crate) tags: HashMap<String, Vec<usize>>,
-    pub(crate) years: HashMap<String, Vec<usize>>,
-    pub(crate) devs: HashMap<String, Vec<usize>>,
-    pub(crate) publis: HashMap<String, Vec<usize>>,
+    pub(crate) engines: HashMap<String, Item>,
+    pub(crate) runtimes: HashMap<String, Item>,
+    pub(crate) genres: HashMap<String, Item>,
+    pub(crate) tags: HashMap<String, Item>,
+    pub(crate) years: HashMap<String, Item>,
+    pub(crate) devs: HashMap<String, Item>,
+    pub(crate) publis: HashMap<String, Item>,
 }
 
 /// Public API
@@ -33,13 +33,19 @@ impl DataBase {
         load_database(&mut database, filename);
         database
     }
-    pub fn get_game_by_id(&self, id: &usize) -> Option<&Game> {
-        self.games.get(id)
-    }
+    /// Return all games
     pub fn get_all_games(&self) -> QuerySet<&Game> {
         let games = self.games.values().collect();
         QuerySet::new(games)
     }
+    /// Return the game the the given id
+    pub fn get_game_by_id(&self, id: &usize) -> Option<&Game> {
+        self.games.get(id)
+    }
+    /// Return the game with the given name
+    /// Note that nothing forbids two games
+    /// to have the same name. Hence, it
+    /// returns a QuerySet.
     pub fn get_game_by_name(&self, name: &str) -> QuerySet<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| item.name == name);
         let mut games: Vec<&Game> = Vec::new();
@@ -60,62 +66,81 @@ impl DataBase {
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// engine.
     pub fn get_game_by_engine(&self, name: &str) -> QuerySet<&Game> {
-        let game_ids = self.engines.get(name).unwrap();
+        let engine = self.engines.get(name).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &engine.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// runtime.
     pub fn get_game_by_runtime(&self, name: &str) -> QuerySet<&Game> {
-        let game_ids = self.runtimes.get(name).unwrap();
+        let runtime = self.runtimes.get(name).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &runtime.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// genre.
     pub fn get_game_by_genre(&self, name: &str) -> QuerySet<&Game> {
-        let game_ids = self.genres.get(name).unwrap();
+        let genre = self.genres.get(name).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &genre.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// tag.
     pub fn get_game_by_tag(&self, name: &str) -> QuerySet<&Game> {
-        let game_ids = self.tags.get(name).unwrap();
+        let tag = self.tags.get(name).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &tag.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// year.
     pub fn get_game_by_year(&self, year: String) -> QuerySet<&Game> {
-        let game_ids = self.years.get(&year).unwrap();
+        let year = self.years.get(&year).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &year.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// dev.
     pub fn get_game_by_dev(&self, name: &str) -> QuerySet<&Game> {
-        let game_ids = self.devs.get(name).unwrap();
+        let dev = self.devs.get(name).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &dev.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated with a given
+    /// publisher.
     pub fn get_game_by_publi(&self, name: &str) -> QuerySet<&Game> {
-        let game_ids = self.publis.get(name).unwrap();
+        let publi = self.publis.get(name).unwrap();
         let mut games: Vec<&Game> = Vec::new();
-        for id in game_ids {
+        for id in &publi.games {
             games.push(self.games.get(id).unwrap());
         }
         QuerySet::new(games)
     }
+    /// Return the games associated that contains
+    /// the given string for each field. When a
+    /// field is not searched, it should be set to
+    /// None. The search is done performing AND
+    /// between the fields.
     pub fn game_contains_and(
         &self,
         name: Option<&str>,
@@ -143,6 +168,11 @@ impl DataBase {
         }
         QuerySet::new(games)
     }
+    /// Return the games associated that contains
+    /// the given string for each field. When a
+    /// field is not searched, it should be set to
+    /// None. The search is done performing OR
+    /// between the fields.
     pub fn game_contains_or(
         &self,
         name: Option<&str>,
@@ -169,5 +199,15 @@ impl DataBase {
             games.push(item);
         }
         QuerySet::new(games)
+    }
+    /// Return all engines
+    pub fn get_all_engines(&self) -> QuerySet<&Item> {
+        let engines = self.engines.values().collect();
+        QuerySet::new(engines)
+    }
+    /// Return all runtimes
+    pub fn get_all_runtimes(&self) -> QuerySet<&Item> {
+        let engines = self.runtimes.values().collect();
+        QuerySet::new(engines)
     }
 }
