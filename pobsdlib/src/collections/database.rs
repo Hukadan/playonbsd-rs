@@ -54,18 +54,6 @@ impl DataBase {
         }
         QuerySet::new(games)
     }
-    pub fn get_game_by_name_contains(&self, search: &str) -> QuerySet<&Game> {
-        let gs = self.games.iter().filter(|&(_, item)| {
-            item.name
-                .to_lowercase()
-                .contains(search.to_lowercase().as_str())
-        });
-        let mut games: Vec<&Game> = Vec::new();
-        for (_, item) in gs {
-            games.push(item);
-        }
-        QuerySet::new(games)
-    }
     /// Return the games associated with a given
     /// engine.
     pub fn get_game_by_engine(&self, name: &str) -> QuerySet<&Game> {
@@ -209,5 +197,30 @@ impl DataBase {
     pub fn get_all_runtimes(&self) -> QuerySet<&Item> {
         let engines = self.runtimes.values().collect();
         QuerySet::new(engines)
+    }
+    /// Return all genres
+    pub fn get_all_genres(&self) -> QuerySet<&Item> {
+        let genres = self.genres.values().collect();
+        QuerySet::new(genres)
+    }
+    /// Return all tags
+    pub fn get_all_tags(&self) -> QuerySet<&Item> {
+        let tags = self.tags.values().collect();
+        QuerySet::new(tags)
+    }
+    /// Return all years
+    pub fn get_all_years(&self) -> QuerySet<&Item> {
+        let years = self.years.values().collect();
+        QuerySet::new(years)
+    }
+    /// Return all devs
+    pub fn get_all_devs(&self) -> QuerySet<&Item> {
+        let devs = self.devs.values().collect();
+        QuerySet::new(devs)
+    }
+    /// Return all publis
+    pub fn get_all_publis(&self) -> QuerySet<&Item> {
+        let publis = self.publis.values().collect();
+        QuerySet::new(publis)
     }
 }
