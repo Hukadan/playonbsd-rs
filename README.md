@@ -1,4 +1,5 @@
 [![Rust](https://github.com/Hukadan/pobsdjs/actions/workflows/rust.yml/badge.svg)](https://github.com/Hukadan/pobsdjs/actions/workflows/rust.yml)
+[![rust-clippy analyze](https://github.com/Hukadan/pobsdjs/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/Hukadan/pobsdjs/actions/workflows/rust-clippy.yml)
 
 ### pobsdjs
 pobsdjs provides a set of tools to interact with
