@@ -1,6 +1,8 @@
 //! # pobsdlib
-//! A library to in interact with the PlayOnBSD database
-//! The database can be found at `https://github.com/playonbsd/OpenBSD-Games-Database`
+//! pobsdlib is a library developped to interact with
+//! the playonbsd database listing games that should
+//! run on OpenBSD. The database can be found here:
+//! `https://github.com/playonbsd/OpenBSD-Games-Database`
 //!
 #[macro_use]
 extern crate serde_derive;
