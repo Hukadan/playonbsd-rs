@@ -9,7 +9,7 @@ pub(crate) fn game_all(db: &State<DataBase>) -> String {
 
 #[get("/games/<id>")]
 pub(crate) fn game_id(db: &State<DataBase>, id: usize) -> String {
-    serde_json::to_string_pretty(&db.get_game_by_id(&id).expect("Should not fail")).unwrap()
+    serde_json::to_string_pretty(&db.get_game_by_id(id).expect("Should not fail")).unwrap()
 }
 
 #[get("/games/andsearch?<name>&<engine>&<runtime>&<genre>&<tag>&<year>&<dev>&<publi>")]
