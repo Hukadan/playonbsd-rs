@@ -1,3 +1,5 @@
+[![Rust](https://github.com/Hukadan/pobsdjs/actions/workflows/rust.yml/badge.svg)](https://github.com/Hukadan/pobsdjs/actions/workflows/rust.yml)
+
 ### pobsdjs
 pobsdjs provides a set of tools to interact with
 the PlayOnBSD database listing games running on
