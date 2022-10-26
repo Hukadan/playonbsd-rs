@@ -4,21 +4,21 @@ use pobsdlib::collections::DataBase;
 #[test]
 fn test_get_all_game() {
     let db = DataBase::new("tests/data/test-games.db");
-    let qs = db.get_all_games();
+    let games = db.get_all_games();
     // we get them all
-    assert_eq!(qs.count, 8);
+    assert_eq!(games.count, 8);
     // we get the right ones and in the right order
     assert_eq!(
-        qs.items.get(0).unwrap().name,
+        games.items.get(0).unwrap().name,
         "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome"
     );
-    assert_eq!(qs.items.get(1).unwrap().name, "The Adventures of Shuggy");
-    assert_eq!(qs.items.get(2).unwrap().name, "Aedemphia");
-    assert_eq!(qs.items.get(3).unwrap().name, "Aeternum");
-    assert_eq!(qs.items.get(4).unwrap().name, "Airships: Conquer the Skies");
-    assert_eq!(qs.items.get(5).unwrap().name, "Akane the Kunoichi");
-    assert_eq!(qs.items.get(6).unwrap().name, "Always Sometimes Monsters");
-    assert_eq!(qs.items.get(7).unwrap().name, "Amazing Princess Sarah");
+    assert_eq!(games.items.get(1).unwrap().name, "The Adventures of Shuggy");
+    assert_eq!(games.items.get(2).unwrap().name, "Aedemphia");
+    assert_eq!(games.items.get(3).unwrap().name, "Aeternum");
+    assert_eq!(games.items.get(4).unwrap().name, "Airships: Conquer the Skies");
+    assert_eq!(games.items.get(5).unwrap().name, "Akane the Kunoichi");
+    assert_eq!(games.items.get(6).unwrap().name, "Always Sometimes Monsters");
+    assert_eq!(games.items.get(7).unwrap().name, "Amazing Princess Sarah");
 }
 #[test]
 fn test_game_get_by_id() {
@@ -40,38 +40,47 @@ fn test_game_get_by_id() {
 #[test]
 fn test_game_get_by_name() {
     let db_game = DataBase::new("tests/data/test-games.db");
-    let qs = db_game.get_game_by_name("Akane the Kunoichi");
+    let games = db_game.get_game_by_name("Akane the Kunoichi");
     // check we have the right number
-    assert_eq!(qs.count, 1);
+    assert_eq!(games.count, 1);
     // check we have the good one
-    assert_eq!(qs.items.get(0).unwrap().name, "Akane the Kunoichi");
-    assert_eq!(qs.items.get(0).unwrap().id, 6);
+    assert_eq!(games.items.get(0).unwrap().name, "Akane the Kunoichi");
+    assert_eq!(games.items.get(0).unwrap().id, 6);
     assert_eq!(
-        qs.items.get(0).unwrap().engine.as_ref().unwrap(),
+        games.items.get(0).unwrap().engine.as_ref().unwrap(),
         &"XNA".to_string()
     );
+    let games = db_game.get_game_by_name("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
 }
 #[test]
 fn test_game_get_by_engine() {
     let db_game = DataBase::new("tests/data/test-games.db");
-    let qs = db_game.get_game_by_engine("FNA");
+    let games = db_game.get_game_by_engine("FNA");
     // check we have the right number
-    assert_eq!(qs.count, 2);
+    assert_eq!(games.count, 2);
     // check we have the good ones
-    assert_eq!(qs.items.get(0).unwrap().name, "The Adventures of Shuggy");
-    assert_eq!(qs.items.get(0).unwrap().id, 2);
-    assert_eq!(qs.items.get(1).unwrap().name, "Aeternum");
-    assert_eq!(qs.items.get(1).unwrap().id, 4);
+    assert_eq!(games.items.get(0).unwrap().name, "The Adventures of Shuggy");
+    assert_eq!(games.items.get(0).unwrap().id, 2);
+    assert_eq!(games.items.get(1).unwrap().name, "Aeternum");
+    assert_eq!(games.items.get(1).unwrap().id, 4);
+    let games = db_game.get_game_by_runtime("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
 }
 #[test]
 fn test_game_get_by_runtime() {
     let db_game = DataBase::new("tests/data/test-games.db");
-    let qs = db_game.get_game_by_runtime("easyrpg");
+    let games = db_game.get_game_by_runtime("easyrpg");
     // check we have the right number
-    assert_eq!(qs.count, 1);
+    assert_eq!(games.count, 1);
     // check we have the good ones
-    assert_eq!(qs.items.get(0).unwrap().name, "Aedemphia");
-    assert_eq!(qs.items.get(0).unwrap().id, 3);
+    assert_eq!(games.items.get(0).unwrap().name, "Aedemphia");
+    assert_eq!(games.items.get(0).unwrap().id, 3);
+    let games = db_game.get_game_by_runtime("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
 }
 #[test]
 fn test_game_get_by_genre() {
@@ -80,14 +89,20 @@ fn test_game_get_by_genre() {
     assert_eq!(games.count, 2);
     assert_eq!(games.items.get(0).unwrap().name, "Aedemphia".to_string());
     assert_eq!(games.items.get(1).unwrap().name, "Always Sometimes Monsters".to_string());
+    let games = db_game.get_game_by_genre("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
 }
 #[test]
 fn test_game_get_by_tag() {
     let db_game = DataBase::new("tests/data/test-games.db");
     let games = db_game.get_game_by_tag("indie");
     assert_eq!(games.count, 2);
-    assert_eq!(games.items[0].name, "The Adventures of Shuggy".to_string());
-    assert_eq!(games.items[1].name, "Aeternum".to_string());
+    assert_eq!(games.items.get(0).unwrap().name, "The Adventures of Shuggy".to_string());
+    assert_eq!(games.items.get(1).unwrap().name, "Aeternum".to_string());
+    let games = db_game.get_game_by_tag("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
 }
 #[test]
 fn test_game_get_by_year() {
@@ -98,4 +113,27 @@ fn test_game_get_by_year() {
     // check we have the right one
     assert_eq!(games.items.get(0).unwrap().name, "Aeternum");
     assert_eq!(games.items.get(0).unwrap().id, 4);
+    let games = db_game.get_game_by_year("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
+}
+#[test]
+fn test_game_get_by_dev() {
+    let db_game = DataBase::new("tests/data/test-games.db");
+    let games = db_game.get_game_by_dev("David Stark");
+    // check we have the right number
+    assert_eq!(games.count, 1);
+    // check we have the right one
+    assert_eq!(games.items.get(0).unwrap().name, "Airships: Conquer the Skies");
+    assert_eq!(games.items.get(0).unwrap().id, 5);
+    let games = db_game.get_game_by_dev("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
+}
+#[test]
+fn test_game_get_by_pub() {
+    let db_game = DataBase::new("tests/data/test-games.db");
+    let games = db_game.get_game_by_publi("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
 }
