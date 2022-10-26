@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::collections::QuerySet;
+use crate::collections::QueryResult;
 use crate::models::{Game, Item};
 use crate::utils::load_database;
 
@@ -34,9 +34,9 @@ impl DataBase {
         database
     }
     /// Return all games
-    pub fn get_all_games(&self) -> QuerySet<&Game> {
+    pub fn get_all_games(&self) -> QueryResult<&Game> {
         let games = self.games.values().collect();
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the game the the given id
     pub fn get_game_by_id(&self, id: usize) -> Option<&Game> {
@@ -46,90 +46,90 @@ impl DataBase {
     /// Note that nothing forbids two games
     /// to have the same name. Hence, it
     /// returns a QuerySet.
-    pub fn get_game_by_name(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_name(&self, name: &str) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| item.name == name);
         let mut games: Vec<&Game> = Vec::new();
         for (_, item) in gs {
             games.push(item);
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// engine.
-    pub fn get_game_by_engine(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_engine(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(engine) = self.engines.get(name) {
             for id in &engine.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// runtime.
-    pub fn get_game_by_runtime(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_runtime(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(runtime) = self.runtimes.get(name) {
             for id in &runtime.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// genre.
-    pub fn get_game_by_genre(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_genre(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(genre) = self.genres.get(name) {
             for id in &genre.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// tag.
-    pub fn get_game_by_tag(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_tag(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(tag) = self.tags.get(name) {
             for id in &tag.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// year.
-    pub fn get_game_by_year(&self, year: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_year(&self, year: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(year) = self.years.get(&year.to_string()) {
             for id in &year.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// dev.
-    pub fn get_game_by_dev(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_dev(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(dev) = self.devs.get(name) {
             for id in &dev.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated with a given
     /// publisher.
-    pub fn get_game_by_publi(&self, name: &str) -> QuerySet<&Game> {
+    pub fn get_game_by_publi(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(publi) = self.publis.get(name) {
             for id in &publi.games {
                 games.push(self.games.get(id).unwrap());
             }
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated that contains
     /// the given string for each field. When a
@@ -146,7 +146,7 @@ impl DataBase {
         year: Option<&str>,
         dev: Option<&str>,
         publi: Option<&str>,
-    ) -> QuerySet<&Game> {
+    ) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
             item.name_contains(name)
                 && item.engine_contains(engine)
@@ -161,7 +161,7 @@ impl DataBase {
         for (_, item) in gs {
             games.push(item);
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return the games associated that contains
     /// the given string for each field. When a
@@ -178,7 +178,7 @@ impl DataBase {
         year: Option<&str>,
         dev: Option<&str>,
         publi: Option<&str>,
-    ) -> QuerySet<&Game> {
+    ) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
             item.name_contains(name)
                 || item.engine_contains(engine)
@@ -193,41 +193,41 @@ impl DataBase {
         for (_, item) in gs {
             games.push(item);
         }
-        QuerySet::new(games)
+        QueryResult::new(games)
     }
     /// Return all engines
-    pub fn get_all_engines(&self) -> QuerySet<&Item> {
+    pub fn get_all_engines(&self) -> QueryResult<&Item> {
         let engines = self.engines.values().collect();
-        QuerySet::new(engines)
+        QueryResult::new(engines)
     }
     /// Return all runtimes
-    pub fn get_all_runtimes(&self) -> QuerySet<&Item> {
+    pub fn get_all_runtimes(&self) -> QueryResult<&Item> {
         let engines = self.runtimes.values().collect();
-        QuerySet::new(engines)
+        QueryResult::new(engines)
     }
     /// Return all genres
-    pub fn get_all_genres(&self) -> QuerySet<&Item> {
+    pub fn get_all_genres(&self) -> QueryResult<&Item> {
         let genres = self.genres.values().collect();
-        QuerySet::new(genres)
+        QueryResult::new(genres)
     }
     /// Return all tags
-    pub fn get_all_tags(&self) -> QuerySet<&Item> {
+    pub fn get_all_tags(&self) -> QueryResult<&Item> {
         let tags = self.tags.values().collect();
-        QuerySet::new(tags)
+        QueryResult::new(tags)
     }
     /// Return all years
-    pub fn get_all_years(&self) -> QuerySet<&Item> {
+    pub fn get_all_years(&self) -> QueryResult<&Item> {
         let years = self.years.values().collect();
-        QuerySet::new(years)
+        QueryResult::new(years)
     }
     /// Return all devs
-    pub fn get_all_devs(&self) -> QuerySet<&Item> {
+    pub fn get_all_devs(&self) -> QueryResult<&Item> {
         let devs = self.devs.values().collect();
-        QuerySet::new(devs)
+        QueryResult::new(devs)
     }
     /// Return all publis
-    pub fn get_all_publis(&self) -> QuerySet<&Item> {
+    pub fn get_all_publis(&self) -> QueryResult<&Item> {
         let publis = self.publis.values().collect();
-        QuerySet::new(publis)
+        QueryResult::new(publis)
     }
 }
