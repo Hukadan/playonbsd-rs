@@ -15,9 +15,15 @@ fn test_get_all_game() {
     assert_eq!(games.items.get(1).unwrap().name, "The Adventures of Shuggy");
     assert_eq!(games.items.get(2).unwrap().name, "Aedemphia");
     assert_eq!(games.items.get(3).unwrap().name, "Aeternum");
-    assert_eq!(games.items.get(4).unwrap().name, "Airships: Conquer the Skies");
+    assert_eq!(
+        games.items.get(4).unwrap().name,
+        "Airships: Conquer the Skies"
+    );
     assert_eq!(games.items.get(5).unwrap().name, "Akane the Kunoichi");
-    assert_eq!(games.items.get(6).unwrap().name, "Always Sometimes Monsters");
+    assert_eq!(
+        games.items.get(6).unwrap().name,
+        "Always Sometimes Monsters"
+    );
     assert_eq!(games.items.get(7).unwrap().name, "Amazing Princess Sarah");
 }
 #[test]
@@ -88,7 +94,10 @@ fn test_game_get_by_genre() {
     let games = db_game.get_game_by_genre("RPG");
     assert_eq!(games.count, 2);
     assert_eq!(games.items.get(0).unwrap().name, "Aedemphia".to_string());
-    assert_eq!(games.items.get(1).unwrap().name, "Always Sometimes Monsters".to_string());
+    assert_eq!(
+        games.items.get(1).unwrap().name,
+        "Always Sometimes Monsters".to_string()
+    );
     let games = db_game.get_game_by_genre("Unknown");
     // check we have the right number
     assert_eq!(games.count, 0);
@@ -98,7 +107,10 @@ fn test_game_get_by_tag() {
     let db_game = DataBase::new("tests/data/test-games.db");
     let games = db_game.get_game_by_tag("indie");
     assert_eq!(games.count, 2);
-    assert_eq!(games.items.get(0).unwrap().name, "The Adventures of Shuggy".to_string());
+    assert_eq!(
+        games.items.get(0).unwrap().name,
+        "The Adventures of Shuggy".to_string()
+    );
     assert_eq!(games.items.get(1).unwrap().name, "Aeternum".to_string());
     let games = db_game.get_game_by_tag("Unknown");
     // check we have the right number
@@ -124,7 +136,10 @@ fn test_game_get_by_dev() {
     // check we have the right number
     assert_eq!(games.count, 1);
     // check we have the right one
-    assert_eq!(games.items.get(0).unwrap().name, "Airships: Conquer the Skies");
+    assert_eq!(
+        games.items.get(0).unwrap().name,
+        "Airships: Conquer the Skies"
+    );
     assert_eq!(games.items.get(0).unwrap().id, 5);
     let games = db_game.get_game_by_dev("Unknown");
     // check we have the right number

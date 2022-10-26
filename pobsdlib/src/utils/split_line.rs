@@ -5,7 +5,7 @@ pub fn split_line(line: &str) -> (Option<&str>, Option<&str>) {
     // split the line in a left and right hand sides
     match split_line.len() {
         1 => {
-            if split_line[0].len() > 0 {
+            if !split_line[0].is_empty() {
                 left = Some(split_line[0]);
             } else {
                 left = None;
@@ -14,7 +14,7 @@ pub fn split_line(line: &str) -> (Option<&str>, Option<&str>) {
         }
         2 => {
             left = Some(split_line[0]);
-            if split_line[1].len() > 0 {
+            if !split_line[1].is_empty() {
                 right = Some(split_line[1]);
             } else {
                 right = None

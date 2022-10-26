@@ -13,7 +13,7 @@ use crate::utils::load_database;
 /// The games collection also stores a vector of Game.
 /// being described using the following struct:
 ///
-#[derive(Serialize, Clone, Default, Debug, PartialEq)]
+#[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct DataBase {
     pub(crate) games: HashMap<usize, Game>,
     pub(crate) engines: HashMap<String, Item>,

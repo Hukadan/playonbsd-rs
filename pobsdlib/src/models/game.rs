@@ -8,23 +8,23 @@ use std::fmt;
 /// ```
 /// use pobsdlib::models::{Field, Game};
 /// // typical lines of a game in the database
-/// let database="Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
-/// Cover	AaaaaA_for_the_Awesome_Cover.jpg
+/// let database="Game\tAaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
+/// Cover\tAaaaaA_for_the_Awesome_Cover.jpg
 /// Engine
 /// Setup
-/// Runtime	HumblePlay
-/// Store	https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
-/// Hints	Demo on HumbleBundle store page
+/// Runtime\tHumblePlay
+/// Store\thttps://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
+/// Hints\tDemo on HumbleBundle store page
 /// Genre
 /// Tags
-/// Year	2011
+/// Year\t2011
 /// Dev
 /// Pub
 /// Version
 /// Status";
 ///
 /// ```
-#[derive(Serialize, Clone, Default, Debug, PartialEq)]
+#[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Game {
     /// The id of the game.
     pub id: usize,
@@ -379,16 +379,16 @@ mod test_game_methods {
     }
     #[test]
     fn test_display() {
-        let game_str = "Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
-Cover	AaaaaA_for_the_Awesome_Cover.jpg
+        let game_str = "Game\tAaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
+Cover\tAaaaaA_for_the_Awesome_Cover.jpg
 Engine
 Setup
-Runtime	HumblePlay
-Store	https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
-Hints	Demo on HumbleBundle store page
+Runtime\tHumblePlay
+Store\thttps://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
+Hints\tDemo on HumbleBundle store page
 Genre
 Tags
-Year	2011
+Year\t2011
 Dev
 Pub
 Version

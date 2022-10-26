@@ -1,10 +1,8 @@
-
 pub fn get_app_id(url: &str) -> Option<&str> {
-
     let url = url.split("app/").collect::<Vec<&str>>();
-    let last_part = url.get(1); 
+    let last_part = url.get(1);
     if let Some(last_part) = last_part {
-        if let Some(appid) = last_part.split("/").collect::<Vec<&str>>().get(0) {
+        if let Some(appid) = last_part.split('/').collect::<Vec<&str>>().first() {
             Some(appid)
         } else {
             None

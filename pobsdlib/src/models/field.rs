@@ -4,7 +4,7 @@ use std::fmt;
 /* ------------------------ FIELD ENUM -----------------------*/
 /// Represent a field generated form a line of the game database
 ///
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub enum Field<'a> {
     Game(Option<&'a str>),
     Cover(Option<&'a str>),

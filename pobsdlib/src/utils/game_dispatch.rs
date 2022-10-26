@@ -22,10 +22,10 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    if name.len() > 0 {
+                    if !name.is_empty() {
                         game.cover = Some(format!(
                             "https://playonbsd.com/legacy/shopping_guide/pics/originals/{}",
-                            name.to_string()
+                            name
                         ));
                     }
                 };
@@ -136,7 +136,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                         // if a steam link is given in store.
                         // if is_empty && item.contains("steampowered") {
                         if item.contains("steampowered") {
-                            let item = item.clone();
+                            let item = item;
                             let app_id = get_app_id(item);
                             if let Some(app_id) = app_id {
                                 game.cover = Some(format!(

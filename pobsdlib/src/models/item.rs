@@ -1,7 +1,7 @@
 use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
-#[derive(Serialize, Clone, Default, Debug, PartialEq)]
+#[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Item {
     pub name: String,
     pub games: Vec<usize>,
