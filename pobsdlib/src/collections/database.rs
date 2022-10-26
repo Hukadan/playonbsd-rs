@@ -39,8 +39,8 @@ impl DataBase {
         QuerySet::new(games)
     }
     /// Return the game the the given id
-    pub fn get_game_by_id(&self, id: &usize) -> Option<&Game> {
-        self.games.get(id)
+    pub fn get_game_by_id(&self, id: usize) -> Option<&Game> {
+        self.games.get(&id)
     }
     /// Return the game with the given name
     /// Note that nothing forbids two games
@@ -96,8 +96,8 @@ impl DataBase {
     }
     /// Return the games associated with a given
     /// year.
-    pub fn get_game_by_year(&self, year: String) -> QuerySet<&Game> {
-        let year = self.years.get(&year).unwrap();
+    pub fn get_game_by_year(&self, year: &str) -> QuerySet<&Game> {
+        let year = self.years.get(&year.to_string()).unwrap();
         let mut games: Vec<&Game> = Vec::new();
         for id in &year.games {
             games.push(self.games.get(id).unwrap());
