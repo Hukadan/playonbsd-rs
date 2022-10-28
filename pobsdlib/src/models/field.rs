@@ -2,24 +2,67 @@ use crate::utils::split_line;
 use std::fmt;
 
 /* ------------------------ FIELD ENUM -----------------------*/
-/// Represent a field generated form a line of the game database
+/// The Field enum is a representations of a line
+/// in the database.
+/// Each type of line is represented by a variant (see
+/// below).
+/// The Unknown variant is used to represent lines
+/// that were not parsed correctly.
+/// ```
+/// use pobsdlib::Field;
 ///
+/// // line representing a runtime item
+/// let runtime_str = "Runtime\truntime name";
+/// // create a Field enum from that line
+/// let runtime_field = Field::from(runtime_str);
+/// assert_eq!(runtime_field,Field::Runtime(Some(&"runtime name")));
+/// // the Field enum is displayed as the corresponding line
+/// // in the database
+/// assert_eq!(format!("{}", runtime_field), runtime_str);
+///
+/// // line representing a tag item
+/// let tag_str = "Tags\ttag1, tag2";
+/// // create a Field enum from that line
+/// let tag_field = Field::from(tag_str);
+/// assert_eq!(tag_field,Field::Tags(Some(vec![&"tag1",&"tag2"])));
+/// assert_eq!(format!("{}", tag_field), tag_str);
+/// ```
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub enum Field<'a> {
+    /// Store the result of a Game line of the database
     Game(Option<&'a str>),
+    /// Store the result of a Cover line of the database
     Cover(Option<&'a str>),
+    /// Store the result of a Engine line of the database
     Engine(Option<&'a str>),
+    /// Store the result of a Setup line of the database
     Setup(Option<&'a str>),
+    /// Store the result of a Runtime line of the database
     Runtime(Option<&'a str>),
+    /// Store the result of a Hints line of the database
     Hints(Option<&'a str>),
+    /// Store the result of a Dev line of the database
     Dev(Option<&'a str>),
+    /// Store the result of a Pub line of the database
     Publi(Option<&'a str>),
+    /// Store the result of a Version line of the database
     Version(Option<&'a str>),
+    /// Store the result of a Status line of the database
     Status(Option<&'a str>),
+    /// Store the result of a Store line of the database
+    /// Stores are stored in a vector
     Store(Option<Vec<&'a str>>),
+    /// Store the result of a Genre line of the database
+    /// Genres are stored in a vector
     Genres(Option<Vec<&'a str>>),
+    /// Store the result of a Tag line of the database
+    /// Tags are stored in a vector
     Tags(Option<Vec<&'a str>>),
+    /// Store the result of a Year line of the database
     Year(Option<&'a str>),
+    /// Store the result of a unknown line of the database
+    /// The left hand side and the right hand side (if
+    /// any) are stores separately.
     Unknown(Option<&'a str>, Option<&'a str>),
 }
 
@@ -91,23 +134,8 @@ impl fmt::Display for Field<'_> {
 }
 
 impl<'a> Field<'a> {
-    /// Convert a line of the database in a Field enum (see exemple above).
-    /// Return Field::Unknown if the field is not recognized.
-    /// ```
-    /// use pobsdlib::models::Field;
-    ///
-    /// let runtime_str = "Runtime\truntime name";
-    /// let runtime_field = Field::from(runtime_str);
-    /// assert_eq!(runtime_field,Field::Runtime(Some(&"runtime name")));
-    ///
-    /// let tag_str = "Tags\ttag1, tag2";
-    /// let tag_field = Field::from(tag_str);
-    /// assert_eq!(tag_field,Field::Tags(Some(vec![&"tag1",&"tag2"])));
-    ///
-    /// let uk_str = "not a field\tnot an entry";
-    /// let uk_field = Field::from(uk_str);
-    /// assert_eq!(uk_field,Field::Unknown(Some("not a field"), Some("not an entry")));
-    /// ```
+    /// Convert a line of the database into a Field enum
+    /// (see exemple above).
     pub fn from(line: &'a str) -> Self {
         // Split the line in a left and right hand sides
         let (left, right) = split_line(line);

@@ -145,10 +145,10 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                                 ));
                             }
                         }
-                        match &mut game.store {
-                            Some(store) => store.push(item.to_string()),
+                        match &mut game.stores {
+                            Some(stores) => stores.push(item.to_string()),
                             None => {
-                                game.store = Some(vec![item.to_string()]);
+                                game.stores = Some(vec![item.to_string()]);
                             }
                         }
                     }

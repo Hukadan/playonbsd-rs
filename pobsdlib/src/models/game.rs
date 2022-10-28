@@ -2,28 +2,19 @@ use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
 /// # Represent a game
-/// A Game is created by a line starting by 'Game' in the database.
-/// Once created, the fields are set by the lines following the
-/// game entry.
-/// ```
-/// use pobsdlib::models::{Field, Game};
-/// // typical lines of a game in the database
-/// let database="Game\tAaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
-/// Cover\tAaaaaA_for_the_Awesome_Cover.jpg
-/// Engine
-/// Setup
-/// Runtime\tHumblePlay
-/// Store\thttps://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
-/// Hints\tDemo on HumbleBundle store page
-/// Genre
-/// Tags
-/// Year\t2011
-/// Dev
-/// Pub
-/// Version
-/// Status";
-///
-/// ```
+/// The Game struct represents a game from the database
+/// with an additional id which represents the position
+/// in the database.
+/// See <https://github.com/playonbsd/OpenBSD-Games-Database>
+/// for details.
+/// The name of some fields differs from the one used
+/// in the database itself: Genre and Store are plural
+/// since there can be more than one item for each
+/// and Pub translate to publi since pub is a reserved
+/// keyword in Rust.
+/// A String type is used for Year since sometimes the
+/// release date can only be described by textw (e.g.
+/// "early acess").
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Game {
     /// The id of the game.
@@ -39,14 +30,14 @@ pub struct Game {
     /// The executable in the package.
     pub runtime: Option<String>,
     /// A vector with store urls.
-    pub store: Option<Vec<String>>,
+    pub stores: Option<Vec<String>>,
     /// Hints (as the name imply).
     pub hints: Option<String>,
     /// A vector of genres associated with the game.
     pub genres: Option<Vec<String>>,
     /// A vector of tags associated with the game.
     pub tags: Option<Vec<String>>,
-    /// Released year.
+    /// Released year (can be text such as "early access".
     pub year: Option<String>,
     /// Developer.
     pub dev: Option<String>,
@@ -58,6 +49,31 @@ pub struct Game {
     pub status: Option<String>,
 }
 
+/// For now games are ordered by id.
+/// This will probably be dropped in the
+/// future in favor of alphabetical ordering
+/// on the name.
+impl PartialOrd for Game {
+    fn partial_cmp(&self, other: &Game) -> Option<Ordering> {
+        self.id.partial_cmp(&other.id)
+    }
+    fn lt(&self, other: &Game) -> bool {
+        self.id.lt(&other.id)
+    }
+    fn le(&self, other: &Game) -> bool {
+        self.id.le(&other.id)
+    }
+    fn gt(&self, other: &Game) -> bool {
+        self.id.gt(&other.id)
+    }
+    fn ge(&self, other: &Game) -> bool {
+        self.id.ge(&other.id)
+    }
+}
+
+/// Display the game as it would appears in the database.
+/// See <https://github.com/playonbsd/OpenBSD-Games-Database>
+/// for details.
 impl fmt::Display for Game {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let game = format!("Game\t{}", self.name);
@@ -77,8 +93,8 @@ impl fmt::Display for Game {
             Some(runtime) => format!("Runtime\t{}", runtime),
             None => "Runtime".to_string(),
         };
-        let store = match &self.store {
-            Some(store) => format!("Store\t{}", store.join(" ")),
+        let stores = match &self.stores {
+            Some(stores) => format!("Store\t{}", stores.join(" ")),
             None => "Store".to_string(),
         };
         let hints = match &self.hints {
@@ -121,7 +137,7 @@ impl fmt::Display for Game {
             engine,
             setup,
             runtime,
-            store,
+            stores,
             hints,
             genres,
             tags,
@@ -135,6 +151,10 @@ impl fmt::Display for Game {
 }
 
 impl Game {
+    /// Return true if the name of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn name_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -146,6 +166,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the engine of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn engine_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -159,6 +183,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the runtime of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn runtime_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -172,6 +200,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the genres of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn genres_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -186,6 +218,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the tags of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn tags_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -200,6 +236,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the years of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn year_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -213,6 +253,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the devs of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn dev_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -224,6 +268,10 @@ impl Game {
             None => true,
         }
     }
+    /// Return true if the pub of the game contains the
+    /// given pattern, false otherwise. It is not case
+    /// sensitive.
+    /// If None is given, returns true.
     pub fn publi_contains(&self, pattern: Option<&str>) -> bool {
         match pattern {
             // case insensitive
@@ -239,24 +287,6 @@ impl Game {
     }
 }
 
-impl PartialOrd for Game {
-    fn partial_cmp(&self, other: &Game) -> Option<Ordering> {
-        self.id.partial_cmp(&other.id)
-    }
-    fn lt(&self, other: &Game) -> bool {
-        self.id.lt(&other.id)
-    }
-    fn le(&self, other: &Game) -> bool {
-        self.id.le(&other.id)
-    }
-    fn gt(&self, other: &Game) -> bool {
-        self.id.gt(&other.id)
-    }
-    fn ge(&self, other: &Game) -> bool {
-        self.id.ge(&other.id)
-    }
-}
-
 /* ------------------------- TESTS --------------------------*/
 
 #[cfg(test)]
@@ -266,13 +296,13 @@ mod test_game_methods {
         let mut game = Game::default();
         let tags: Vec<String> = vec!["tag1".to_string(), "tag2".to_string()];
         let genres: Vec<String> = vec!["genre1".to_string(), "genre2".to_string()];
-        let store: Vec<String> = vec!["store1".to_string(), "store2".to_string()];
+        let stores: Vec<String> = vec!["store1".to_string(), "store2".to_string()];
         game.name = "game name".to_string();
         game.cover = Some("cover.jpg".to_string());
         game.engine = Some("game engine".to_string());
         game.setup = Some("game setup".to_string());
         game.runtime = Some("game runtime".to_string());
-        game.store = Some(store);
+        game.stores = Some(stores);
         game.hints = Some("game hints".to_string());
         game.genres = Some(genres);
         game.tags = Some(tags);
@@ -400,7 +430,7 @@ Status";
             engine: None,
             setup: None,
             runtime: Some("HumblePlay".to_string()),
-            store: Some(vec![
+            stores: Some(vec![
                 "https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome"
                     .to_string(),
             ]),

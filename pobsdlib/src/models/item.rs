@@ -1,9 +1,18 @@
 use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
+/// Items are attributes to which several games can
+/// be associated with such as genres, tags or years.
+///
+/// An Item contains the name of the item and a
+/// vector containing the ids of the games associated
+/// to said item.
+///
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Item {
+    /// name of the item.
     pub name: String,
+    /// vector of ids of the games associated to the items.
     pub games: Vec<usize>,
 }
 

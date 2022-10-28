@@ -4,14 +4,41 @@ use crate::collections::QueryResult;
 use crate::models::{Game, Item};
 use crate::utils::load_database;
 
-/// # DataBase
-/// Store the game database in three different collection:
-/// - a games collection
-/// - a tags collection
-/// - a genres collection
+/// Store the game database in different collections.
+/// With the exception of the get_game_by_id query,
+/// all queries performed on the database return a
+/// QueryResult.
 ///
-/// The games collection also stores a vector of Game.
-/// being described using the following struct:
+/// ## The game collection
+/// The game collection is stored using a HashMap.
+/// The id of each game is used as key while the 
+/// value is the corresponding Game struct.
+/// Most of the queries are performed using this
+/// HashMap.
+///
+/// ## The item collections
+/// Each item collection is stored using a HashMap.
+/// The name of each item is used as a key while
+/// the value is the corresponding Item struct.
+///
+/// The following item collections are available for 
+/// searching:
+/// - engines
+/// - runtimes
+/// - genres
+/// - tags
+/// - years
+/// - devs
+/// - publishers
+///
+/// Those collections are used to retrieve all games
+/// associated with a specific item.
+///
+/// ## Limitations
+/// In its current state, queries cannot be chained
+/// to obtain complex queries. However, with the method
+/// game_contains_and and game_contains_or most of the
+/// useful queries can be performed.
 ///
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct DataBase {
@@ -25,15 +52,16 @@ pub struct DataBase {
     pub(crate) publis: HashMap<String, Item>,
 }
 
-/// Public API
 impl DataBase {
-    /// Create a database from a file
+    /// Create a database from a database file.
+    /// Please see <https://github.com/playonbsd/OpenBSD-Games-Database>
+    /// for more information.
     pub fn new(filename: &str) -> Self {
         let mut database = Self::default();
         load_database(&mut database, filename);
         database
     }
-    /// Return all games
+    /// Return all games of the database.
     pub fn get_all_games(&self) -> QueryResult<&Game> {
         let games = self.games.values().collect();
         QueryResult::new(games)
@@ -42,10 +70,11 @@ impl DataBase {
     pub fn get_game_by_id(&self, id: usize) -> Option<&Game> {
         self.games.get(&id)
     }
-    /// Return the game with the given name
-    /// Note that nothing forbids two games
-    /// to have the same name. Hence, it
-    /// returns a QuerySet.
+    /// Return the games of the database with the given name.
+    /// It preforms an exact matching.
+    /// Note that nothing forbids two games to have the same name.
+    /// Hence, it does not behave like get_game_by_id but 
+    /// returns a QueryResult.
     pub fn get_game_by_name(&self, name: &str) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| item.name == name);
         let mut games: Vec<&Game> = Vec::new();
@@ -54,8 +83,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// engine.
+    /// Return the games of the database using the given engine.
+    /// It performs an exact matching.
     pub fn get_game_by_engine(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(engine) = self.engines.get(name) {
@@ -65,8 +94,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// runtime.
+    /// Return the games of the database using the givent runtime.
+    /// It performs an exact matching.
     pub fn get_game_by_runtime(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(runtime) = self.runtimes.get(name) {
@@ -76,8 +105,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// genre.
+    /// Return the games of the database classified in the given genre.
+    /// It performs an exact matching.
     pub fn get_game_by_genre(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(genre) = self.genres.get(name) {
@@ -87,8 +116,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// tag.
+    /// Return the games of the database classified in the given tag.
+    /// It performs an exact matching.
     pub fn get_game_by_tag(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(tag) = self.tags.get(name) {
@@ -98,8 +127,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// year.
+    /// Return the games of the database released in the given year.
+    /// It performs an exact matching.
     pub fn get_game_by_year(&self, year: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(year) = self.years.get(&year.to_string()) {
@@ -109,8 +138,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// dev.
+    /// Return the games of the database developped by the given developper.
+    /// It performs an exact matching.
     pub fn get_game_by_dev(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(dev) = self.devs.get(name) {
@@ -120,8 +149,8 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated with a given
-    /// publisher.
+    /// Return the games of the database published by the given publisher.
+    /// It performs an exact matching.
     pub fn get_game_by_publi(&self, name: &str) -> QueryResult<&Game> {
         let mut games: Vec<&Game> = Vec::new();
         if let Some(publi) = self.publis.get(name) {
@@ -131,10 +160,11 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated that contains
-    /// the given string for each field. When a
-    /// field is not searched, it should be set to
-    /// None. The search is done performing AND
+    /// Return the games that **contains**
+    /// the given string for each field.
+    /// When a field is not searched, it should
+    /// be set to None.
+    /// The search is done performing `AND` 
     /// between the fields.
     pub fn game_contains_and(
         &self,
@@ -163,10 +193,11 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return the games associated that contains
-    /// the given string for each field. When a
-    /// field is not searched, it should be set to
-    /// None. The search is done performing OR
+    /// Return the games that **contains**
+    /// the given string for each field.
+    /// When a field is not searched, it should
+    /// be set to None.
+    /// The search is done performing `OR` 
     /// between the fields.
     pub fn game_contains_or(
         &self,
@@ -195,37 +226,37 @@ impl DataBase {
         }
         QueryResult::new(games)
     }
-    /// Return all engines
+    /// Return all engines of the database.
     pub fn get_all_engines(&self) -> QueryResult<&Item> {
         let engines = self.engines.values().collect();
         QueryResult::new(engines)
     }
-    /// Return all runtimes
+    /// Return all runtimes of the database.
     pub fn get_all_runtimes(&self) -> QueryResult<&Item> {
         let engines = self.runtimes.values().collect();
         QueryResult::new(engines)
     }
-    /// Return all genres
+    /// Return all genres of the database.
     pub fn get_all_genres(&self) -> QueryResult<&Item> {
         let genres = self.genres.values().collect();
         QueryResult::new(genres)
     }
-    /// Return all tags
+    /// Return all tags of the database.
     pub fn get_all_tags(&self) -> QueryResult<&Item> {
         let tags = self.tags.values().collect();
         QueryResult::new(tags)
     }
-    /// Return all years
+    /// Return all years of the database.
     pub fn get_all_years(&self) -> QueryResult<&Item> {
         let years = self.years.values().collect();
         QueryResult::new(years)
     }
-    /// Return all devs
+    /// Return all developpers of the database.
     pub fn get_all_devs(&self) -> QueryResult<&Item> {
         let devs = self.devs.values().collect();
         QueryResult::new(devs)
     }
-    /// Return all publis
+    /// Return all publishers of the database.
     pub fn get_all_publis(&self) -> QueryResult<&Item> {
         let publis = self.publis.values().collect();
         QueryResult::new(publis)
