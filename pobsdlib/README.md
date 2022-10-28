@@ -6,7 +6,7 @@ using based on most of the fields.
 ### Example
 ```rust
 extern crate pobsdlib;
-use pobsdlib::collections::DataBase;
+use pobsdlib::DataBase;
 
 let db = DataBase::new("tests/data/test-games.db");
 // return a list of all games in the form of
