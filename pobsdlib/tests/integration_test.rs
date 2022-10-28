@@ -1,8 +1,8 @@
 extern crate pobsdlib;
-use pobsdlib::collections::DataBase;
+use pobsdlib::DataBase;
 
 #[test]
-fn test_get_all_game() {
+fn test_get_all_games() {
     let db = DataBase::new("tests/data/test-games.db");
     let games = db.get_all_games();
     // we get them all
@@ -33,7 +33,7 @@ fn test_game_get_by_id() {
         Some(game) => {
             assert_eq!(game.name, "The Adventures of Shuggy".to_string());
             assert_eq!(
-                game.store.as_ref().unwrap(),
+                game.stores.as_ref().unwrap(),
                 &vec![
                     "https://store.steampowered.com/app/211440/Adventures_of_Shuggy/".to_string(),
                     "https://www.gog.com/game/the_adventures_of_shuggy".to_string()
