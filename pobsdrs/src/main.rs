@@ -5,12 +5,19 @@ extern crate serde_derive;
 extern crate pobsdlib;
 extern crate serde_json;
 
-pub mod game_end_points;
+pub mod api;
 
-use self::game_end_points::{game_all, game_id, game_search_and, game_search_or};
+use self::api::game_end_points::{game_all, game_id, game_search};
+use self::api::home::api_home;
 use pobsdlib::collections::DataBase;
 use rocket::fs::{relative, FileServer};
-//use std::{env, io, path, process};
+use rocket::fairing::AdHoc;
+
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct Config {
+    domain: String,
+}
 
 #[launch]
 fn rocket() -> _ {
@@ -20,6 +27,7 @@ fn rocket() -> _ {
         //.mount("/", FileServer::from(relative!("front-end/dist/")))
         .mount(
             "/api/",
-            routes![game_all, game_id, game_search_and, game_search_or],
+            routes![api_home, game_all, game_id, game_search],
         )
+        .attach(AdHoc::config::<Config>())
 }
