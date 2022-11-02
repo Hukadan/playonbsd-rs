@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::collections::QueryResult;
-use crate::models::{Game, Item, GameFilter};
+use crate::models::{Game, GameFilter, Item};
 use crate::utils::load_database;
 
 /// Store the game database in different collections.
@@ -11,7 +11,7 @@ use crate::utils::load_database;
 ///
 /// ## The game collection
 /// The game collection is stored using a HashMap.
-/// The id of each game is used as key while the 
+/// The id of each game is used as key while the
 /// value is the corresponding Game struct.
 /// Most of the queries are performed using this
 /// HashMap.
@@ -21,7 +21,7 @@ use crate::utils::load_database;
 /// The name of each item is used as a key while
 /// the value is the corresponding Item struct.
 ///
-/// The following item collections are available for 
+/// The following item collections are available for
 /// searching:
 /// - engines
 /// - runtimes
@@ -73,7 +73,7 @@ impl DataBase {
     /// Return the games of the database with the given name.
     /// It preforms an exact matching.
     /// Note that nothing forbids two games to have the same name.
-    /// Hence, it does not behave like get_game_by_id but 
+    /// Hence, it does not behave like get_game_by_id but
     /// returns a QueryResult.
     pub fn get_game_by_name(&self, name: &str) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| item.name == name);
@@ -164,12 +164,9 @@ impl DataBase {
     /// the given string for each field.
     /// When a field is not searched, it should
     /// be set to None.
-    /// The search is done performing `AND` 
+    /// The search is done performing `AND`
     /// between the fields.
-    pub fn game_contains_and(
-        &self,
-        filter: GameFilter,
-    ) -> QueryResult<&Game> {
+    pub fn game_contains_and(&self, filter: GameFilter) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
             item.name_contains(filter.name, true)
                 && item.engine_contains(filter.engine, true)
@@ -190,12 +187,9 @@ impl DataBase {
     /// the given string for each field.
     /// When a field is not searched, it should
     /// be set to None.
-    /// The search is done performing `OR` 
+    /// The search is done performing `OR`
     /// between the fields.
-    pub fn game_contains_or(
-        &self,
-        filter: GameFilter,
-    ) -> QueryResult<&Game> {
+    pub fn game_contains_or(&self, filter: GameFilter) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
             item.name_contains(filter.name, false)
                 || item.engine_contains(filter.engine, false)

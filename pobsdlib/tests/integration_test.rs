@@ -153,7 +153,7 @@ fn test_game_get_by_publi() {
     assert_eq!(games.count, 0);
 }
 #[test]
-fn test_game_contains_or () {
+fn test_game_contains_or() {
     let db_game = DataBase::new("tests/data/test-games.db");
     let mut filter = GameFilter::new();
     filter.name_contains("Akane the Kunoichi");

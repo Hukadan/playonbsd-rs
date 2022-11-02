@@ -18,5 +18,8 @@ fn rocket() -> _ {
         .manage(DataBase::new("../db/openbsd-games.db"))
         .mount("/", FileServer::from("front-end/dist/"))
         //.mount("/", FileServer::from(relative!("front-end/dist/")))
-        .mount("/api/", routes![game_all, game_id, game_search_and, game_search_or])
+        .mount(
+            "/api/",
+            routes![game_all, game_id, game_search_and, game_search_or],
+        )
 }

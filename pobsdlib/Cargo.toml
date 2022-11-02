@@ -1,6 +1,13 @@
 [package]
 name = "pobsdlib"
 version = "0.1.0"
+description = "library to interact with the PlayOnBSD database listing games running on OpenBSD"
+authors = ["Hukadan <me@hukadan.org>"]
+readme = "README.md"
+repository = "https://github.com/Hukadan/pobsdjs"
+documentation = "https://docs.rs/pobsdlib"
+keywords = ["openbsd", "openbsd-gaming"]
+licence = "MIT"
 
 [dependencies]
 serde = "1.0"

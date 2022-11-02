@@ -50,10 +50,7 @@ pub(crate) fn game_search_and(
     if let Some(publi) = publi {
         filter.publi_contains(publi);
     }
-    return serde_json::to_string_pretty(
-        &db.game_contains_and(filter)
-    )
-    .unwrap();
+    return serde_json::to_string_pretty(&db.game_contains_and(filter)).unwrap();
 }
 
 #[get("/games/orsearch?<name>&<engine>&<runtime>&<genre>&<tag>&<year>&<dev>&<publi>")]
@@ -93,8 +90,5 @@ pub(crate) fn game_search_or(
     if let Some(publi) = publi {
         filter.publi_contains(publi);
     }
-    return serde_json::to_string_pretty(
-        &db.game_contains_or(filter),
-    )
-    .unwrap();
+    return serde_json::to_string_pretty(&db.game_contains_or(filter)).unwrap();
 }
