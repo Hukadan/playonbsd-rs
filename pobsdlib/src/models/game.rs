@@ -155,7 +155,7 @@ impl Game {
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn name_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn name_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => self
@@ -163,14 +163,14 @@ impl Game {
                 .to_lowercase()
                 .contains(pattern.to_lowercase().as_str()),
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the engine of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn engine_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn engine_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.engine {
@@ -180,14 +180,14 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the runtime of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn runtime_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn runtime_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.runtime {
@@ -197,14 +197,14 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the genres of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn genres_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn genres_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.genres {
@@ -215,14 +215,14 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the tags of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn tags_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn tags_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.tags {
@@ -233,14 +233,14 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the years of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn year_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn year_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.year {
@@ -250,14 +250,14 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the devs of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn dev_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn dev_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.dev {
@@ -265,14 +265,14 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
     /// Return true if the pub of the game contains the
     /// given pattern, false otherwise. It is not case
     /// sensitive.
     /// If None is given, returns true.
-    pub fn publi_contains(&self, pattern: Option<&str>) -> bool {
+    pub fn publi_contains(&self, pattern: Option<&str>, default: bool) -> bool {
         match pattern {
             // case insensitive
             Some(pattern) => match &self.publi {
@@ -282,7 +282,7 @@ impl Game {
                 None => false,
             },
             //if there is no patter everything matches
-            None => true,
+            None => default,
         }
     }
 }
@@ -322,79 +322,79 @@ mod test_game_methods {
     #[test]
     fn name_contains() {
         let game = create_game();
-        assert!(game.name_contains(None));
-        assert!(game.name_contains(Some(&"name")));
-        assert!(!game.name_contains(Some(&"not sure")));
+        assert!(game.name_contains(None, true));
+        assert!(game.name_contains(Some(&"name"), true));
+        assert!(!game.name_contains(Some(&"not sure"), true));
     }
     #[test]
     fn engine_contains() {
         let mut game = create_game();
-        assert!(game.engine_contains(None));
-        assert!(game.engine_contains(Some(&"engine")));
-        assert!(!game.engine_contains(Some(&"not sure")));
+        assert!(game.engine_contains(None, true));
+        assert!(game.engine_contains(Some(&"engine"), true));
+        assert!(!game.engine_contains(Some(&"not sure"), true));
         game.engine = None;
-        assert!(game.engine_contains(None));
-        assert!(!game.engine_contains(Some(&"engine")));
+        assert!(game.engine_contains(None, true));
+        assert!(!game.engine_contains(Some(&"engine"), true));
     }
     #[test]
     fn runtime_contains() {
         let mut game = create_game();
-        assert!(game.runtime_contains(None));
-        assert!(game.runtime_contains(Some(&"runtime")));
-        assert!(!game.runtime_contains(Some(&"not sure")));
+        assert!(game.runtime_contains(None, true));
+        assert!(game.runtime_contains(Some(&"runtime"), true));
+        assert!(!game.runtime_contains(Some(&"not sure"), true));
         game.runtime = None;
-        assert!(game.runtime_contains(None));
-        assert!(!game.runtime_contains(Some(&"runtime")));
+        assert!(game.runtime_contains(None, true));
+        assert!(!game.runtime_contains(Some(&"runtime"), true));
     }
     #[test]
     fn genres_contains() {
         let mut game = create_game();
-        assert!(game.genres_contains(None));
-        assert!(game.genres_contains(Some(&"genre")));
-        assert!(!game.genres_contains(Some(&"not sure")));
+        assert!(game.genres_contains(None, true));
+        assert!(game.genres_contains(Some(&"genre"), true));
+        assert!(!game.genres_contains(Some(&"not sure"), true));
         game.genres = None;
-        assert!(game.genres_contains(None));
-        assert!(!game.genres_contains(Some(&"genre")));
+        assert!(game.genres_contains(None, true));
+        assert!(!game.genres_contains(Some(&"genre"), true));
     }
     #[test]
     fn tags_contains() {
         let mut game = create_game();
-        assert!(game.tags_contains(None));
-        assert!(game.tags_contains(Some(&"tag")));
-        assert!(!game.tags_contains(Some(&"not sure")));
+        assert!(game.tags_contains(None, true));
+        assert!(game.tags_contains(Some(&"tag"), true));
+        assert!(!game.tags_contains(Some(&"not sure"), true));
         game.tags = None;
-        assert!(game.tags_contains(None));
-        assert!(!game.tags_contains(Some(&"tag")));
+        assert!(game.tags_contains(None, true));
+        assert!(!game.tags_contains(Some(&"tag"), true));
     }
     #[test]
     fn year_contains() {
         let mut game = create_game();
-        assert!(game.year_contains(None));
-        assert!(game.year_contains(Some(&"1980")));
-        assert!(!game.year_contains(Some(&"not sure")));
+        assert!(game.year_contains(None, true));
+        assert!(game.year_contains(Some(&"1980"), true));
+        assert!(!game.year_contains(Some(&"not sure"), true));
         game.year = None;
-        assert!(game.year_contains(None));
-        assert!(!game.year_contains(Some(&"1980")));
+        assert!(game.year_contains(None, true));
+        assert!(!game.year_contains(Some(&"1980"), true));
     }
     #[test]
     fn dev_contains() {
         let mut game = create_game();
-        assert!(game.dev_contains(None));
-        assert!(game.dev_contains(Some(&"dev")));
-        assert!(!game.dev_contains(Some(&"not sure")));
+        assert!(game.dev_contains(None, true));
+        assert!(game.dev_contains(Some(&"dev"), true));
+        assert!(!game.dev_contains(Some(&"not sure"), true));
         game.dev = None;
-        assert!(game.dev_contains(None));
-        assert!(!game.dev_contains(Some(&"dev")));
+        assert!(game.dev_contains(None, true));
+        assert!(!game.dev_contains(Some(&"dev"), true));
     }
     #[test]
     fn publi_contains() {
         let mut game = create_game();
-        assert!(game.publi_contains(None));
-        assert!(game.publi_contains(Some(&"publi")));
-        assert!(!game.publi_contains(Some(&"not sure")));
+        assert!(game.publi_contains(None, true));
+        assert!(game.publi_contains(Some(&"publi"), true));
+        assert!(!game.publi_contains(Some(&"not sure"), true));
         game.publi = None;
-        assert!(game.publi_contains(None));
-        assert!(!game.publi_contains(Some(&"publi")));
+        assert!(game.publi_contains(None, true));
+        assert!(!game.publi_contains(Some(&"publi"), true));
     }
     #[test]
     fn test_ordering() {
