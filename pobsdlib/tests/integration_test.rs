@@ -1,5 +1,5 @@
 extern crate pobsdlib;
-use pobsdlib::DataBase;
+use pobsdlib::{DataBase, GameFilter};
 
 #[test]
 fn test_get_all_games() {
@@ -146,9 +146,28 @@ fn test_game_get_by_dev() {
     assert_eq!(games.count, 0);
 }
 #[test]
-fn test_game_get_by_pub() {
+fn test_game_get_by_publi() {
     let db_game = DataBase::new("tests/data/test-games.db");
     let games = db_game.get_game_by_publi("Unknown");
+    // check we have the right number
+    assert_eq!(games.count, 0);
+}
+#[test]
+fn test_game_contains_or () {
+    let db_game = DataBase::new("tests/data/test-games.db");
+    let mut filter = GameFilter::new();
+    filter.name_contains("Akane the Kunoichi");
+    let games = db_game.game_contains_or(filter);
+    // check we have the right number
+    assert_eq!(games.count, 1);
+    // check we have the good one
+    assert_eq!(games.items.get(0).unwrap().name, "Akane the Kunoichi");
+    assert_eq!(games.items.get(0).unwrap().id, 6);
+    assert_eq!(
+        games.items.get(0).unwrap().engine.as_ref().unwrap(),
+        &"XNA".to_string()
+    );
+    let games = db_game.get_game_by_name("Unknown");
     // check we have the right number
     assert_eq!(games.count, 0);
 }
