@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::collections::QueryResult;
-use crate::models::{Game, Item};
+use crate::models::{Game, Item, GameFilter};
 use crate::utils::load_database;
 
 /// Store the game database in different collections.
@@ -168,24 +168,17 @@ impl DataBase {
     /// between the fields.
     pub fn game_contains_and(
         &self,
-        name: Option<&str>,
-        engine: Option<&str>,
-        runtime: Option<&str>,
-        genre: Option<&str>,
-        tag: Option<&str>,
-        year: Option<&str>,
-        dev: Option<&str>,
-        publi: Option<&str>,
+        filter: GameFilter,
     ) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
-            item.name_contains(name)
-                && item.engine_contains(engine)
-                && item.runtime_contains(runtime)
-                && item.genres_contains(genre)
-                && item.tags_contains(tag)
-                && item.year_contains(year)
-                && item.dev_contains(dev)
-                && item.publi_contains(publi)
+            item.name_contains(filter.name, true)
+                && item.engine_contains(filter.engine, true)
+                && item.runtime_contains(filter.runtime, true)
+                && item.genres_contains(filter.genre, true)
+                && item.tags_contains(filter.tag, true)
+                && item.year_contains(filter.year, true)
+                && item.dev_contains(filter.dev, true)
+                && item.publi_contains(filter.publi, true)
         });
         let mut games: Vec<&Game> = Vec::new();
         for (_, item) in gs {
@@ -201,24 +194,17 @@ impl DataBase {
     /// between the fields.
     pub fn game_contains_or(
         &self,
-        name: Option<&str>,
-        engine: Option<&str>,
-        runtime: Option<&str>,
-        genre: Option<&str>,
-        tag: Option<&str>,
-        year: Option<&str>,
-        dev: Option<&str>,
-        publi: Option<&str>,
+        filter: GameFilter,
     ) -> QueryResult<&Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
-            item.name_contains(name)
-                || item.engine_contains(engine)
-                || item.runtime_contains(runtime)
-                || item.genres_contains(genre)
-                || item.tags_contains(tag)
-                || item.year_contains(year)
-                || item.dev_contains(dev)
-                || item.publi_contains(publi)
+            item.name_contains(filter.name, false)
+                || item.engine_contains(filter.engine, false)
+                || item.runtime_contains(filter.runtime, false)
+                || item.genres_contains(filter.genre, false)
+                || item.tags_contains(filter.tag, false)
+                || item.year_contains(filter.year, false)
+                || item.dev_contains(filter.dev, false)
+                || item.publi_contains(filter.publi, false)
         });
         let mut games: Vec<&Game> = Vec::new();
         for (_, item) in gs {
