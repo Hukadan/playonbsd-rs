@@ -5,25 +5,12 @@ import DetailsGame from './components/DetailsGame.vue'
 import TopBar from './components/TopBar.vue'
 
 const gameData = ref(null)
-const gameid = ref(1)
+const game_url = ref(null)
 const searchtxt = ref("")
 const allGames = ref(null)
-//const hostname = "127.0.0.1:8000"
-//const hostname = ref("pobsdjs.chocolatines.org")
-//const conf = ref("nul")
-
-//async function fetchConfig() {
-//  const res = await fetch("config.json")
-//  conf.value = await res.json()
-//}
-//fetchConfig()
-
 
 async function fetchGame() {
-  const res = await fetch(
-    //`http://${conf.value.hostname}/api/games/${gameid.value}`
-    `api/games/${gameid.value}`
-  )
+  const res = await fetch(game_url.value)
   gameData.value = await res.json()
 }
 
@@ -37,8 +24,7 @@ async function fetchAllGames() {
 
 async function searchGamesByName() {
   const res = await fetch(
-    //`http://${conf.hostname}/api/games/orsearch?name=${searchtxt.value}&engine=${searchtxt.value}&runtime=${searchtxt.value}&genre=${searchtxt.value}&tag=${searchtxt.value}&year=${searchtxt.value}&dev=${searchtxt.value}&publi=${searchtxt.value}`
-    `api/games/orsearch?name=${searchtxt.value}&engine=${searchtxt.value}&runtime=${searchtxt.value}&genre=${searchtxt.value}&tag=${searchtxt.value}&year=${searchtxt.value}&dev=${searchtxt.value}&publi=${searchtxt.value}`
+    `api/games/search?name=${searchtxt.value}&engine=${searchtxt.value}&runtime=${searchtxt.value}&genre=${searchtxt.value}&tag=${searchtxt.value}&year=${searchtxt.value}&dev=${searchtxt.value}&publi=${searchtxt.value}`
 
   )
   allGames.value = await res.json()
@@ -46,7 +32,7 @@ async function searchGamesByName() {
 
 fetchAllGames()
 fetchGame()
-watch(gameid, fetchGame)
+watch(game_url, fetchGame)
 watch(searchtxt, searchGamesByName)
 
 </script>
@@ -60,7 +46,7 @@ watch(searchtxt, searchGamesByName)
     <br>
     <div class="grid-x grid-padding-x align-center">
     <div class="cell small-4" style="max-height: 90vh; overflow-y :auto"  >
-      <ListGame :games="allGames" @newid="(id) => gameid = id"/>
+      <ListGame :games="allGames" @new_game="(url) => game_url = url"/>
     </div>
     <div class="cell small-6" style="max-height: 90vh; overflow-y :auto"  >
       <DetailsGame :game="gameData" />
