@@ -1,20 +1,30 @@
-use rocket::State;
 use rocket::serde::json::Json;
+use rocket::State;
 
 use pobsdlib::collections::DataBase;
 use pobsdlib::models::GameFilter;
 
-use crate::api::wrappers::{GameWrapper, QueryResultWrapper};
+use crate::wrappers::wrappers::{GameWrapper, QueryResultWrapper};
 use crate::Config;
 
 #[get("/games")]
-pub(crate) fn game_all<'a>(db: &'a State<DataBase>, config: &'a State<Config>) -> Json<QueryResultWrapper> {
+pub(crate) fn game_all<'a>(
+    db: &'a State<DataBase>,
+    config: &'a State<Config>,
+) -> Json<QueryResultWrapper> {
     Json(QueryResultWrapper::new(db.get_all_games(), &config.domain))
 }
 
 #[get("/games/<id>")]
-pub(crate) fn game_id<'a>(db: &'a State<DataBase>, config: &'a State<Config>, id: usize) -> Json<GameWrapper<'a>> {
-    Json(GameWrapper::new(&db.get_game_by_id(id).expect("Should not fail"), &config.domain))
+pub(crate) fn game_id<'a>(
+    db: &'a State<DataBase>,
+    config: &'a State<Config>,
+    id: usize,
+) -> Json<GameWrapper<'a>> {
+    Json(GameWrapper::new(
+        &db.get_game_by_id(id).expect("Should not fail"),
+        &config.domain,
+    ))
 }
 
 #[get("/games/search?<name>&<engine>&<runtime>&<genre>&<tag>&<year>&<dev>&<publi>")]
@@ -55,5 +65,8 @@ pub(crate) fn game_search<'a>(
     if let Some(publi) = publi {
         filter.publi_contains(publi);
     }
-    Json(QueryResultWrapper::new(db.game_contains_or(filter), &config.domain))
+    Json(QueryResultWrapper::new(
+        db.game_contains_or(filter),
+        &config.domain,
+    ))
 }

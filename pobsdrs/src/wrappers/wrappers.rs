@@ -1,5 +1,5 @@
-use rocket::serde::Serialize;
 use pobsdlib::{Game, QueryResult};
+use rocket::serde::Serialize;
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -55,80 +55,80 @@ impl<'a> GameWrapper<'a> {
         let wrapped_tags: Option<Vec<ItemWrapper>>;
         match &game.engine {
             Some(engine) => {
-                wrapped_engine = Some(ItemWrapper::new(engine,
-                                            format!("{}/api/engines/{}", domain, engine),
-                                            format!("{}/api/games/search?engine={}", domain, engine),
-                                            )
-                              )
-            },
+                wrapped_engine = Some(ItemWrapper::new(
+                    engine,
+                    format!("{}/api/engines/{}", domain, engine),
+                    format!("{}/api/games/search?engine={}", domain, engine),
+                ))
+            }
             None => wrapped_engine = None,
         }
         match &game.runtime {
             Some(runtime) => {
-                wrapped_runtime = Some(ItemWrapper::new(runtime,
-                                            format!("{}/api/runtimes/{}", domain, runtime),
-                                            format!("{}/api/games/search?runtime={}", domain, runtime),
-                                            )
-                              )
-            },
+                wrapped_runtime = Some(ItemWrapper::new(
+                    runtime,
+                    format!("{}/api/runtimes/{}", domain, runtime),
+                    format!("{}/api/games/search?runtime={}", domain, runtime),
+                ))
+            }
             None => wrapped_runtime = None,
         }
         match &game.year {
             Some(year) => {
-                wrapped_year = Some(ItemWrapper::new(year,
-                                            format!("{}/api/years/{}", domain, year),
-                                            format!("{}/api/games/search?year={}", domain, year),
-                                            )
-                              )
-            },
+                wrapped_year = Some(ItemWrapper::new(
+                    year,
+                    format!("{}/api/years/{}", domain, year),
+                    format!("{}/api/games/search?year={}", domain, year),
+                ))
+            }
             None => wrapped_year = None,
         }
         match &game.dev {
             Some(dev) => {
-                wrapped_dev = Some(ItemWrapper::new(dev,
-                                            format!("{}/api/devs/{}", domain, dev),
-                                            format!("{}/api/games/search?dev={}", domain, dev),
-                                            )
-                              )
-            },
+                wrapped_dev = Some(ItemWrapper::new(
+                    dev,
+                    format!("{}/api/devs/{}", domain, dev),
+                    format!("{}/api/games/search?dev={}", domain, dev),
+                ))
+            }
             None => wrapped_dev = None,
         }
         match &game.publi {
             Some(publi) => {
-                wrapped_publi = Some(ItemWrapper::new(publi,
-                                            format!("{}/api/pubs/{}", domain, publi),
-                                            format!("{}/api/games/search?pub={}", domain, publi),
-                                            )
-                              )
-            },
+                wrapped_publi = Some(ItemWrapper::new(
+                    publi,
+                    format!("{}/api/pubs/{}", domain, publi),
+                    format!("{}/api/games/search?pub={}", domain, publi),
+                ))
+            }
             None => wrapped_publi = None,
         }
         match &game.genres {
             Some(genres) => {
                 let mut items_to_wrap: Vec<ItemWrapper> = Vec::new();
                 for genre in genres {
-                    items_to_wrap.push(ItemWrapper::new(genre,
-                                                         format!("{}/api/genres/{}", domain, genre),
-                                                         format!("{}/api/games/search?genre={}", domain, genre),
-                                                         )
-                                        )
+                    items_to_wrap.push(ItemWrapper::new(
+                        genre,
+                        format!("{}/api/genres/{}", domain, genre),
+                        format!("{}/api/games/search?genre={}", domain, genre),
+                    ))
                 }
                 wrapped_genres = Some(items_to_wrap);
-            },
+            }
             None => wrapped_genres = None,
         }
         match &game.tags {
             Some(tags) => {
                 let mut items_to_wrap: Vec<ItemWrapper> = Vec::new();
                 for tag in tags {
-                    items_to_wrap.push(ItemWrapper::new(tag,
-                                                         format!("{}/api/tags/{}", domain, tag),
-                                                         format!("{}/api/games/search?tag={}", domain, tag),
-                                                         )
-                                        )
+                    items_to_wrap.push(ItemWrapper::new(
+                        tag,
+                        format!("{}/api/tags/{}", domain, tag),
+                        format!("{}/api/games/search?tag={}", domain, tag),
+                    ))
                 }
                 wrapped_tags = Some(items_to_wrap);
-            },
+            }
             None => wrapped_tags = None,
         }
         Self {
@@ -147,11 +147,10 @@ impl<'a> GameWrapper<'a> {
             publi: wrapped_publi,
             genres: wrapped_genres,
             tags: wrapped_tags,
-            self_url: format!("{}/api/games/{}", domain, game.id)
+            self_url: format!("{}/api/games/{}", domain, game.id),
         }
     }
 }
-
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
