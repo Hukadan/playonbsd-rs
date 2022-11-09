@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate rocket;
+extern crate rocket_dyn_templates;
 #[macro_use]
 extern crate serde_derive;
 extern crate pobsdlib;
@@ -9,10 +10,12 @@ pub mod routes;
 pub mod wrappers;
 
 use self::routes::api::game_end_points::{game_all, game_id, game_search};
+use self::routes::html::home::{home, game};
 use self::routes::api::home::api_home;
 use pobsdlib::collections::DataBase;
 use rocket::fairing::AdHoc;
 use rocket::fs::{relative, FileServer};
+use rocket_dyn_templates::Template;
 
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -24,8 +27,9 @@ struct Config {
 fn rocket() -> _ {
     rocket::build()
         .manage(DataBase::new("../db/openbsd-games.db"))
-        .mount("/", FileServer::from("front-end/dist/"))
-        //.mount("/", FileServer::from(relative!("front-end/dist/")))
+        .mount("/static", FileServer::from("static/"))
         .mount("/api/", routes![api_home, game_all, game_id, game_search])
+        .mount("/", routes![home, game])
         .attach(AdHoc::config::<Config>())
+        .attach(Template::fairing())
 }

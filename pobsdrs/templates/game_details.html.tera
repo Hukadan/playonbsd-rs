@@ -1,0 +1,69 @@
+{% extends "base" %}
+{% block content %}
+{% if game.cover %}
+<strong class="has-text-grey-light is-uppercase">{{ game.name }}</strong>
+<figure style="max-height: 300px;">
+  <img src="{{ game.cover }}" style="max-height: 200px;">
+</figure>
+{% endif %}
+{% if game.year %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Release date</strong>: {{ game.year }}</p>
+{% endif %}
+{% if game.engine %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Engine</strong>: {{ game.engine }}</p>
+{% endif %}
+{% if game.setup %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Setup</strong>: {{ game.setup }}</p>
+{% endif %}
+{% if game.runtime %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Runtime</strong>: {{ game.runtime }}</p>
+{% endif %}
+{% if game.hints %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Hints</strong>: {{ game.hints }}</p>
+{% endif %}
+{% if game.dev %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Developper</strong>: {{ game.dev }}</p>
+{% endif %}
+{% if game.publi %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Publisher</strong>: {{ game.publi }}</p>
+{% endif %}
+{% if game.status %}
+<p class="has-text-grey-light"><strong class="has-text-grey-light">Status</strong>: {{ game.status }}</p>
+{% endif %}
+{% if game.stores %}
+<div>
+  <p class="has-text-grey-light">Available here:</p>
+  <ul class="has-text-grey-light">
+    {% for store in game.stores %}
+    <li>
+      <a href="{{ store }}">{{ store }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+<div class="field is-grouped is-grouped-multiline">
+{% if game.tags %}
+	<div class="control">
+	<div class="tags has-addons">
+		<span class="tag is-black has-text-grey">TAGS</span>
+		{% for tag in game.tags %}
+		<a class="tag is-link is-capitalized has-text-black" href="/?tag={{ tag }}">
+			{{ tag }}
+		</a>
+		{% endfor %}
+	</div>
+	</div>
+{% endif %}
+{% if game.genres %}
+	<div class="control">
+	<div class="tags has-addons">
+		<span class="tag is-black has-text-grey">GENRES</span>
+		{% for genre in game.genres %}
+		<a class="tag is-info is-capitalized has-text-black" href="/?genre={{ genre }}">{{ genre }}</a>
+		{% endfor %}
+	</div>
+	</div>
+{% endif %}
+</div>
+{% endblock %}

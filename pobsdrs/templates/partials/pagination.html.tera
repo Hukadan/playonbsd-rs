@@ -1,0 +1,55 @@
+<nav class="pagination is-small" role="navigation" aria-label="pagination">
+  {% if paginator.current_page > 1 %}
+  <a class="pagination-previous has-text-light" href="?{{ query_str }}&page={{ paginator.current_page - 1}}">Previous</a>
+  {% endif %}
+  {% if paginator.current_page < paginator.last_page %}
+  <a class="pagination-next has-text-light" href="?{{ query_str }}&page={{ paginator.current_page + 1}}">Next page</a>
+  {% endif %}
+  <ul class="pagination-list">
+    <li>
+      <a 
+	    {% if paginator.current_page == 1 %}
+	    class="pagination-link is-current"
+	    {% else %}
+	    class="pagination-link has-text-light"
+	    {% endif %}
+	      href="?{{ query_str }}&page=1" aria-label="Goto page 1">1</a>
+    </li>
+    {% if paginator.current_page > 3 %}
+    <li>
+      <span class="pagination-ellipsis has-text-light">&hellip;</span>
+    </li>
+    {% endif %}
+    {% if paginator.current_page > 2 %}
+    <li>
+	    <a class="pagination-link has-text-light" href="?{{ query_str }}&page={{ paginator.current_page - 1 }}" aria-label="Goto page {{ paginator.current_page - 1}}">{{ paginator.current_page - 1}}</a>
+    </li>
+    {% endif %}
+    {% if paginator.current_page > 1 and paginator.current_page < paginator.last_page %}
+    <li>
+	    <a class="pagination-link is-current" href="?{{ query_str }}&page={{ paginator.current_page }}" aria-label="Page {{ paginator.current_page }}" aria-current="page">{{ paginator.current_page }}</a>
+    </li>
+    {% endif %}
+    {% if paginator.current_page < paginator.last_page - 1 %}
+    <li>
+      <a class="pagination-link has-text-light"  href="?{{ query_str }}&page={{ paginator.current_page +1 }}" aria-label="Goto page {{ paginator.current_page +1 }}">{{ paginator.current_page +1 }}</a>
+    </li>
+    {% endif %}
+    {% if paginator.current_page < paginator.last_page - 2 %}
+    <li>
+      <span class="pagination-ellipsis has-text-light">&hellip;</span>
+    </li>
+    {% endif %}
+    {% if paginator.last_page > 1 %}
+    <li>
+	    <a
+		    {% if paginator.current_page == paginator.last_page %}
+		    class="pagination-link is-current"
+		    {% else %}
+		    class="pagination-link has-text-light"
+		    {% endif %}
+		    href="?{{ query_str }}&page={{ paginator.last_page }}" aria-label="Goto page {{ paginator.last_page }}">{{ paginator.last_page }}</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>

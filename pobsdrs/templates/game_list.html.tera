@@ -1,0 +1,88 @@
+{% extends "base" %}
+{% block content %}
+	{% if paginator.last_page > 1 %}
+	{% include "partials/pagination" %}
+	{% endif %}
+	<dl class="has-text-grey-light">
+	{% for item in paginator.query_result.items %}
+	<dt>
+		<div class="level">
+			<div class="level-left">
+			<a id="{{ item.id }}" href="/{{ item.id }}">
+			<strong class="has-text-grey-light is-uppercase">{{ item.name }}</strong> 
+			</a>
+			</div>
+			<div class="level-right">
+				<div class="field is-grouped is-grouped-multiline">
+				{% if item.tags %}
+					<div class="control">
+					<div class="tags has-addons">
+						<span class="tag is-black has-text-grey">TAGS</span>
+						{% for tag in item.tags %}
+						<a class="tag is-link is-capitalized has-text-black" href="/?tag={{ tag }}">
+							{{ tag }}
+						</a>
+						{% endfor %}
+					</div>
+					</div>
+				{% endif %}
+				{% if item.genres %}
+					<div class="control">
+					<div class="tags has-addons">
+						<span class="tag is-black has-text-grey">GENRES</span>
+						{% for genre in item.genres %}
+						<a class="tag is-info is-capitalized has-text-black" href="/?genre={{ genre }}">{{ genre }}</a>
+						{% endfor %}
+					</div>
+					</div>
+				{% endif %}
+					<div class="control">
+					{% if item.year %}
+					{{ item.year }}
+					{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</dt>
+	<dl>
+	{% if item.dev %}
+		<strong class="has-text-grey-light">Developer:</strong>
+		<a href="/?dev={{ item.dev }}">
+			{{ item.dev }}
+		</a>
+	{% endif %}
+	</dl>
+	<dl>
+	{% if item.publi %}
+		<strong class="has-text-grey-light">Publisher:</strong> 
+		<a href="/?publi={{ item.publi }}">
+			{{ item.publi }}
+		</a>
+	{% endif %}
+	</dl>
+	<dl>
+	{% if item.engine %}
+		<strong class="has-text-grey-light">Engine:</strong> 
+		<a href="/?engine={{ item.engine }}">{{ item.engine }}</a>
+	{% endif %}
+	</dl>
+	<dl>
+	{% if item.runtime %}
+		<strong class="has-text-grey-light">Runtime:</strong>
+		<a href="/?runtime={{ item.runtime }}">
+			{{ item.runtime }}
+		</a>
+	{% endif %}
+	</dl>
+	<dl>
+	{% if item.status %}
+		<strong class="has-text-grey-light">Status:</strong> {{ item.status }}
+	{% endif %}
+	</dl>
+	<hr class="has-background-grey-darker">
+	{% endfor %}
+	{% if paginator.last_page > 1 %}
+	{% include "partials/pagination" %}
+	{% endif %}
+{% endblock %}
