@@ -21,6 +21,7 @@ impl<'a> Paginator<'a> {
     }
     pub fn get_page(&self, pagination: usize, page: usize) -> Paginator {
         let modulo = self.query_result.count % pagination;
+        // return an empty QueryResult
         if self.query_result.count == 0 {
             let items: Vec<&Game> = Vec::new();
             let qr = QueryResult::new(items);
@@ -31,13 +32,16 @@ impl<'a> Paginator<'a> {
             };
         }
         let mut page_number: usize = self.query_result.count / pagination;
+        // remaining items need a new page
         if modulo != 0 {
             page_number = page_number + 1;
         }
         let mut page = page;
+        // if we go to far, go to the last page
         if page > page_number {
             page = page_number;
         }
+        // if the page 0 is asked, go to the first page
         if page == 0 {
             page = 1;
         }
@@ -48,6 +52,8 @@ impl<'a> Paginator<'a> {
         } else {
             last_element = pagination * page - 1;
         }
+        // The previous checks ensure that the indices are not
+        // out of bounds.
         let items = &self.query_result.items[first_element..=last_element];
         let items = items.to_vec();
         let qr = QueryResult::new(items);
