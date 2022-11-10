@@ -11,7 +11,7 @@ pub mod wrappers;
 
 use self::routes::api::game_end_points::{game_all, game_id, game_search};
 use self::routes::api::home::api_home;
-use self::routes::html::{gamelist, gamedetails};
+use self::routes::html::{gamedetails, gamelist};
 use pobsdlib::collections::DataBase;
 use rocket::fairing::AdHoc;
 use rocket::fs::{relative, FileServer};

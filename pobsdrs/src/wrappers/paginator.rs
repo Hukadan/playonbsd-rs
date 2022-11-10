@@ -1,5 +1,5 @@
-use rocket::serde::Serialize;
 use pobsdlib::{Game, QueryResult};
+use rocket::serde::Serialize;
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -13,7 +13,7 @@ pub struct Paginator<'a> {
 impl<'a> Paginator<'a> {
     pub fn new(query_result: QueryResult<&'a Game>) -> Self {
         let count = query_result.count;
-        Self { 
+        Self {
             query_result,
             last_page: 0,
             current_page: 0,
@@ -24,7 +24,11 @@ impl<'a> Paginator<'a> {
         if self.query_result.count == 0 {
             let items: Vec<&Game> = Vec::new();
             let qr = QueryResult::new(items);
-            return Self{ query_result: qr, last_page: 1, current_page: 0 };
+            return Self {
+                query_result: qr,
+                last_page: 1,
+                current_page: 0,
+            };
         }
         let mut page_number: usize = self.query_result.count / pagination;
         if modulo != 0 {
@@ -47,6 +51,10 @@ impl<'a> Paginator<'a> {
         let items = &self.query_result.items[first_element..=last_element];
         let items = items.to_vec();
         let qr = QueryResult::new(items);
-        Paginator { query_result: qr, last_page: page_number, current_page: page }
+        Paginator {
+            query_result: qr,
+            last_page: page_number,
+            current_page: page,
+        }
     }
 }

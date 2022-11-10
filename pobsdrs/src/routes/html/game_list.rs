@@ -1,9 +1,9 @@
-use rocket::State;
-use rocket_dyn_templates::{Template, context};
-use crate::Config;
 use crate::wrappers::paginator::Paginator;
+use crate::Config;
 use pobsdlib::collections::DataBase;
 use pobsdlib::models::{Game, GameFilter};
+use rocket::State;
+use rocket_dyn_templates::{context, Template};
 
 #[get("/?<name>&<engine>&<runtime>&<genre>&<tag>&<year>&<dev>&<publi>&<page>")]
 pub fn gamelist<'a>(
@@ -59,10 +59,16 @@ pub fn gamelist<'a>(
     if !query_str.is_empty() {
         let games = db.game_contains_or(filter);
         let pgames = Paginator::new(games);
-        Template::render("game_list", context!{ paginator:&pgames.get_page(15,page_number), query_str: query_str.join("&")})
+        Template::render(
+            "game_list",
+            context! { paginator:&pgames.get_page(15,page_number), query_str: query_str.join("&")},
+        )
     } else {
         let games = db.get_all_games();
         let pgames = Paginator::new(games);
-        Template::render("game_list", context!{ paginator:&pgames.get_page(15,page_number), query_str: ""})
+        Template::render(
+            "game_list",
+            context! { paginator:&pgames.get_page(15,page_number), query_str: ""},
+        )
     }
 }
