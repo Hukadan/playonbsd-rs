@@ -5,17 +5,8 @@ use crate::wrappers::paginator::Paginator;
 use pobsdlib::collections::DataBase;
 use pobsdlib::models::{Game, GameFilter};
 
-#[get("/<game_id>")]
-pub(crate) fn game<'a>(db: &'a State<DataBase>, game_id: usize) -> Template {
-    if let Some(game) = db.get_game_by_id(game_id) {
-        Template::render("game_details", context!{ game: &game })
-    } else {
-        Template::render("game_details", context!{ game: None::<Game> })
-    }
-}
-
 #[get("/?<name>&<engine>&<runtime>&<genre>&<tag>&<year>&<dev>&<publi>&<page>")]
-pub(crate) fn home<'a>(
+pub fn gamelist<'a>(
     db: &'a State<DataBase>,
     name: Option<&'a str>,
     engine: Option<&'a str>,

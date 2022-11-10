@@ -10,8 +10,8 @@ pub mod routes;
 pub mod wrappers;
 
 use self::routes::api::game_end_points::{game_all, game_id, game_search};
-use self::routes::html::home::{home, game};
 use self::routes::api::home::api_home;
+use self::routes::html::{gamelist, gamedetails};
 use pobsdlib::collections::DataBase;
 use rocket::fairing::AdHoc;
 use rocket::fs::{relative, FileServer};
@@ -29,7 +29,7 @@ fn rocket() -> _ {
         .manage(DataBase::new("../db/openbsd-games.db"))
         .mount("/static", FileServer::from("static/"))
         .mount("/api/", routes![api_home, game_all, game_id, game_search])
-        .mount("/", routes![home, game])
+        .mount("/", routes![gamelist, gamedetails])
         .attach(AdHoc::config::<Config>())
         .attach(Template::fairing())
 }
