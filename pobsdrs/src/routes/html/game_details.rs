@@ -1,4 +1,3 @@
-use crate::Config;
 use pobsdlib::{DataBase, Game};
 use rocket::State;
 use rocket_dyn_templates::{context, Template};

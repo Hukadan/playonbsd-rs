@@ -14,7 +14,7 @@ use self::routes::api::home::api_home;
 use self::routes::html::{gamedetails, gamelist};
 use pobsdlib::collections::DataBase;
 use rocket::fairing::AdHoc;
-use rocket::fs::{relative, FileServer};
+use rocket::fs::FileServer;
 use rocket_dyn_templates::Template;
 
 #[derive(Deserialize)]

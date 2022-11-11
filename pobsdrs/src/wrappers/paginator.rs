@@ -12,7 +12,6 @@ pub struct Paginator<'a> {
 
 impl<'a> Paginator<'a> {
     pub fn new(query_result: QueryResult<&'a Game>) -> Self {
-        let count = query_result.count;
         Self {
             query_result,
             last_page: 0,

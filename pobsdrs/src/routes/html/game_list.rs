@@ -1,7 +1,6 @@
 use crate::wrappers::paginator::Paginator;
-use crate::Config;
 use pobsdlib::collections::DataBase;
-use pobsdlib::models::{Game, GameFilter};
+use pobsdlib::models::GameFilter;
 use rocket::State;
 use rocket_dyn_templates::{context, Template};
 
