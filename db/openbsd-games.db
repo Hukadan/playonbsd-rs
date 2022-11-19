@@ -1151,7 +1151,7 @@ Cover	Doom_Ultimate.jpg
 Engine	id Tech 1
 Setup
 Runtime	chocolate-doom, gzdoom, odamex, prboom-plus, crispy-doom
-Store	https://www.gog.com/game/the_ultimate_doom https://www.humblebundle.com/store/ultimate-doom https://store.steampowered.com/app/2280/Ultimate_Doom/
+Store	https://www.gog.com/game/the_ultimate_doom https://store.steampowered.com/app/2280/Ultimate_Doom/
 Hints
 Genre	FPS
 Tags	classic, graphical violence
@@ -2350,6 +2350,20 @@ Dev	Milkstone Studios
 Pub
 Version
 Status
+Game	Lode Runner Online: The Mad Monks' Revenge
+Cover
+Engine	FNA
+Setup	fnaify
+Runtime	fnaify
+Store	https://mmr.quarkrobot.com/
+Hints
+Genre	Platformer
+Tags	free
+Year
+Dev	Quark Robot
+Pub
+Version	22.09
+Status	runs (2022-10-30)
 Game	Long Live the Queen
 Cover	Long_Live_the_Queen.jpg
 Engine	Ren'Py 6

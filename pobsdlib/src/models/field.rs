@@ -60,6 +60,10 @@ pub enum Field<'a> {
     Tags(Option<Vec<&'a str>>),
     /// Store the result of a Year line of the database
     Year(Option<&'a str>),
+    /// When the game was added
+    Added(Option<&'a str>),
+    /// When the game was last updated
+    Updated(Option<&'a str>),
     /// Store the result of a unknown line of the database
     /// The left hand side and the right hand side (if
     /// any) are stores separately.
@@ -125,6 +129,14 @@ impl fmt::Display for Field<'_> {
                 Some(name) => write!(f, "Year\t{}", name),
                 None => write!(f, "Year"),
             },
+            Field::Added(name) => match name {
+                Some(name) => write!(f, "Added\t{}", name),
+                None => write!(f, "Added"),
+            }
+            Field::Updated(name) => match name {
+                Some(name) => write!(f, "Updated\t{}", name),
+                None => write!(f, "Updated"),
+            }
             Field::Unknown(left, right) => match right {
                 Some(right) => write!(f, "Unknown\t{}\t{}", left.unwrap(), right),
                 None => write!(f, "Unknown\t{}", left.unwrap()),
@@ -216,6 +228,14 @@ impl<'a> Field<'a> {
                 "Year" => match right {
                     Some(right) => Field::Year(Some(right)),
                     None => Field::Year(None),
+                },
+                "Added" => match right {
+                    Some(right) => Field::Added(Some(right)),
+                    None => Field::Added(Some("1970/01/01")),
+                },
+                "Updated" => match right {
+                    Some(right) => Field::Updated(Some(right)),
+                    None => Field::Updated(None),
                 },
                 _ => match right {
                     Some(right) => Field::Unknown(Some(left), Some(right)),

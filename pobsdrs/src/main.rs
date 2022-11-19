@@ -1,35 +1,37 @@
-#[macro_use]
-extern crate rocket;
-extern crate rocket_dyn_templates;
-#[macro_use]
-extern crate serde_derive;
-extern crate pobsdlib;
-extern crate serde_json;
-
+pub mod models;
 pub mod routes;
 pub mod wrappers;
 
-use self::routes::api::game_end_points::{game_all, game_id, game_search};
-use self::routes::api::home::api_home;
-use self::routes::html::{gamedetails, gamelist};
+use axum::{extract::Extension, routing::get, Router};
+use reqwest;
+
+use std::sync::Arc;
+
+use crate::routes::{game_list, game_details};
 use pobsdlib::collections::DataBase;
-use rocket::fairing::AdHoc;
-use rocket::fs::FileServer;
-use rocket_dyn_templates::Template;
 
-#[derive(Deserialize)]
-#[serde(crate = "rocket::serde")]
-struct Config {
-    domain: String,
-}
+#[tokio::main]
+async fn main() {
+    let shared_db: Arc<DataBase>;
+    if let Ok(req) = reqwest::get("https://raw.githubusercontent.com/playonbsd/OpenBSD-Games-Database/main/openbsd-games.db").await {
+        if let Ok(content) = req.text().await {
+            let db = DataBase::new_from_string(content);
+            shared_db = Arc::new(db);
+        } else {
+            panic!("Could no fetch the database from GitHub");
+        }
+    } else {
+        panic!("Could no fetch the database from GitHub");
+    }
+    
+    let app = Router::new()
+        .route("/", get(game_list::game_list).post(game_list::game_list_search))
+        .route("/:game_id", get(game_details::game_details))
+        .layer(Extension(shared_db));
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build()
-        .manage(DataBase::new("../db/openbsd-games.db"))
-        .mount("/static", FileServer::from("static/"))
-        .mount("/api/", routes![api_home, game_all, game_id, game_search])
-        .mount("/", routes![gamelist, gamedetails])
-        .attach(AdHoc::config::<Config>())
-        .attach(Template::fairing())
+    // run it with hyper on localhost:3000
+    axum::Server::bind(&"127.0.0.1:3000".parse().unwrap())
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }

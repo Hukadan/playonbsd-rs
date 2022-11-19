@@ -42,11 +42,16 @@ pub struct Game {
     /// Developer.
     pub dev: Option<String>,
     /// Publisher.
+    #[serde(rename = "pub")]
     pub publi: Option<String>,
     /// Version of the game.
     pub version: Option<String>,
     /// When tested on -current.
     pub status: Option<String>,
+    /// When added
+    pub added: Option<String>,
+    /// When updated
+    pub updated: Option<String>
 }
 
 /// For now games are ordered by id.
@@ -129,9 +134,17 @@ impl fmt::Display for Game {
             Some(status) => format!("Status\t{}", status),
             None => "Status".to_string(),
         };
+        let added = match &self.added {
+            Some(added) => format!("Added\t{}", added),
+            None => "Added".to_string(),
+        };
+        let updated = match &self.updated {
+            Some(updated) => format!("Updated\t{}", updated),
+            None => "Updated".to_string(),
+        };
         write!(
             f,
-            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
             game,
             cover,
             engine,
@@ -146,6 +159,8 @@ impl fmt::Display for Game {
             publi,
             version,
             status,
+            added,
+            updated,
         )
     }
 }
@@ -311,6 +326,8 @@ mod test_game_methods {
         game.publi = Some("game publi".to_string());
         game.version = Some("game version".to_string());
         game.status = Some("game status".to_string());
+        game.added = Some("2012-12-03".to_string());
+        game.updated = Some("2014-12-03".to_string());
         game
     }
     #[test]
@@ -422,7 +439,9 @@ Year\t2011
 Dev
 Pub
 Version
-Status";
+Status
+Added
+Updated";
         let game = Game {
             id: 1,
             name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
@@ -442,6 +461,8 @@ Status";
             publi: None,
             version: None,
             status: None,
+            added: None,
+            updated: None,
         };
         assert_eq!(format!("{}", game), game_str);
     }

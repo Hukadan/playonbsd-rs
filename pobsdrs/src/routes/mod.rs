@@ -1,2 +1,2 @@
-pub mod api;
-pub mod html;
+pub mod game_list;
+pub mod game_details;
