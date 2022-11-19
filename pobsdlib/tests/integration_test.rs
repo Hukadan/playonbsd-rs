@@ -3,7 +3,7 @@ use pobsdlib::{DataBase, GameFilter};
 
 #[test]
 fn test_get_all_games() {
-    let db = DataBase::new("tests/data/test-games.db");
+    let db = DataBase::new_from_file("tests/data/test-games.db");
     let games = db.get_all_games();
     // we get them all
     assert_eq!(games.count, 8);
@@ -28,7 +28,7 @@ fn test_get_all_games() {
 }
 #[test]
 fn test_game_get_by_id() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     match db_game.get_game_by_id(2) {
         Some(game) => {
             assert_eq!(game.name, "The Adventures of Shuggy".to_string());
@@ -45,7 +45,7 @@ fn test_game_get_by_id() {
 }
 #[test]
 fn test_game_get_by_name() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_name("Akane the Kunoichi");
     // check we have the right number
     assert_eq!(games.count, 1);
@@ -62,7 +62,7 @@ fn test_game_get_by_name() {
 }
 #[test]
 fn test_game_get_by_engine() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_engine("FNA");
     // check we have the right number
     assert_eq!(games.count, 2);
@@ -77,7 +77,7 @@ fn test_game_get_by_engine() {
 }
 #[test]
 fn test_game_get_by_runtime() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_runtime("easyrpg");
     // check we have the right number
     assert_eq!(games.count, 1);
@@ -90,7 +90,7 @@ fn test_game_get_by_runtime() {
 }
 #[test]
 fn test_game_get_by_genre() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_genre("RPG");
     assert_eq!(games.count, 2);
     assert_eq!(games.items.get(0).unwrap().name, "Aedemphia".to_string());
@@ -104,7 +104,7 @@ fn test_game_get_by_genre() {
 }
 #[test]
 fn test_game_get_by_tag() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_tag("indie");
     assert_eq!(games.count, 2);
     assert_eq!(
@@ -118,7 +118,7 @@ fn test_game_get_by_tag() {
 }
 #[test]
 fn test_game_get_by_year() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_year("2017");
     // check we have the right number
     assert_eq!(games.count, 1);
@@ -131,7 +131,7 @@ fn test_game_get_by_year() {
 }
 #[test]
 fn test_game_get_by_dev() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_dev("David Stark");
     // check we have the right number
     assert_eq!(games.count, 1);
@@ -147,14 +147,14 @@ fn test_game_get_by_dev() {
 }
 #[test]
 fn test_game_get_by_publi() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let games = db_game.get_game_by_publi("Unknown");
     // check we have the right number
     assert_eq!(games.count, 0);
 }
 #[test]
 fn test_game_contains_or() {
-    let db_game = DataBase::new("tests/data/test-games.db");
+    let db_game = DataBase::new_from_file("tests/data/test-games.db");
     let mut filter = GameFilter::new();
     filter.name_contains("Akane the Kunoichi");
     let games = db_game.game_contains_or(filter);
