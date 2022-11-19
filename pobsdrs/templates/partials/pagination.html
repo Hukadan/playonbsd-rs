@@ -25,7 +25,7 @@
 	    <a class="pagination-link has-text-light" href="?{{ query_str }}&page={{ paginator.current_page - 1 }}" aria-label="Goto page {{ paginator.current_page - 1}}">{{ paginator.current_page - 1}}</a>
     </li>
     {% endif %}
-    {% if paginator.current_page > 1 and paginator.current_page < paginator.last_page %}
+    {% if paginator.current_page > 1 && paginator.current_page < paginator.last_page %}
     <li>
 	    <a class="pagination-link is-current" href="?{{ query_str }}&page={{ paginator.current_page }}" aria-label="Page {{ paginator.current_page }}" aria-current="page">{{ paginator.current_page }}</a>
     </li>

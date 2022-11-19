@@ -2,7 +2,14 @@ use crate::collections::DataBase;
 use crate::models::{Field, Game, Item};
 use crate::utils::get_app_id;
 
-pub fn game_dispatch(field: Field, database: &mut DataBase) {
+pub fn game_dispatch(
+    field: Field, 
+    database: &mut DataBase,
+    // expand the cover to complete url
+    expand_cover: bool,
+    // fetch steam cover if possible
+    steam_cover: bool,
+    ) {
     match field {
         Field::Game(name) => {
             if let Some(name) = name {
@@ -23,10 +30,14 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     if !name.is_empty() {
-                        game.cover = Some(format!(
-                            "https://playonbsd.com/legacy/shopping_guide/pics/originals/{}",
-                            name
-                        ));
+                        if expand_cover {
+                            game.cover = Some(format!(
+                                "https://playonbsd.com/legacy/shopping_guide/pics/originals/{}",
+                                name
+                            ));
+                        } else {
+                            game.cover = Some(name.to_string());
+                        }
                     }
                 };
             };
@@ -83,7 +94,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.publi = Some(name.to_string());
+                    game.dev = Some(name.to_string());
                 };
                 database
                     .devs
@@ -99,7 +110,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
             if let Some(name) = name {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.dev = Some(name.to_string());
+                    game.publi = Some(name.to_string());
                 };
                 database
                     .publis
@@ -135,7 +146,7 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                         // Tries to grap the Steam one
                         // if a steam link is given in store.
                         // if is_empty && item.contains("steampowered") {
-                        if item.contains("steampowered") {
+                        if item.contains("steampowered") && steam_cover {
                             let item = item;
                             let app_id = get_app_id(item);
                             if let Some(app_id) = app_id {
@@ -219,6 +230,22 @@ pub fn game_dispatch(field: Field, database: &mut DataBase) {
                         name: year.to_string(),
                         games: vec![last_game_id],
                     });
+            }
+        }
+        Field::Added(date) => {
+            if let Some(date) = date {
+                let last_game_id = database.games.len();
+                if let Some(game) = database.games.get_mut(&last_game_id) {
+                    game.added = Some(date.to_string());
+                };
+            }
+        }
+        Field::Updated(date) => {
+            if let Some(date) = date {
+                let last_game_id = database.games.len();
+                if let Some(game) = database.games.get_mut(&last_game_id) {
+                    game.updated = Some(date.to_string());
+                };
             }
         }
         Field::Unknown(left, right) => {

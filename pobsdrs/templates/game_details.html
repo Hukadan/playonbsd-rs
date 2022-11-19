@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+{% match game %}
+{% when Some with (game) %}
+	<strong class="has-text-grey-light is-uppercase">{{ game.name }}</strong>
+        {% match game.cover %}
+	{% when Some with (cover) %}
+	<figure style="max-height: 300px;">
+	  <img src="{{ cover }}" style="max-height: 200px;">
+	</figure>
+	{% when None %}
+	{% endmatch %}
+        {% match game.year %}
+	{% when Some with (year) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Release date</strong>: {{ year }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.engine %}
+	{% when Some with (engine) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Engine</strong>: {{ engine }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.setup %}
+	{% when Some with (setup) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Setup</strong>: {{ setup }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.runtime %}
+	{% when Some with (runtime) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Runtime</strong>: {{ runtime }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.hints %}
+	{% when Some with (hints) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Hints</strong>: {{ hints }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.dev %}
+	{% when Some with (dev) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Developper</strong>: {{ dev }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.publi %}
+	{% when Some with (publi) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Publisher</strong>: {{ publi }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.status %}
+	{% when Some with (status) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Status</strong>: {{ status }}</p>
+	{% when None %}
+	{% endmatch %}
+        {% match game.stores %}
+	{% when Some with (stores) %}
+	<div>
+	  <p class="has-text-grey-light">Available here:</p>
+	  <ul class="has-text-grey-light">
+	    {% for store in stores %}
+	    <li>
+	      <a href="{{ store }}">{{ store }}</a>
+	    </li>
+	    {% endfor %}
+	  </ul>
+	</div>
+	{% when None %}
+	{% endmatch %}
+	<div class="field is-grouped is-grouped-multiline">
+        {% match game.tags %}
+	{% when Some with (tags) %}
+		<div class="control">
+		<div class="tags has-addons">
+			<span class="tag is-black has-text-grey">TAGS</span>
+			{% for tag in tags %}
+			<a class="tag is-link is-capitalized has-text-black" href="/?tag={{ tag }}">
+				{{ tag }}
+			</a>
+			{% endfor %}
+		</div>
+		</div>
+	{% when None %}
+	{% endmatch %}
+        {% match game.genres %}
+	{% when Some with (genres) %}
+		<div class="control">
+		<div class="tags has-addons">
+			<span class="tag is-black has-text-grey">GENRES</span>
+			{% for genre in genres %}
+			<a class="tag is-info is-capitalized has-text-black" href="/?genre={{ genre }}">{{ genre }}</a>
+			{% endfor %}
+		</div>
+		</div>
+	{% when None %}
+	{% endmatch %}
+	</div>
+{% when None %}
+GAME NOT FOUND
+{% endmatch %}
+{% endblock %}

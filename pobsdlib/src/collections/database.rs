@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::collections::QueryResult;
 use crate::models::{Game, GameFilter, Item};
-use crate::utils::load_database;
+use crate::utils::{load_database, load_database_from_string};
 
 /// Store the game database in different collections.
 /// With the exception of the get_game_by_id query,
@@ -56,19 +56,31 @@ impl DataBase {
     /// Create a database from a database file.
     /// Please see <https://github.com/playonbsd/OpenBSD-Games-Database>
     /// for more information.
-    pub fn new(filename: &str) -> Self {
+    pub fn new_from_file(filename: &str) -> Self {
         let mut database = Self::default();
         load_database(&mut database, filename);
         database
     }
+    pub fn new_from_string(text: String) -> Self {
+        let mut database = Self::default();
+        load_database_from_string(&mut database, text);
+        database
+    }
     /// Return all games of the database.
-    pub fn get_all_games(&self) -> QueryResult<&Game> {
-        let games = self.games.values().collect();
-        QueryResult::new(games)
+    pub fn get_all_games(&self) -> QueryResult<Game> {
+        let games: Vec<&Game> = self.games.values().collect();
+        let mut items: Vec<Game> = Vec::with_capacity(games.len());
+        for game in games {
+            items.push(game.clone())
+        }
+        QueryResult::new(items)
     }
     /// Return the game the the given id
-    pub fn get_game_by_id(&self, id: usize) -> Option<&Game> {
-        self.games.get(&id)
+    pub fn get_game_by_id(&self, id: usize) -> Option<Game> {
+        match self.games.get(&id) {
+            Some(game) => Some(game.clone()),
+            None => None,
+        }
     }
     /// Return the games of the database with the given name.
     /// It preforms an exact matching.
@@ -166,7 +178,7 @@ impl DataBase {
     /// be set to None.
     /// The search is done performing `AND`
     /// between the fields.
-    pub fn game_contains_and(&self, filter: GameFilter) -> QueryResult<&Game> {
+    pub fn game_contains_and(&self, filter: GameFilter) -> QueryResult<Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
             item.name_contains(filter.name, true)
                 && item.engine_contains(filter.engine, true)
@@ -177,9 +189,9 @@ impl DataBase {
                 && item.dev_contains(filter.dev, true)
                 && item.publi_contains(filter.publi, true)
         });
-        let mut games: Vec<&Game> = Vec::new();
+        let mut games: Vec<Game> = Vec::new();
         for (_, item) in gs {
-            games.push(item);
+            games.push(item.clone());
         }
         QueryResult::new(games)
     }
@@ -189,7 +201,7 @@ impl DataBase {
     /// be set to None.
     /// The search is done performing `OR`
     /// between the fields.
-    pub fn game_contains_or(&self, filter: GameFilter) -> QueryResult<&Game> {
+    pub fn game_contains_or(&self, filter: GameFilter) -> QueryResult<Game> {
         let gs = self.games.iter().filter(|&(_, item)| {
             item.name_contains(filter.name, false)
                 || item.engine_contains(filter.engine, false)
@@ -200,9 +212,9 @@ impl DataBase {
                 || item.dev_contains(filter.dev, false)
                 || item.publi_contains(filter.publi, false)
         });
-        let mut games: Vec<&Game> = Vec::new();
+        let mut games: Vec<Game> = Vec::new();
         for (_, item) in gs {
-            games.push(item);
+            games.push(item.clone());
         }
         QueryResult::new(games)
     }

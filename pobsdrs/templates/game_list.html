@@ -1,10 +1,10 @@
-{% extends "base" %}
+{% extends "base.html" %}
 {% block content %}
 	{% if paginator.last_page > 1 %}
-	{% include "partials/pagination" %}
+	{% include "partials/pagination.html" %}
 	{% endif %}
 	<dl class="has-text-grey-light">
-	{% for item in paginator.query_result.items %}
+	{% for item in games %}
 	<dt>
 		<div class="level">
 			<div class="level-left">
@@ -14,75 +14,91 @@
 			</div>
 			<div class="level-right">
 				<div class="field is-grouped is-grouped-multiline">
-				{% if item.tags %}
+				{% match item.tags %}
+				  {% when Some with (tags) %}
 					<div class="control">
 					<div class="tags has-addons">
 						<span class="tag is-black has-text-grey">TAGS</span>
-						{% for tag in item.tags %}
+						{% for tag in tags %}
 						<a class="tag is-link is-capitalized has-text-black" href="/?tag={{ tag }}">
 							{{ tag }}
 						</a>
 						{% endfor %}
 					</div>
 					</div>
-				{% endif %}
-				{% if item.genres %}
+				  {% when None %}
+				{% endmatch %}
+				{% match item.genres %}
+				  {% when Some with (genres) %}
 					<div class="control">
 					<div class="tags has-addons">
 						<span class="tag is-black has-text-grey">GENRES</span>
-						{% for genre in item.genres %}
+						{% for genre in genres %}
 						<a class="tag is-info is-capitalized has-text-black" href="/?genre={{ genre }}">{{ genre }}</a>
 						{% endfor %}
 					</div>
 					</div>
-				{% endif %}
+				  {% when None %}
+				{% endmatch %}
 					<div class="control">
-					{% if item.year %}
-					{{ item.year }}
-					{% endif %}
+					{% match item.year %}
+					  {% when Some with (year) %}
+					    {{ year }}
+				          {% when None %}
+					{% endmatch %}
 					</div>
 				</div>
 			</div>
 		</div>
 	</dt>
 	<dl>
-	{% if item.dev %}
+	{% match item.dev %}
+	  {% when Some with (dev) %}
 		<strong class="has-text-grey-light">Developer:</strong>
-		<a href="/?dev={{ item.dev }}">
-			{{ item.dev }}
+		<a href="/?dev={{ dev }}">
+			{{ dev }}
 		</a>
-	{% endif %}
+	  {% when None %}
+	{% endmatch %}
 	</dl>
 	<dl>
-	{% if item.publi %}
+	{% match item.publi %}
+	  {% when Some with (publi) %}
 		<strong class="has-text-grey-light">Publisher:</strong> 
-		<a href="/?publi={{ item.publi }}">
-			{{ item.publi }}
+		<a href="/?publi={{ publi }}">
+			{{ publi }}
 		</a>
-	{% endif %}
+	  {% when None %}
+	{% endmatch %}
 	</dl>
 	<dl>
-	{% if item.engine %}
+	{% match item.engine %}
+	  {% when Some with (engine) %}
 		<strong class="has-text-grey-light">Engine:</strong> 
-		<a href="/?engine={{ item.engine }}">{{ item.engine }}</a>
-	{% endif %}
+		<a href="/?engine={{ engine }}">{{ engine }}</a>
+	  {% when None %}
+	{% endmatch %}
 	</dl>
 	<dl>
-	{% if item.runtime %}
+	{% match item.runtime %}
+	  {% when Some with (runtime) %}
 		<strong class="has-text-grey-light">Runtime:</strong>
-		<a href="/?runtime={{ item.runtime }}">
-			{{ item.runtime }}
+		<a href="/?runtime={{ runtime }}">
+			{{ runtime }}
 		</a>
-	{% endif %}
+	  {% when None %}
+	{% endmatch %}
 	</dl>
 	<dl>
-	{% if item.status %}
-		<strong class="has-text-grey-light">Status:</strong> {{ item.status }}
-	{% endif %}
+	{% match item.status %}
+	  {% when Some with (status) %}
+		<strong class="has-text-grey-light">Status:</strong> {{ status }}
+	  {% when None %}
+	{% endmatch %}
 	</dl>
 	<hr class="has-background-grey-darker">
 	{% endfor %}
 	{% if paginator.last_page > 1 %}
-	{% include "partials/pagination" %}
+	{% include "partials/pagination.html" %}
 	{% endif %}
 {% endblock %}

@@ -42,11 +42,16 @@ pub struct Game {
     /// Developer.
     pub dev: Option<String>,
     /// Publisher.
+    #[serde(rename = "pub")]
     pub publi: Option<String>,
     /// Version of the game.
     pub version: Option<String>,
     /// When tested on -current.
     pub status: Option<String>,
+    /// When added
+    pub added: Option<String>,
+    /// When updated
+    pub updated: Option<String>
 }
 
 /// For now games are ordered by id.
@@ -129,9 +134,17 @@ impl fmt::Display for Game {
             Some(status) => format!("Status\t{}", status),
             None => "Status".to_string(),
         };
+        let added = match &self.added {
+            Some(added) => format!("Added\t{}", added),
+            None => "Added".to_string(),
+        };
+        let updated = match &self.updated {
+            Some(updated) => format!("Updated\t{}", updated),
+            None => "Updated".to_string(),
+        };
         write!(
             f,
-            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
             game,
             cover,
             engine,
@@ -146,6 +159,8 @@ impl fmt::Display for Game {
             publi,
             version,
             status,
+            added,
+            updated,
         )
     }
 }
