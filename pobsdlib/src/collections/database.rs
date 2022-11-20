@@ -87,87 +87,87 @@ impl DataBase {
     /// Note that nothing forbids two games to have the same name.
     /// Hence, it does not behave like get_game_by_id but
     /// returns a QueryResult.
-    pub fn get_game_by_name(&self, name: &str) -> QueryResult<&Game> {
+    pub fn get_game_by_name(&self, name: &str) -> QueryResult<Game> {
         let gs = self.games.iter().filter(|&(_, item)| item.name == name);
-        let mut games: Vec<&Game> = Vec::new();
+        let mut games: Vec<Game> = Vec::new();
         for (_, item) in gs {
-            games.push(item);
+            games.push(item.clone());
         }
         QueryResult::new(games)
     }
     /// Return the games of the database using the given engine.
     /// It performs an exact matching.
-    pub fn get_game_by_engine(&self, name: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_engine(&self, name: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(engine) = self.engines.get(name) {
             for id in &engine.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
     }
     /// Return the games of the database using the givent runtime.
     /// It performs an exact matching.
-    pub fn get_game_by_runtime(&self, name: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_runtime(&self, name: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(runtime) = self.runtimes.get(name) {
             for id in &runtime.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
     }
     /// Return the games of the database classified in the given genre.
     /// It performs an exact matching.
-    pub fn get_game_by_genre(&self, name: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_genre(&self, name: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(genre) = self.genres.get(name) {
             for id in &genre.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
     }
     /// Return the games of the database classified in the given tag.
     /// It performs an exact matching.
-    pub fn get_game_by_tag(&self, name: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_tag(&self, name: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(tag) = self.tags.get(name) {
             for id in &tag.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
     }
     /// Return the games of the database released in the given year.
     /// It performs an exact matching.
-    pub fn get_game_by_year(&self, year: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_year(&self, year: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(year) = self.years.get(&year.to_string()) {
             for id in &year.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
     }
     /// Return the games of the database developped by the given developper.
     /// It performs an exact matching.
-    pub fn get_game_by_dev(&self, name: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_dev(&self, name: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(dev) = self.devs.get(name) {
             for id in &dev.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
     }
     /// Return the games of the database published by the given publisher.
     /// It performs an exact matching.
-    pub fn get_game_by_publi(&self, name: &str) -> QueryResult<&Game> {
-        let mut games: Vec<&Game> = Vec::new();
+    pub fn get_game_by_publi(&self, name: &str) -> QueryResult<Game> {
+        let mut games: Vec<Game> = Vec::new();
         if let Some(publi) = self.publis.get(name) {
             for id in &publi.games {
-                games.push(self.games.get(id).unwrap());
+                games.push(self.games.get(id).unwrap().clone());
             }
         }
         QueryResult::new(games)
