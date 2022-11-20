@@ -1,19 +1,24 @@
 pub mod models;
 pub mod routes;
 pub mod wrappers;
+pub mod views;
 
 use axum::{extract::Extension, routing::get, Router};
 use reqwest;
 
 use std::sync::Arc;
 
-use crate::routes::{game_list, game_details};
+use crate::routes::{game_details, game_list};
 use pobsdlib::collections::DataBase;
 
 #[tokio::main]
 async fn main() {
     let shared_db: Arc<DataBase>;
-    if let Ok(req) = reqwest::get("https://raw.githubusercontent.com/playonbsd/OpenBSD-Games-Database/main/openbsd-games.db").await {
+    if let Ok(req) = reqwest::get(
+        "https://raw.githubusercontent.com/playonbsd/OpenBSD-Games-Database/main/openbsd-games.db",
+    )
+    .await
+    {
         if let Ok(content) = req.text().await {
             let db = DataBase::new_from_string(content);
             shared_db = Arc::new(db);
@@ -23,9 +28,12 @@ async fn main() {
     } else {
         panic!("Could no fetch the database from GitHub");
     }
-    
+
     let app = Router::new()
-        .route("/", get(game_list::game_list).post(game_list::game_list_search))
+        .route(
+            "/",
+            get(game_list::game_list).post(game_list::game_list_search),
+        )
         .route("/:game_id", get(game_details::game_details))
         .layer(Extension(shared_db));
 

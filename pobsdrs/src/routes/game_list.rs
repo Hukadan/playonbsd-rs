@@ -1,20 +1,12 @@
-use crate::models::HtmlTemplate;
-use crate::wrappers::{GameFilterWrapper, Page, Paginator};
-use askama::Template;
-use serde::Deserialize;
+use crate::wrappers::GameFilterWrapper;
+use crate::views::game_list::game_list_view;
 use axum::extract::{Extension, Form, Query};
 use axum::response::IntoResponse;
 use pobsdlib::{DataBase, Game, QueryResult};
+use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::Arc;
 
-#[derive(Template)]
-#[template(path = "game_list.html")]
-struct GameListTemplate {
-    games: Vec<Game>,
-    query_str: String,
-    paginator: Page,
-}
 
 #[derive(Deserialize, Debug)]
 pub struct Search {
@@ -32,35 +24,8 @@ pub async fn game_list(
     } else {
         game_query = db.get_all_games();
     }
-    let page = match params.get("page") {
-        Some(page) => page.parse::<usize>().unwrap(),
-        None => 1,
-    };
-    let page = Paginator::new(game_query.count, 15).page(page);
-    let template: GameListTemplate;
-    match page {
-        Some(page) => {
-            template = GameListTemplate {
-                games: game_query.items[page.first_element..=page.last_element].to_vec(),
-                query_str: game_filter_wrapper.query_str,
-                paginator: page,
-            }
-        }
-        None => {
-            let page = Page {
-                first_element: 0,
-                last_element: game_query.count,
-                current_page: 1,
-                last_page: 1,
-            };
-            template = GameListTemplate {
-                games: game_query.items,
-                query_str: "".to_string(),
-                paginator: page,
-            }
-        }
-    }
-    HtmlTemplate(template)
+    let page = params.get("page");
+    game_list_view(game_query, page.cloned(), game_filter_wrapper.query_str)
 }
 
 pub async fn game_list_search(
@@ -86,33 +51,5 @@ pub async fn game_list_search(
     } else {
         game_query = db.get_all_games();
     }
-    let page = match params.get("page") {
-        Some(page) => page.parse::<usize>().unwrap(),
-        None => 1,
-    };
-    let page = Paginator::new(game_query.count, 15).page(page);
-    let template: GameListTemplate;
-    match page {
-        Some(page) => {
-            template = GameListTemplate {
-                games: game_query.items[page.first_element..=page.last_element].to_vec(),
-                query_str: game_filter_wrapper.query_str,
-                paginator: page,
-            }
-        }
-        None => {
-            let page = Page {
-                first_element: 0,
-                last_element: game_query.count,
-                current_page: 1,
-                last_page: 1,
-            };
-            template = GameListTemplate {
-                games: game_query.items,
-                query_str: "".to_string(),
-                paginator: page,
-            }
-        }
-    }
-    HtmlTemplate(template)
+    game_list_view(game_query, None, game_filter_wrapper.query_str)
 }

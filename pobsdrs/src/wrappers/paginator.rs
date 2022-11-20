@@ -27,7 +27,7 @@ impl Paginator {
             None
         } else if page_number == last_page {
             let first_element = self.item_per_page * (page_number - 1);
-            
+
             let last_element = if self.item_number % self.item_per_page == 0 {
                 first_element + self.item_per_page - 1
             } else {
