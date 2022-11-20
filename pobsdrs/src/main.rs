@@ -1,7 +1,7 @@
 pub mod models;
 pub mod routes;
-pub mod wrappers;
 pub mod views;
+pub mod wrappers;
 
 use axum::{extract::Extension, routing::get, Router};
 use reqwest;

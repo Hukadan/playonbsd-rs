@@ -1,12 +1,11 @@
-use crate::wrappers::GameFilterWrapper;
 use crate::views::game_list::game_list_view;
+use crate::wrappers::GameFilterWrapper;
 use axum::extract::{Extension, Form, Query};
 use axum::response::IntoResponse;
 use pobsdlib::{DataBase, Game, QueryResult};
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::Arc;
-
 
 #[derive(Deserialize, Debug)]
 pub struct Search {

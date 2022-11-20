@@ -1,8 +1,8 @@
+use crate::models::HtmlTemplate;
+use crate::wrappers::{Page, Paginator};
 use askama::Template;
 use axum::response::IntoResponse;
 use pobsdlib::{Game, QueryResult};
-use crate::models::HtmlTemplate;
-use crate::wrappers::{Paginator, Page};
 
 #[derive(Template)]
 #[template(path = "game_list.html")]
@@ -12,10 +12,11 @@ struct GameListTemplate {
     paginator: Page,
 }
 
-pub fn game_list_view(game_query: QueryResult<Game>,
-                 page: Option<String>,
-                 query_str: String,
-    ) -> impl IntoResponse {
+pub fn game_list_view(
+    game_query: QueryResult<Game>,
+    page: Option<String>,
+    query_str: String,
+) -> impl IntoResponse {
     let page = match page {
         Some(page) => page.parse::<usize>().unwrap(),
         None => 1,
