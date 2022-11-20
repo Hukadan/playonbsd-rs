@@ -132,11 +132,11 @@ impl fmt::Display for Field<'_> {
             Field::Added(name) => match name {
                 Some(name) => write!(f, "Added\t{}", name),
                 None => write!(f, "Added"),
-            }
+            },
             Field::Updated(name) => match name {
                 Some(name) => write!(f, "Updated\t{}", name),
                 None => write!(f, "Updated"),
-            }
+            },
             Field::Unknown(left, right) => match right {
                 Some(right) => write!(f, "Unknown\t{}\t{}", left.unwrap(), right),
                 None => write!(f, "Unknown\t{}", left.unwrap()),

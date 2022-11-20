@@ -51,7 +51,7 @@ pub struct Game {
     /// When added
     pub added: Option<String>,
     /// When updated
-    pub updated: Option<String>
+    pub updated: Option<String>,
 }
 
 /// For now games are ordered by id.

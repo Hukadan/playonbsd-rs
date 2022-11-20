@@ -3,13 +3,13 @@ use crate::models::{Field, Game, Item};
 use crate::utils::get_app_id;
 
 pub fn game_dispatch(
-    field: Field, 
+    field: Field,
     database: &mut DataBase,
     // expand the cover to complete url
     expand_cover: bool,
     // fetch steam cover if possible
     steam_cover: bool,
-    ) {
+) {
     match field {
         Field::Game(name) => {
             if let Some(name) = name {

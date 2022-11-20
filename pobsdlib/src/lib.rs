@@ -6,8 +6,8 @@
 //!
 #[macro_use]
 extern crate serde_derive;
-extern crate serde_json;
 extern crate reqwest;
+extern crate serde_json;
 mod utils;
 // public api
 pub mod collections;
