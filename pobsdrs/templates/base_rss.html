@@ -1,0 +1,22 @@
+<!doctype html>
+<html class="has-navbar-fixed-top" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+         a:hover {
+           color: #aa6a6a;
+         }
+    </style>
+  </head>
+  <body class="has-background-black-ter has-text-white-ter">
+  <div class="container has-background-black-ter">
+	<section class="hero is-fullheight-with-navbar p-6" style="display: inherit;">
+	{% block content %}
+	{% endblock %}
+	</section>
+    </div>
+  </body>
+</html>

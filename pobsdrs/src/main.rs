@@ -8,7 +8,7 @@ use reqwest;
 
 use std::sync::Arc;
 
-use crate::routes::{game_details, game_list};
+use crate::routes::{game_details, game_list, rss};
 use pobsdlib::collections::DataBase;
 
 #[tokio::main]
@@ -35,6 +35,7 @@ async fn main() {
             get(game_list::game_list).post(game_list::game_list_search),
         )
         .route("/:game_id", get(game_details::game_details))
+        .route("/rss", get(rss::rss))
         .layer(Extension(shared_db));
 
     // run it with hyper on localhost:3000
