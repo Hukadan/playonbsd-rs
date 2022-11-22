@@ -1,6 +1,0 @@
-[debug]
-domain = "http://127.0.0.1:8000"
-
-[release]
-domain = "https://pobsd.chocolatines.org"
-log_level = "normal"

@@ -1,5 +1,5 @@
-use axum::extract::Extension;
 use askama::Template;
+use axum::extract::Extension;
 use axum::http::{header, HeaderMap};
 use axum::response::IntoResponse;
 use chrono::{prelude::*, Duration};
@@ -48,6 +48,9 @@ pub async fn rss(Extension(db): Extension<Arc<DataBase>>) -> impl IntoResponse {
         .items(items)
         .build();
     let mut headers = HeaderMap::new();
-    headers.insert(header::CONTENT_TYPE, "application/rss+xml;charset=UTF-8".parse().unwrap());
+    headers.insert(
+        header::CONTENT_TYPE,
+        "application/rss+xml;charset=UTF-8".parse().unwrap(),
+    );
     (headers, channel.to_string())
 }

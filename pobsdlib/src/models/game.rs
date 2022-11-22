@@ -1,3 +1,4 @@
+use chrono::NaiveDate;
 use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
@@ -49,9 +50,9 @@ pub struct Game {
     /// When tested on -current.
     pub status: Option<String>,
     /// When added
-    pub added: Option<String>,
+    pub added: Option<NaiveDate>,
     /// When updated
-    pub updated: Option<String>,
+    pub updated: Option<NaiveDate>,
 }
 
 /// For now games are ordered by id.
@@ -135,11 +136,11 @@ impl fmt::Display for Game {
             None => "Status".to_string(),
         };
         let added = match &self.added {
-            Some(added) => format!("Added\t{}", added),
+            Some(added) => format!("Added\t{}", added.format("%F").to_string()),
             None => "Added".to_string(),
         };
         let updated = match &self.updated {
-            Some(updated) => format!("Updated\t{}", updated),
+            Some(updated) => format!("Updated\t{}", updated.format("%F").to_string()),
             None => "Updated".to_string(),
         };
         write!(

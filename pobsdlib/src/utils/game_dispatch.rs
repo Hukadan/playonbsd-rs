@@ -1,6 +1,7 @@
 use crate::collections::DataBase;
 use crate::models::{Field, Game, Item};
 use crate::utils::get_app_id;
+use chrono::NaiveDate;
 
 pub fn game_dispatch(
     field: Field,
@@ -236,7 +237,10 @@ pub fn game_dispatch(
             if let Some(date) = date {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.added = Some(date.to_string());
+                    game.added = Some(
+                        NaiveDate::parse_from_str(&date, "%F")
+                            .expect("fail to convert to date"),
+                    );
                 };
             }
         }
@@ -244,7 +248,15 @@ pub fn game_dispatch(
             if let Some(date) = date {
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
-                    game.updated = Some(date.to_string());
+                    game.updated = Some(
+                        NaiveDate::parse_from_str(&date, "%F")
+                            .expect("fail to convert to date"),
+                    );
+                };
+            } else {
+                let last_game_id = database.games.len();
+                if let Some(game) = database.games.get_mut(&last_game_id) {
+                    game.updated = game.added.clone()
                 };
             }
         }

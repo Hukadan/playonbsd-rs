@@ -18,7 +18,6 @@ fn main() {
         let games = game_db.get_all_games();
         for mut game in games.items {
             if let Some(date) = game.added {
-                let date = date.replace("/", "-");
                 game.added = Some(date);
             }
             println!("{}", game);
