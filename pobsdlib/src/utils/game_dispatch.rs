@@ -2,6 +2,8 @@ use crate::collections::DataBase;
 use crate::models::{Field, Game, Item};
 use crate::utils::get_app_id;
 use chrono::NaiveDate;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 pub fn game_dispatch(
     field: Field,
@@ -18,6 +20,9 @@ pub fn game_dispatch(
                 let game_id = database.games.len() + 1;
                 game.name = name.to_string();
                 game.id = game_id;
+                let mut hasher = DefaultHasher::new();
+                game.name.hash(&mut hasher);
+                game.uiid = hasher.finish();
                 database.games.insert(game_id, game);
             } else {
                 eprintln!(

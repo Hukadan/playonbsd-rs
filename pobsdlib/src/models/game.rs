@@ -20,6 +20,8 @@ use std::fmt;
 pub struct Game {
     /// The id of the game.
     pub id: usize,
+    /// The unique id
+    pub uiid: u64,
     /// The name of the game.
     pub name: String,
     /// The cover of the game.
