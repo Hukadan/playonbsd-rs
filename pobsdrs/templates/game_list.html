@@ -3,6 +3,9 @@
 	{% if paginator.last_page > 1 %}
 	{% include "partials/pagination.html" %}
 	{% endif %}
+	{% if games.is_empty() %}
+	NO GAME FOUND
+	{% endif %}
 	<dl class="has-text-grey-light">
 	{% for item in games %}
 	<dt>
