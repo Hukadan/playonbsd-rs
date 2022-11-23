@@ -329,8 +329,14 @@ mod test_game_methods {
         game.publi = Some("game publi".to_string());
         game.version = Some("game version".to_string());
         game.status = Some("game status".to_string());
-        game.added = Some("2012-12-03".to_string());
-        game.updated = Some("2014-12-03".to_string());
+        game.added = Some(
+            NaiveDate::parse_from_str("2012-12-03", "%F")
+                .expect("Date conversion in test should not fail"),
+        );
+        game.updated = Some(
+            NaiveDate::parse_from_str("2014-12-03", "%F")
+                .expect("Date conversion in test should not fail"),
+        );
         game
     }
     #[test]
@@ -447,6 +453,7 @@ Added
 Updated";
         let game = Game {
             id: 1,
+            uiid: 123456789,
             name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
             cover: Some("AaaaaA_for_the_Awesome_Cover.jpg".to_string()),
             engine: None,

@@ -243,8 +243,7 @@ pub fn game_dispatch(
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     game.added = Some(
-                        NaiveDate::parse_from_str(&date, "%F")
-                            .expect("fail to convert to date"),
+                        NaiveDate::parse_from_str(&date, "%F").expect("fail to convert to date"),
                     );
                 };
             }
@@ -254,8 +253,7 @@ pub fn game_dispatch(
                 let last_game_id = database.games.len();
                 if let Some(game) = database.games.get_mut(&last_game_id) {
                     game.updated = Some(
-                        NaiveDate::parse_from_str(&date, "%F")
-                            .expect("fail to convert to date"),
+                        NaiveDate::parse_from_str(&date, "%F").expect("fail to convert to date"),
                     );
                 };
             } else {
