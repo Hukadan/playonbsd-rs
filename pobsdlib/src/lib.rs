@@ -9,10 +9,10 @@ extern crate serde_derive;
 extern crate chrono;
 extern crate reqwest;
 extern crate serde_json;
-mod utils;
 // public api
 pub mod collections;
 pub mod models;
+pub mod utils;
 
 pub use crate::collections::database::DataBase;
 pub use crate::collections::query_result::QueryResult;

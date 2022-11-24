@@ -12,12 +12,13 @@ pub fn game_dispatch(
     expand_cover: bool,
     // fetch steam cover if possible
     steam_cover: bool,
-) {
+    counter: usize,
+) -> usize {
     match field {
         Field::Game(name) => {
             if let Some(name) = name {
                 let mut game = Game::default();
-                let game_id = database.games.len() + 1;
+                let game_id = counter + 1;
                 game.name = name.to_string();
                 game.id = game_id;
                 let mut hasher = DefaultHasher::new();
@@ -30,6 +31,7 @@ pub fn game_dispatch(
                     database.games.len() + 1
                 );
             };
+            counter
         }
         Field::Cover(name) => {
             if let Some(name) = name {
@@ -47,6 +49,7 @@ pub fn game_dispatch(
                     }
                 };
             };
+            counter
         }
         Field::Engine(name) => {
             if let Some(name) = name {
@@ -63,6 +66,7 @@ pub fn game_dispatch(
                         games: vec![last_game_id],
                     });
             };
+            counter
         }
         Field::Setup(name) => {
             if let Some(name) = name {
@@ -71,6 +75,7 @@ pub fn game_dispatch(
                     game.setup = Some(name.to_string());
                 };
             };
+            counter
         }
         Field::Runtime(name) => {
             if let Some(name) = name {
@@ -87,6 +92,7 @@ pub fn game_dispatch(
                         games: vec![last_game_id],
                     });
             };
+            counter
         }
         Field::Hints(name) => {
             if let Some(name) = name {
@@ -95,6 +101,7 @@ pub fn game_dispatch(
                     game.hints = Some(name.to_string());
                 };
             }
+            counter
         }
         Field::Dev(name) => {
             if let Some(name) = name {
@@ -111,6 +118,7 @@ pub fn game_dispatch(
                         games: vec![last_game_id],
                     });
             };
+            counter
         }
         Field::Publi(name) => {
             if let Some(name) = name {
@@ -127,6 +135,7 @@ pub fn game_dispatch(
                         games: vec![last_game_id],
                     });
             };
+            counter
         }
         Field::Version(name) => {
             if let Some(name) = name {
@@ -135,6 +144,7 @@ pub fn game_dispatch(
                     game.version = Some(name.to_string());
                 };
             };
+            counter
         }
         Field::Status(name) => {
             if let Some(name) = name {
@@ -143,6 +153,7 @@ pub fn game_dispatch(
                     game.status = Some(name.to_string());
                 };
             };
+            counter
         }
         Field::Store(items) => {
             if let Some(items) = items {
@@ -171,6 +182,7 @@ pub fn game_dispatch(
                     }
                 };
             };
+            counter
         }
         Field::Genres(items) => {
             if let Some(items) = items {
@@ -196,6 +208,7 @@ pub fn game_dispatch(
                         });
                 }
             };
+            counter
         }
         Field::Tags(items) => {
             if let Some(items) = items {
@@ -221,6 +234,7 @@ pub fn game_dispatch(
                         });
                 }
             };
+            counter
         }
         Field::Year(year) => {
             if let Some(year) = year {
@@ -237,6 +251,7 @@ pub fn game_dispatch(
                         games: vec![last_game_id],
                     });
             }
+            counter
         }
         Field::Added(date) => {
             if let Some(date) = date {
@@ -247,6 +262,7 @@ pub fn game_dispatch(
                     );
                 };
             }
+            counter
         }
         Field::Updated(date) => {
             if let Some(date) = date {
@@ -262,6 +278,7 @@ pub fn game_dispatch(
                     game.updated = game.added.clone()
                 };
             }
+            counter
         }
         Field::Unknown(left, right) => {
             if let Some(left) = left {
@@ -273,8 +290,9 @@ pub fn game_dispatch(
             } else {
                 eprintln!("Skipping unknown field");
             }
+            counter
         }
-    };
+    }
 }
 
 #[cfg(test)]
