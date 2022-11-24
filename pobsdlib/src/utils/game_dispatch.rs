@@ -31,7 +31,7 @@ pub fn game_dispatch(
                     database.games.len() + 1
                 );
             };
-            counter
+            counter + 1
         }
         Field::Cover(name) => {
             if let Some(name) = name {
@@ -304,7 +304,7 @@ mod test_game_dispatch {
     fn dispatch_game() {
         let mut db = DataBase::default();
         let fd = Field::Game(Some("test"));
-        game_dispatch(fd, &mut db, true, true);
+        game_dispatch(fd, &mut db, true, true, 0);
         assert_eq!(db.games.len(), 1);
         assert_eq!(db.games.get(&1).unwrap().name, "test".to_string());
     }
@@ -313,8 +313,8 @@ mod test_game_dispatch {
         let mut db = DataBase::default();
         let fd = Field::Game(Some("test"));
         let co = Field::Cover(Some("cover"));
-        game_dispatch(fd, &mut db, true, true);
-        game_dispatch(co, &mut db, true, true);
+        game_dispatch(fd, &mut db, true, true, 0);
+        game_dispatch(co, &mut db, true, true, 0);
         assert_eq!(db.games.len(), 1);
         assert_eq!(
             db.games.get(&1).unwrap().cover.as_ref().unwrap(),
@@ -326,8 +326,8 @@ mod test_game_dispatch {
         let mut db = DataBase::default();
         let fd1 = Field::Game(Some("test1"));
         let fd2 = Field::Engine(Some("test2"));
-        game_dispatch(fd1, &mut db, true, true);
-        game_dispatch(fd2, &mut db, true, true);
+        game_dispatch(fd1, &mut db, true, true, 0);
+        game_dispatch(fd2, &mut db, true, true, 0);
         assert_eq!(db.games.len(), 1);
         assert_eq!(
             db.games.get(&1).unwrap().engine.as_ref().unwrap(),
@@ -347,8 +347,8 @@ mod test_game_dispatch {
         let mut db = DataBase::default();
         let fd1 = Field::Game(Some("test1"));
         let fd2 = Field::Setup(Some("test2"));
-        game_dispatch(fd1, &mut db, true, true);
-        game_dispatch(fd2, &mut db, true, true);
+        game_dispatch(fd1, &mut db, true, true, 0);
+        game_dispatch(fd2, &mut db, true, true, 0);
         assert_eq!(db.games.len(), 1);
         assert_eq!(
             db.games.get(&1).unwrap().setup.as_ref().unwrap(),
@@ -360,8 +360,8 @@ mod test_game_dispatch {
         let mut db = DataBase::default();
         let fd1 = Field::Game(Some("test1"));
         let fd2 = Field::Runtime(Some("test2"));
-        game_dispatch(fd1, &mut db, true, true);
-        game_dispatch(fd2, &mut db, true, true);
+        game_dispatch(fd1, &mut db, true, true, 0);
+        game_dispatch(fd2, &mut db, true, true, 0);
         assert_eq!(db.games.len(), 1);
         assert_eq!(
             db.games.get(&1).unwrap().runtime.as_ref().unwrap(),
