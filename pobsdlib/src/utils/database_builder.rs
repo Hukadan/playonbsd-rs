@@ -39,13 +39,7 @@ impl DataBaseBuilder {
         let mut cursor = Cursor::new();
         let mut database = DataBase::default();
         for line in data.lines() {
-            game_dispatch(
-                Field::from(line),
-                &mut database,
-                self.expand_cover,
-                self.steam_cover,
-                &mut cursor,
-            );
+            self.dispatch_line(&mut database, &mut cursor, line);
         }
         database
     }
@@ -54,15 +48,18 @@ impl DataBaseBuilder {
         let mut database = DataBase::default();
         if let Ok(lines) = read_lines(filename) {
             for line in lines.flatten() {
-                game_dispatch(
-                    Field::from(&line),
-                    &mut database,
-                    self.expand_cover,
-                    self.steam_cover,
-                    &mut cursor,
-                );
+                self.dispatch_line(&mut database, &mut cursor, &line);
             }
         }
         database
+    }
+    fn dispatch_line(&self, database: &mut DataBase, cursor: &mut Cursor, line: &str) {
+        game_dispatch(
+            Field::from(&line),
+            database,
+            self.expand_cover,
+            self.steam_cover,
+            cursor,
+        );
     }
 }
