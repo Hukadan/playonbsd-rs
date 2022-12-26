@@ -41,7 +41,7 @@ use crate::models::{Game, GameFilter, Item};
 ///
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct DataBase {
-    pub(crate) games: HashMap<usize, Game>,
+    pub(crate) games: HashMap<u64, Game>,
     pub(crate) engines: HashMap<String, Item>,
     pub(crate) runtimes: HashMap<String, Item>,
     pub(crate) genres: HashMap<String, Item>,
@@ -62,7 +62,7 @@ impl DataBase {
         QueryResult::new(items)
     }
     /// Return the game the the given id
-    pub fn get_game_by_id(&self, id: usize) -> Option<Game> {
+    pub fn get_game_by_id(&self, id: u64) -> Option<Game> {
         match self.games.get(&id) {
             Some(game) => Some(game.clone()),
             None => None,

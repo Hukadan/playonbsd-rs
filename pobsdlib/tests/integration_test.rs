@@ -29,7 +29,9 @@ fn test_get_all_games() {
 #[test]
 fn test_game_get_by_id() {
     let db = DataBaseBuilder::new(true, true).build_from_file("tests/data/test-games.db");
-    match db.get_game_by_id(2) {
+    let games = db.get_game_by_name("The Adventures of Shuggy");
+    let uuid = games.items[0].uuid;
+    match db.get_game_by_id(uuid) {
         Some(game) => {
             assert_eq!(game.name, "The Adventures of Shuggy".to_string());
             assert_eq!(
