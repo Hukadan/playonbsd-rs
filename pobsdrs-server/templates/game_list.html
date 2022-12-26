@@ -11,7 +11,7 @@
 	<dt>
 		<div class="level">
 			<div class="level-left">
-			<a id="{{ item.id }}" href="/{{ item.id }}">
+			<a id="{{ item.uuid }}" href="/{{ item.uuid }}">
 			<strong class="has-text-grey-light is-uppercase">{{ item.name }}</strong> 
 			</a>
 			</div>
@@ -54,6 +54,14 @@
 			</div>
 		</div>
 	</dt>
+	<dl>
+	{% match item.version %}
+	  {% when Some with (version) %}
+		<strong class="has-text-grey-light">Version:</strong>
+			{{ version }}
+	  {% when None %}
+	{% endmatch %}
+	</dl>
 	<dl>
 	{% match item.dev %}
 	  {% when Some with (dev) %}

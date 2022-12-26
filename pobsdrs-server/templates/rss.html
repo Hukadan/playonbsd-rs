@@ -35,7 +35,7 @@
 	{% endmatch %}
         {% match game.dev %}
 	{% when Some with (dev) %}
-	<p><strong>Developper</strong>: {{ dev }}</p>
+	<p><strong>Developer</strong>: {{ dev }}</p>
 	{% when None %}
 	{% endmatch %}
         {% match game.publi %}
@@ -63,29 +63,27 @@
 	{% when None %}
 	{% endmatch %}
 	<div>
-        {% match game.tags %}
+  {% match game.tags %}
 	{% when Some with (tags) %}
 		<div>
-		<div>
-			<span>TAGS</span>
+		<p>
+			<strong>Tags:</strong>
 			{% for tag in tags %}
-			<p>
 				{{ tag }}
-			</p>
 			{% endfor %}
-		</div>
+		</p>
 		</div>
 	{% when None %}
 	{% endmatch %}
-        {% match game.genres %}
+  {% match game.genres %}
 	{% when Some with (genres) %}
 		<div>
-		<div>
-			<span>GENRES</span>
+		<p>
+			<strong>Genres:</strong>
 			{% for genre in genres %}
-			<p>{{ genre }}</p>
+			{{ genre }}
 			{% endfor %}
-		</div>
+		</p>
 		</div>
 	{% when None %}
 	{% endmatch %}
