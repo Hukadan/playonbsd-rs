@@ -21,7 +21,7 @@ pub struct Game {
     /// The id of the game.
     pub id: usize,
     /// The unique id
-    pub uiid: u64,
+    pub uuid: u64,
     /// The name of the game.
     pub name: String,
     /// The cover of the game.
@@ -453,7 +453,7 @@ Added
 Updated";
         let game = Game {
             id: 1,
-            uiid: 123456789,
+            uuid: 123456789,
             name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
             cover: Some("AaaaaA_for_the_Awesome_Cover.jpg".to_string()),
             engine: None,

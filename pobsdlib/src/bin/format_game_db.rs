@@ -1,5 +1,5 @@
 extern crate pobsdlib;
-use pobsdlib::DataBase;
+use pobsdlib::utils::database_builder::DataBaseBuilder;
 use std::{env, path, process};
 
 fn main() {
@@ -14,7 +14,7 @@ fn main() {
     }
     let path = path::Path::new(&args[1]);
     if path.is_file() {
-        let game_db = DataBase::new_from_file(&args[1]);
+        let game_db = DataBaseBuilder::new(true, true).build_from_file(&args[1]);
         let games = game_db.get_all_games();
         for mut game in games.items {
             if let Some(date) = game.added {

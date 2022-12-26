@@ -35,7 +35,7 @@ pub async fn rss(Extension(db): Extension<Arc<DataBase>>) -> impl IntoResponse {
             item.set_title(format!("The game {} has been updated.", &game.name))
         }
         item.set_pub_date(format!("{}", game.updated.unwrap().format("%F")));
-        item.set_link(format!("https://pobsd.chocolatines.org/{}", game.id));
+        item.set_link(format!("https://pobsd.chocolatines.org/{}", game.uuid));
         let template = RSSTemplate { game: Some(game) };
         if let Ok(content) = template.render() {
             item.set_content(content);

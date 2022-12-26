@@ -10,47 +10,52 @@
 	</figure>
 	{% when None %}
 	{% endmatch %}
-        {% match game.year %}
+  {% match game.year %}
 	{% when Some with (year) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Release date</strong>: {{ year }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.engine %}
+  {% match game.version %}
+	{% when Some with (version) %}
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Version</strong>: {{ version }}</p>
+	{% when None %}
+	{% endmatch %}
+	{% match game.engine %}
 	{% when Some with (engine) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Engine</strong>: {{ engine }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.setup %}
+  {% match game.setup %}
 	{% when Some with (setup) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Setup</strong>: {{ setup }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.runtime %}
+  {% match game.runtime %}
 	{% when Some with (runtime) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Runtime</strong>: {{ runtime }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.hints %}
+  {% match game.hints %}
 	{% when Some with (hints) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Hints</strong>: {{ hints }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.dev %}
+  {% match game.dev %}
 	{% when Some with (dev) %}
-	<p class="has-text-grey-light"><strong class="has-text-grey-light">Developper</strong>: {{ dev }}</p>
+	<p class="has-text-grey-light"><strong class="has-text-grey-light">Developer</strong>: {{ dev }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.publi %}
+  {% match game.publi %}
 	{% when Some with (publi) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Publisher</strong>: {{ publi }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.status %}
+  {% match game.status %}
 	{% when Some with (status) %}
 	<p class="has-text-grey-light"><strong class="has-text-grey-light">Status</strong>: {{ status }}</p>
 	{% when None %}
 	{% endmatch %}
-        {% match game.stores %}
+  {% match game.stores %}
 	{% when Some with (stores) %}
 	<div>
 	  <p class="has-text-grey-light">Available here:</p>
@@ -65,7 +70,7 @@
 	{% when None %}
 	{% endmatch %}
 	<div class="field is-grouped is-grouped-multiline">
-        {% match game.tags %}
+  {% match game.tags %}
 	{% when Some with (tags) %}
 		<div class="control">
 		<div class="tags has-addons">
@@ -79,7 +84,7 @@
 		</div>
 	{% when None %}
 	{% endmatch %}
-        {% match game.genres %}
+  {% match game.genres %}
 	{% when Some with (genres) %}
 		<div class="control">
 		<div class="tags has-addons">

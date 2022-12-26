@@ -13,7 +13,7 @@ pub struct Item {
     /// name of the item.
     pub name: String,
     /// vector of ids of the games associated to the items.
-    pub games: Vec<usize>,
+    pub games: Vec<u64>,
 }
 
 impl fmt::Display for Item {

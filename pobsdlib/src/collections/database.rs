@@ -2,7 +2,6 @@ use std::collections::HashMap;
 
 use crate::collections::QueryResult;
 use crate::models::{Game, GameFilter, Item};
-use crate::utils::{load_database, load_database_from_string};
 
 /// Store the game database in different collections.
 /// With the exception of the get_game_by_id query,
@@ -42,7 +41,7 @@ use crate::utils::{load_database, load_database_from_string};
 ///
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct DataBase {
-    pub(crate) games: HashMap<usize, Game>,
+    pub(crate) games: HashMap<u64, Game>,
     pub(crate) engines: HashMap<String, Item>,
     pub(crate) runtimes: HashMap<String, Item>,
     pub(crate) genres: HashMap<String, Item>,
@@ -53,20 +52,7 @@ pub struct DataBase {
 }
 
 impl DataBase {
-    /// Create a database from a database file.
-    /// Please see <https://github.com/playonbsd/OpenBSD-Games-Database>
-    /// for more information.
-    pub fn new_from_file(filename: &str) -> Self {
-        let mut database = Self::default();
-        load_database(&mut database, filename);
-        database
-    }
-    pub fn new_from_string(text: String) -> Self {
-        let mut database = Self::default();
-        load_database_from_string(&mut database, text);
-        database
-    }
-    /// Return all games of the database.
+   /// Return all games of the database.
     pub fn get_all_games(&self) -> QueryResult<Game> {
         let games: Vec<&Game> = self.games.values().collect();
         let mut items: Vec<Game> = Vec::with_capacity(games.len());
@@ -76,7 +62,7 @@ impl DataBase {
         QueryResult::new(items)
     }
     /// Return the game the the given id
-    pub fn get_game_by_id(&self, id: usize) -> Option<Game> {
+    pub fn get_game_by_id(&self, id: u64) -> Option<Game> {
         match self.games.get(&id) {
             Some(game) => Some(game.clone()),
             None => None,
