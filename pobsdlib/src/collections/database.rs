@@ -52,7 +52,7 @@ pub struct DataBase {
 }
 
 impl DataBase {
-   /// Return all games of the database.
+    /// Return all games of the database.
     pub fn get_all_games(&self) -> QueryResult<Game> {
         let games: Vec<&Game> = self.games.values().collect();
         let mut items: Vec<Game> = Vec::with_capacity(games.len());
@@ -63,10 +63,7 @@ impl DataBase {
     }
     /// Return the game the the given id
     pub fn get_game_by_id(&self, id: u64) -> Option<Game> {
-        match self.games.get(&id) {
-            Some(game) => Some(game.clone()),
-            None => None,
-        }
+        self.games.get(&id).cloned()
     }
     /// Return the games of the database with the given name.
     /// It preforms an exact matching.

@@ -1,7 +1,7 @@
 use crate::collections::DataBase;
 use crate::models::{Field, Game, Item};
-use crate::utils::get_app_id;
 use crate::utils::database_builder::Cursor;
+use crate::utils::get_app_id;
 use chrono::NaiveDate;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
@@ -232,7 +232,7 @@ pub fn game_dispatch<'a>(
             if let Some(date) = date {
                 if let Some(game) = database.games.get_mut(&cursor.uuid) {
                     game.added = Some(
-                        NaiveDate::parse_from_str(&date, "%F").expect("fail to convert to date"),
+                        NaiveDate::parse_from_str(date, "%F").expect("fail to convert to date"),
                     );
                 };
             }
@@ -241,13 +241,11 @@ pub fn game_dispatch<'a>(
             if let Some(date) = date {
                 if let Some(game) = database.games.get_mut(&cursor.uuid) {
                     game.updated = Some(
-                        NaiveDate::parse_from_str(&date, "%F").expect("fail to convert to date"),
+                        NaiveDate::parse_from_str(date, "%F").expect("fail to convert to date"),
                     );
                 };
-            } else {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.updated = game.added.clone()
-                };
+            } else if let Some(game) = database.games.get_mut(&cursor.uuid) {
+                game.updated = game.added;
             }
         }
         Field::Unknown(left, right) => {
@@ -338,7 +336,12 @@ mod test_game_dispatch {
         game_dispatch(fd2, &mut db, true, true, &mut cursor);
         assert_eq!(db.games.len(), 1);
         assert_eq!(
-            db.games.get(&cursor.uuid).unwrap().runtime.as_ref().unwrap(),
+            db.games
+                .get(&cursor.uuid)
+                .unwrap()
+                .runtime
+                .as_ref()
+                .unwrap(),
             &"test2".to_string()
         );
         assert_eq!(db.runtimes.len(), 1);

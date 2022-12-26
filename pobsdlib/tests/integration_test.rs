@@ -1,5 +1,5 @@
 extern crate pobsdlib;
-use pobsdlib::{GameFilter, DataBaseBuilder};
+use pobsdlib::{DataBaseBuilder, GameFilter};
 
 #[test]
 fn test_get_all_games() {

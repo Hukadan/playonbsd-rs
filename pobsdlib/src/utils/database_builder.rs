@@ -2,6 +2,7 @@ use crate::collections::DataBase;
 use crate::models::Field;
 use crate::utils::{game_dispatch, read_lines};
 
+#[derive(Default)]
 pub struct Cursor {
     pub counter: usize,
     pub uuid: u64,
@@ -9,7 +10,10 @@ pub struct Cursor {
 
 impl Cursor {
     pub fn new() -> Self {
-        Self { counter: 0, uuid: 0 }
+        Self {
+            counter: 0,
+            uuid: 0,
+        }
     }
 }
 
@@ -36,7 +40,7 @@ impl DataBaseBuilder {
         let mut database = DataBase::default();
         for line in data.lines() {
             game_dispatch(
-                Field::from(&line),
+                Field::from(line),
                 &mut database,
                 self.expand_cover,
                 self.steam_cover,

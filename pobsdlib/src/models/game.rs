@@ -138,11 +138,11 @@ impl fmt::Display for Game {
             None => "Status".to_string(),
         };
         let added = match &self.added {
-            Some(added) => format!("Added\t{}", added.format("%F").to_string()),
+            Some(added) => format!("Added\t{}", added.format("%F")),
             None => "Added".to_string(),
         };
         let updated = match &self.updated {
-            Some(updated) => format!("Updated\t{}", updated.format("%F").to_string()),
+            Some(updated) => format!("Updated\t{}", updated.format("%F")),
             None => "Updated".to_string(),
         };
         write!(
