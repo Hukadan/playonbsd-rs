@@ -9,7 +9,7 @@ use reqwest;
 use std::sync::Arc;
 
 use crate::routes::{game_details, game_list, rss};
-use pobsdlib::collections::DataBase;
+use pobsdlib::{DataBaseBuilder, DataBase};
 
 #[tokio::main]
 async fn main() {
@@ -20,7 +20,7 @@ async fn main() {
     .await
     {
         if let Ok(content) = req.text().await {
-            let db = DataBase::new_from_string(content);
+            let db = DataBaseBuilder::new(true, true).build_from_string(content);
             shared_db = Arc::new(db);
         } else {
             panic!("Could no fetch the database from GitHub");

@@ -13,7 +13,7 @@ struct GameDetailsTemplate {
 
 pub async fn game_details(
     Extension(db): Extension<Arc<DataBase>>,
-    Path(game_id): Path<usize>,
+    Path(game_id): Path<u64>,
 ) -> impl IntoResponse {
     let template = GameDetailsTemplate {
         game: db.get_game_by_id(game_id),
