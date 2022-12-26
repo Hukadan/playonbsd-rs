@@ -4,12 +4,11 @@ pub mod views;
 pub mod wrappers;
 
 use axum::{extract::Extension, routing::get, Router};
-use reqwest;
 
 use std::sync::Arc;
 
 use crate::routes::{game_details, game_list, rss};
-use pobsdlib::{DataBaseBuilder, DataBase};
+use pobsdlib::{DataBase, DataBaseBuilder};
 
 #[tokio::main]
 async fn main() {

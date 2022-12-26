@@ -22,15 +22,12 @@ pub fn game_list_view(
         None => 1,
     };
     let page = Paginator::new(game_query.count, 15).page(page);
-    let template: GameListTemplate;
-    match page {
-        Some(page) => {
-            template = GameListTemplate {
-                games: game_query.items[page.first_element..=page.last_element].to_vec(),
-                query_str,
-                paginator: page,
-            }
-        }
+    let template: GameListTemplate = match page {
+        Some(page) => GameListTemplate {
+            games: game_query.items[page.first_element..=page.last_element].to_vec(),
+            query_str,
+            paginator: page,
+        },
         None => {
             let page = Page {
                 first_element: 0,
@@ -38,12 +35,12 @@ pub fn game_list_view(
                 current_page: 1,
                 last_page: 1,
             };
-            template = GameListTemplate {
+            GameListTemplate {
                 games: game_query.items,
                 query_str: "".to_string(),
                 paginator: page,
             }
         }
-    }
+    };
     HtmlTemplate(template)
 }

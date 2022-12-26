@@ -17,12 +17,11 @@ pub async fn game_list(
     Query(params): Query<HashMap<String, String>>,
 ) -> impl IntoResponse {
     let game_filter_wrapper = GameFilterWrapper::new(&params);
-    let game_query: QueryResult<Game>;
-    if game_filter_wrapper.filter_on {
-        game_query = db.game_contains_or(game_filter_wrapper.game_filter);
+    let game_query: QueryResult<Game> = if game_filter_wrapper.filter_on {
+        db.game_contains_or(game_filter_wrapper.game_filter)
     } else {
-        game_query = db.get_all_games();
-    }
+        db.get_all_games()
+    };
     let page = params.get("page");
     game_list_view(game_query, page.cloned(), game_filter_wrapper.query_str)
 }
@@ -41,14 +40,13 @@ pub async fn game_list_search(
         params.insert("tag".to_string(), pattern.clone());
         params.insert("year".to_string(), pattern.clone());
         params.insert("dev".to_string(), pattern.clone());
-        params.insert("publi".to_string(), pattern.clone());
+        params.insert("publi".to_string(), pattern);
     }
     let game_filter_wrapper = GameFilterWrapper::new(&params);
-    let game_query: QueryResult<Game>;
-    if game_filter_wrapper.filter_on {
-        game_query = db.game_contains_or(game_filter_wrapper.game_filter);
+    let game_query: QueryResult<Game> = if game_filter_wrapper.filter_on {
+        db.game_contains_or(game_filter_wrapper.game_filter)
     } else {
-        game_query = db.get_all_games();
-    }
+        db.get_all_games()
+    };
     game_list_view(game_query, None, game_filter_wrapper.query_str)
 }
