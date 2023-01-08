@@ -17,247 +17,55 @@ pub fn game_dispatch<'a>(
 ) {
     match field {
         Field::Game(name) => {
-            if let Some(name) = name {
-                cursor.counter += 1;
-                let mut game = Game::default();
-                let mut hasher = DefaultHasher::new();
-                name.hash(&mut hasher);
-                cursor.uuid = hasher.finish();
-                game.name = name.to_string();
-                game.id = cursor.counter;
-                game.uuid = cursor.uuid;
-                database.games.insert(cursor.uuid, game);
-            } else {
-                eprintln!(
-                    "Error trying to insert game with id: {}.",
-                    database.games.len() + 1
-                );
-            };
+            field_dispatch![newgame name, database, cursor];
         }
         Field::Cover(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    if !name.is_empty() {
-                        if expand_cover {
-                            game.cover = Some(format!(
-                                "https://playonbsd.com/legacy/shopping_guide/pics/originals/{}",
-                                name
-                            ));
-                        } else {
-                            game.cover = Some(name.to_string());
-                        }
-                    }
-                };
-            };
+            field_dispatch![cover, name, database, cursor];
         }
         Field::Engine(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.engine = Some(name.to_string());
-                };
-                database
-                    .engines
-                    .entry(name.to_string())
-                    .and_modify(|e| e.games.push(cursor.uuid))
-                    .or_insert(Item {
-                        name: name.to_string(),
-                        games: vec![cursor.uuid],
-                    });
-            };
+            field_dispatch![engine in engines, name, database, cursor];
         }
         Field::Setup(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.setup = Some(name.to_string());
-                };
-            };
+            field_dispatch![setup, name, database, cursor];
         }
         Field::Runtime(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.runtime = Some(name.to_string());
-                };
-                database
-                    .runtimes
-                    .entry(name.to_string())
-                    .and_modify(|e| e.games.push(cursor.uuid))
-                    .or_insert(Item {
-                        name: name.to_string(),
-                        games: vec![cursor.uuid],
-                    });
-            };
+            field_dispatch![runtime in runtimes, name, database, cursor];
         }
         Field::Hints(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.hints = Some(name.to_string());
-                };
-            }
+            field_dispatch![hints, name, database, cursor];
         }
         Field::Dev(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.dev = Some(name.to_string());
-                };
-                database
-                    .devs
-                    .entry(name.to_string())
-                    .and_modify(|e| e.games.push(cursor.uuid))
-                    .or_insert(Item {
-                        name: name.to_string(),
-                        games: vec![cursor.uuid],
-                    });
-            };
+            field_dispatch![dev in devs, name, database, cursor];
         }
         Field::Publi(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.publi = Some(name.to_string());
-                };
-                database
-                    .publis
-                    .entry(name.to_string())
-                    .and_modify(|e| e.games.push(cursor.uuid))
-                    .or_insert(Item {
-                        name: name.to_string(),
-                        games: vec![cursor.uuid],
-                    });
-            };
+            field_dispatch![publi in publis, name, database, cursor];
         }
         Field::Version(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.version = Some(name.to_string());
-                };
-            };
+            field_dispatch![version, name, database, cursor];
         }
         Field::Status(name) => {
-            if let Some(name) = name {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.status = Some(name.to_string());
-                };
-            };
+            field_dispatch![status, name, database, cursor];
         }
         Field::Store(items) => {
-            if let Some(items) = items {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    for item in items {
-                        // Tries to grap the Steam one
-                        // if a steam link is given in store.
-                        // if is_empty && item.contains("steampowered") {
-                        if item.contains("steampowered") && steam_cover {
-                            let item = item;
-                            let app_id = get_app_id(item);
-                            if let Some(app_id) = app_id {
-                                game.cover = Some(format!(
-                                    "https://cdn.akamai.steamstatic.com/steam/apps/{}/header.jpg",
-                                    app_id
-                                ));
-                            }
-                        }
-                        match &mut game.stores {
-                            Some(stores) => stores.push(item.to_string()),
-                            None => {
-                                game.stores = Some(vec![item.to_string()]);
-                            }
-                        }
-                    }
-                };
-            };
+            field_dispatch![stores, with_items items, database, cursor];
         }
         Field::Genres(items) => {
-            if let Some(items) = items {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    for item in &items {
-                        match &mut game.genres {
-                            Some(genres) => genres.push(item.to_string()),
-                            None => {
-                                game.genres = Some(vec![item.to_string()]);
-                            }
-                        }
-                    }
-                };
-                for item in &items {
-                    database
-                        .genres
-                        .entry(item.to_string())
-                        .and_modify(|e| e.games.push(cursor.uuid))
-                        .or_insert(Item {
-                            name: item.to_string(),
-                            games: vec![cursor.uuid],
-                        });
-                }
-            };
+            field_dispatch![genres in genres, with_items items, database, cursor];
         }
         Field::Tags(items) => {
-            if let Some(items) = items {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    for item in &items {
-                        match &mut game.tags {
-                            Some(tags) => tags.push(item.to_string()),
-                            None => {
-                                game.tags = Some(vec![item.to_string()]);
-                            }
-                        }
-                    }
-                };
-                for item in &items {
-                    database
-                        .tags
-                        .entry(item.to_string())
-                        .and_modify(|e| e.games.push(cursor.uuid))
-                        .or_insert(Item {
-                            name: item.to_string(),
-                            games: vec![cursor.uuid],
-                        });
-                }
-            };
+            field_dispatch![tags in tags, with_items items, database, cursor];
         }
         Field::Year(year) => {
-            if let Some(year) = year {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.year = Some(year.to_string());
-                };
-                database
-                    .years
-                    .entry(year.to_string())
-                    .and_modify(|e| e.games.push(cursor.uuid))
-                    .or_insert(Item {
-                        name: year.to_string(),
-                        games: vec![cursor.uuid],
-                    });
-            }
+            field_dispatch![year in years, year, database, cursor];
         }
         Field::Added(date) => {
-            if let Some(date) = date {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.added = Some(
-                        NaiveDate::parse_from_str(date, "%F").expect("fail to convert to date"),
-                    );
-                };
-            }
+            field_dispatch![added, is_date date, database, cursor];
         }
         Field::Updated(date) => {
-            if let Some(date) = date {
-                if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                    game.updated = Some(
-                        NaiveDate::parse_from_str(date, "%F").expect("fail to convert to date"),
-                    );
-                };
-            } else if let Some(game) = database.games.get_mut(&cursor.uuid) {
-                game.updated = game.added;
-            }
+            field_dispatch![updated, is_date date, database, cursor];
         }
         Field::Unknown(left, right) => {
-            if let Some(left) = left {
-                if let Some(right) = right {
-                    eprintln!("Skipping unknown field: {}: {}", left, right);
-                } else {
-                    eprintln!("Skipping unknown field: {}", left);
-                };
-            } else {
-                eprintln!("Skipping unknown field");
-            }
+            field_dispatch![unknown left, right];
         }
     }
 }
