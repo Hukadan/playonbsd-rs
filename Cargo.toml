@@ -3,5 +3,5 @@
 members = [
    "pobsdlib",
    "pobsdrs-server",
-   "pobsd-parser",
+   "pobsdrs-parser",
 ]
