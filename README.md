@@ -1,23 +1,21 @@
 [![Rust](https://github.com/Hukadan/pobsdjs/actions/workflows/rust.yml/badge.svg)](https://github.com/Hukadan/pobsdjs/actions/workflows/rust.yml)
 [![rust-clippy analyze](https://github.com/Hukadan/pobsdjs/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/Hukadan/pobsdjs/actions/workflows/rust-clippy.yml)
 
-# pobsdjs
-pobsdjs provides a set of tools to interact with
-the PlayOnBSD database listing games running on
-OpenBSD.
+# pobsd-rs
+pobsd-rs is a toy project I use to learn Rust. It aims to provide
+a set of tools to interact with the PlayOnBSD database which lists
+games that can be played on OpenBSD.
 
-Be careful, this is a toy project for me to learn
-rust programming (and a bit of Vue.js on the way).
-This also means that I am in the process of learning
-and the code leave much to be desired. So bear with
-me.
+As the moment, the project provides:
+* posbsdrs-parser which is a really simple parser to
+read the PlayOnBSD database and converts it into
+a vector of Games;
+* posbsdlib which is a parser/db(kind of) to read
+the PlayOnBSD database and converts it into a 
+queryable database (should be deprecated soon in 
+favor of a furture project named pobsdrs-db);
+ * pobsdrs-sever which provides a minimal web server
+to browse the PlayOnBSD database.
 
-## pobsdlib
-pobsdlib provides a library to load and interact
-with the PlayOnBSD datbase using rust.
-
-## pobsdrs
-pobsdrs is a rocket based web app that provides
-a rudimentary web api to the PlayOnBSD database
-as well as a rudimentary Vue.js based web 
-front-end.
+Please refer to their respective README for more
+information.
