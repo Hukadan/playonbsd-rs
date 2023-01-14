@@ -23,23 +23,72 @@ enum ParserState {
     Error,
 }
 
+pub enum ParsingMode {
+    Strict,
+    Relaxed,
+}
+
+pub enum ParserResult {
+    WithError(Vec<Game>, Vec<usize>),
+    WithoutError(Vec<Game>),
+}
+
+impl Into<Vec<Game>> for ParserResult {
+    fn into(self) -> Vec<Game> {
+        match self {
+            ParserResult::WithError(games, _) => games,
+            ParserResult::WithoutError(games) => games,
+        }
+    }
+}
+
 pub struct Parser {
     state: ParserState,
     games: Vec<Game>,
+    mode: ParsingMode,
 }
 
-impl Parser {
-    pub fn new() -> Self {
+impl Default for Parser {
+    fn default() -> Self {
         Self {
             state: ParserState::Game,
             games: Vec::new(),
+            mode: ParsingMode::Relaxed,
         }
     }
-    pub fn load_from_string(mut self, data: &str) -> Vec<Game> {
-        for line in data.lines() {
-            self.parse(line);
+}
+impl Parser {
+    pub fn new(mode: ParsingMode) -> Self {
+        Self {
+            state: ParserState::Game,
+            games: Vec::new(),
+            mode,
         }
-        self.games
+    }
+    pub fn load_from_string(mut self, data: &str) -> ParserResult {
+        let mut has_error = false;
+        let mut lines: Vec<usize> = Vec::new();
+        let mut counter = 0;
+        for line in data.lines() {
+            counter += 1;
+            self.parse(line);
+            // Check for parsing error. Only stop if in Strict mode
+            // Otherwise continues but keeps track of the ignored lines
+            if let ParserState::Error = self.state {
+                lines.push(counter);
+                match self.mode {
+                    ParsingMode::Strict => break,
+                    ParsingMode::Relaxed => {
+                        has_error = true;
+                        eprintln!("Error while parsing... Trying my best to recover")
+                    }
+                }
+            }
+        }
+        match has_error {
+            true => ParserResult::WithError(self.games, lines),
+            false => ParserResult::WithoutError(self.games),
+        }
     }
     impl_parse![ParserState::Game, Field::Game, name, ParserState::Cover;
          (ParserState::Cover, Field::Cover, cover, ParserState::Engine);
@@ -58,129 +107,4 @@ impl Parser {
          (ParserState::Added, Field::Added, added, ParserState::Updated);
          (ParserState::Updated, Field::Updated, updated, ParserState::Game)
     ];
-}
-
-#[cfg(test)]
-mod test_parser {
-    use super::*;
-
-    #[test]
-    fn test_parser() {
-        let data = "Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
-Cover	AaaaaA_for_the_Awesome_Cover.jpg
-Engine
-Setup
-Runtime	HumblePlay
-Store	https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
-Hints	Demo on HumbleBundle store page
-Genre
-Tags
-Year	2011
-Dev
-Pub
-Version
-Status
-Added	1970-01-01
-Updated	1970-01-01
-Game	The Adventures of Mr. Hat
-Cover
-Engine	godot
-Setup
-Runtime	godot
-Store	https://store.steampowered.com/app/1869200/The_Adventures_of_Mr_Hat/
-Hints
-Genre	Puzzle Platformer
-Tags	indie
-Year
-Dev	AX-GAME
-Pub	Fun Quarter
-Version	Early Access
-Status	runs (2022-05-13)
-Added	2022-05-13
-Updated	2022-05-13";
-        let games = Parser::new().load_from_string(data);
-        assert_eq!(games.len(), 2);
-        if let Some(game) = games.get(0) {
-            assert_eq!(game.name, "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome");
-            assert_eq!(game.engine, None);
-            assert_eq!(game.setup, None);
-            assert_eq!(game.runtime, Some("HumblePlay".to_string()));
-            assert_eq!(
-                game.stores,
-                Some(vec![
-                    "https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome"
-                        .to_string()
-                ])
-            );
-            assert_eq!(game.genres, None);
-            assert_eq!(game.year, Some("2011".to_string()));
-            assert_eq!(game.dev, None);
-            assert_eq!(game.publi, None);
-            assert_eq!(game.version, None);
-            assert_eq!(game.status, None);
-            assert_eq!(game.added, Some("1970-01-01".to_string()));
-            assert_eq!(game.updated, Some("1970-01-01".to_string()));
-        }
-    }
-    #[test]
-    fn test_parser_error() {
-        let data_error = "Game	AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome
-Cover	AaaaaA_for_the_Awesome_Cover.jpg
-Engine
-Setup
-Runtime	HumblePlay
-Store	https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome
-Hints	Demo on HumbleBundle store page
-Genre
-Tags
-Year	2011
-Dev
-Pub
-Version
-//Status
-Added	1970-01-01
-Updated	1970-01-01
-Game	The Adventures of Mr. Hat
-Cover
-Engine	godot
-Setup
-Runtime	godot
-Store	https://store.steampowered.com/app/1869200/The_Adventures_of_Mr_Hat/
-Hints
-Genre	Puzzle Platformer
-Tags	indie
-Year
-Dev	AX-GAME
-Pub	Fun Quarter
-Version	Early Access
-Status	runs (2022-05-13)
-Added	2022-05-13
-Updated	2022-05-13";
-        let games = Parser::new().load_from_string(data_error);
-        assert_eq!(games.len(), 2);
-        if let Some(game) = games.get(0) {
-            assert_eq!(game.name, "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome");
-            assert_eq!(game.engine, None);
-            assert_eq!(game.setup, None);
-            assert_eq!(game.runtime, Some("HumblePlay".to_string()));
-            assert_eq!(
-                game.stores,
-                Some(vec![
-                    "https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome"
-                        .to_string()
-                ])
-            );
-            assert_eq!(game.genres, None);
-            assert_eq!(game.year, Some("2011".to_string()));
-            assert_eq!(game.dev, None);
-            assert_eq!(game.publi, None);
-            assert_eq!(game.version, None);
-            assert_eq!(game.status, None);
-            assert_eq!(game.added, None);
-            assert_eq!(game.updated, None);
-        } 
-        if let Some(game) = games.get(1) {
-            assert_eq!(game.name, "The Adventures of Mr. Hat");
-        }
-    }
 }
