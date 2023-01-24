@@ -1,0 +1,10 @@
+[package]
+name = "pobsdrs-db"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+igdb-rs = { git = "https://github.com/Hukadan/igdb-rs", branch = "v3tov4"}
+sea-orm = { version = "^0", features = ["sqlx-sqlite", "runtime-tokio-native-tls", "macros"] }
