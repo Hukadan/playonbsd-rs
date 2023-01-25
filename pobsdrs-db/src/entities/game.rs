@@ -40,4 +40,44 @@ impl Related<super::dev::Entity> for Entity {
     }
 }
 
+impl Related<super::runtime::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::runtime_game::Relation::Runtime.def()
+    }
+
+    fn via() -> Option<RelationDef> {
+        Some(super::runtime_game::Relation::Game.def().rev())
+    }
+}
+
+impl Related<super::engine::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::engine_game::Relation::Engine.def()
+    }
+
+    fn via() -> Option<RelationDef> {
+        Some(super::engine_game::Relation::Game.def().rev())
+    }
+}
+
+
+impl Related<super::tag::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::tag_game::Relation::Tag.def()
+    }
+
+    fn via() -> Option<RelationDef> {
+        Some(super::tag_game::Relation::Game.def().rev())
+    }
+}
+
+impl Related<super::publi::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::publi_game::Relation::Publi.def()
+    }
+
+    fn via() -> Option<RelationDef> {
+        Some(super::publi_game::Relation::Game.def().rev())
+    }
+}
 impl ActiveModelBehavior for ActiveModel {}
