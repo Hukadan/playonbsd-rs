@@ -9,7 +9,7 @@ use std::fmt;
 /// The Unknown variant is used to represent lines
 /// that were not parsed correctly.
 /// ```
-/// use pobsd_parser::field::Field;
+/// use pobsdrs_parser::Field;
 ///
 /// // line representing a runtime item
 /// let runtime_str = "Runtime\truntime name";

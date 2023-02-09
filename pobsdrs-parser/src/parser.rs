@@ -1,3 +1,6 @@
+use std::fs;
+use std::path::Path;
+
 use crate::field::Field;
 use crate::game::Game;
 
@@ -65,8 +68,18 @@ impl Parser {
             mode,
         }
     }
+    pub fn load_from_file(self, file: impl AsRef<Path>) -> Result<ParserResult, std::io::Error> {
+        let file: &Path = file.as_ref();
+        if file.is_file() {
+            let data = fs::read_to_string(file)?;
+            Ok(self.load_from_string(&data))
+        } else {
+            Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, "This is not a file"))
+        }
+    }
     pub fn load_from_string(mut self, data: &str) -> ParserResult {
         let mut has_error = false;
+        let mut first_error = true;
         let mut lines: Vec<usize> = Vec::new();
         let mut counter = 0;
         for line in data.lines() {
@@ -74,16 +87,20 @@ impl Parser {
             self.parse(line);
             // Check for parsing error. Only stop if in Strict mode
             // Otherwise continues but keeps track of the ignored lines
-            if let ParserState::Error = self.state {
-                lines.push(counter);
-                match self.mode {
-                    ParsingMode::Strict => break,
-                    ParsingMode::Relaxed => {
-                        has_error = true;
-                        eprintln!("Error while parsing... Trying my best to recover")
+            match self.state {
+                ParserState::Error => {
+                    if first_error {
+                        lines.push(counter);
+                        first_error = false;
+                        eprintln!("Parsing error occured at line {}.", counter);
+                    }
+                    match self.mode {
+                        ParsingMode::Strict => break,
+                        ParsingMode::Relaxed => has_error = true,
                     }
                 }
-            }
+                _ => first_error = true
+            };
         }
         match has_error {
             true => ParserResult::WithError(self.games, lines),

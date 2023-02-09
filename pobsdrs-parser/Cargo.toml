@@ -1,5 +1,5 @@
 [package]
-name = "pobsd-parser"
+name = "pobsdrs-parser"
 version = "0.1.0"
 edition = "2021"
 description = "library to parse the PlayOnBSD database listing games running on OpenBSD"
@@ -13,3 +13,4 @@ keywords = ["openbsd", "openbsd-gaming"]
 serde = "1.0"
 serde_json = "1.0"
 serde_derive = "1.0"
+clap = "4.0"
